@@ -39,7 +39,7 @@ export default function DashboardPage() {
             </div>
 
             <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4 mb-10">
-              <div className="bg-gradient-to-br from-[#A0E7E5] to-[#FFEE93] p-[2px] rounded-2xl shadow-md hover:shadow-lg transition-all duration-200 hover:scale-[1.02]">
+              <div className="bg-gradient-to-br from-[#A0E7E5] to-[#FFEE93] p-[2px] rounded-2xl shadow-md hover:shadow-lg transition-all duration-200 hover:scale-[1.02] card-enter" style={{ animationDelay: '0ms' }}>
                 <div className="bg-white rounded-2xl p-6 h-full">
                   <div className="flex items-start justify-between mb-4">
                     <div className="flex-1">
@@ -54,7 +54,7 @@ export default function DashboardPage() {
                 </div>
               </div>
 
-              <div className="bg-gradient-to-br from-[#FFB7B2] to-[#FFEE93] p-[2px] rounded-2xl shadow-md hover:shadow-lg transition-all duration-200 hover:scale-[1.02]">
+              <div className="bg-gradient-to-br from-[#FFB7B2] to-[#FFEE93] p-[2px] rounded-2xl shadow-md hover:shadow-lg transition-all duration-200 hover:scale-[1.02] card-enter" style={{ animationDelay: '50ms' }}>
                 <div className="bg-white rounded-2xl p-6 h-full">
                   <div className="flex items-start justify-between mb-4">
                     <div className="flex-1">
@@ -69,7 +69,7 @@ export default function DashboardPage() {
                 </div>
               </div>
 
-              <div className="bg-gradient-to-br from-[#FFEE93] to-[#A0E7E5] p-[2px] rounded-2xl shadow-md hover:shadow-lg transition-all duration-200 hover:scale-[1.02]">
+              <div className="bg-gradient-to-br from-[#FFEE93] to-[#A0E7E5] p-[2px] rounded-2xl shadow-md hover:shadow-lg transition-all duration-200 hover:scale-[1.02] card-enter" style={{ animationDelay: '100ms' }}>
                 <div className="bg-white rounded-2xl p-6 h-full">
                   <div className="flex items-start justify-between mb-4">
                     <div className="flex-1">
@@ -84,7 +84,7 @@ export default function DashboardPage() {
                 </div>
               </div>
 
-              <div className="bg-gradient-to-br from-[#A0E7E5] to-[#FFB7B2] p-[2px] rounded-2xl shadow-md hover:shadow-lg transition-all duration-200 hover:scale-[1.02]">
+              <div className="bg-gradient-to-br from-[#A0E7E5] to-[#FFB7B2] p-[2px] rounded-2xl shadow-md hover:shadow-lg transition-all duration-200 hover:scale-[1.02] card-enter" style={{ animationDelay: '150ms' }}>
                 <div className="bg-white rounded-2xl p-6 h-full">
                   <div className="flex items-start justify-between mb-4">
                     <div className="flex-1">

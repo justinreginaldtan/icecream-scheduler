@@ -94,7 +94,7 @@ export function Sidebar({ onCollapseChange }: { onCollapseChange?: (collapsed: b
                         
                         <item.icon 
                           className={cn(
-                            "h-6 w-6 rounded-xl p-1.5 transition-all duration-200",
+                            "h-6 w-6 rounded-xl p-1.5 transition-all duration-200 icon-bounce",
                             isActive
                               ? "bg-[#FFB7B2]/20 text-white shadow-md"
                               : "text-white/70 group-hover:text-white group-hover:bg-white/10 group-hover:shadow-sm"
