@@ -2,40 +2,62 @@
 
 ## 🏗️ Project Structure
 
-This project is split into **two separate repositories** for optimal team collaboration and AWS deployment:
+This is a **monorepo** with two applications:
+
+```
+sweet-solutions/
+├── frontend/       # Next.js web application
+├── backend/        # Express.js API server
+├── README.md       # Root documentation
+└── ARCHITECTURE.md # This file
+```
 
 ### Frontend (`frontend/`)
 - **Framework**: Next.js 16 with App Router
 - **UI**: Radix UI + Tailwind CSS
 - **State**: React Context + Custom Hooks
 - **Deployment**: Vercel (recommended)
+- **Port**: 3000
 
 ### Backend (`backend/`)
 - **Framework**: Express.js + Node.js
 - **Database**: MongoDB with Mongoose
 - **Authentication**: JWT tokens
 - **Deployment**: AWS Lambda/API Gateway (recommended)
+- **Port**: 3001
 
 ## 🔄 Data Flow
 
 ```
 Frontend (Next.js) → API Client → Backend (Express) → Database (MongoDB)
+       :3000                         :3001
 ```
 
-## 🚀 Current Status
+## 🚀 Getting Started
 
-### ✅ **Completed**
-- Complete UI/UX implementation
-- Role-based authentication system
-- REST API with all endpoints
-- Database models and validation
-- Mock data for development
-- Production-ready architecture
+### Development
 
-### 🔄 **Development Mode**
-- Currently using **mock data** for demonstration
-- Backend API is **fully functional** and ready
-- Easy switch to live data via environment variables
+**Option 1: Run both applications**
+```bash
+npm run dev
+```
+
+**Option 2: Run separately**
+```bash
+# Frontend only
+npm run dev:frontend
+
+# Backend only
+npm run dev:backend
+```
+
+### Installation
+
+```bash
+npm run install:all
+```
+
+This installs dependencies for both frontend and backend.
 
 ## 🎯 **AWS Deployment Plan**
 
@@ -61,21 +83,47 @@ serverless deploy
 - **Backend Developer**: `backend/`
 - **DevOps**: AWS deployment and configuration
 
-## 🔧 **Development Commands**
+## 📁 **Directory Structure**
 
 ### Frontend
-```bash
-cd frontend
-npm install
-npm run dev
+```
+frontend/
+├── app/              # Next.js App Router pages
+│   ├── (auth)/       # Authentication routes
+│   └── (dashboard)/  # Protected dashboard routes
+├── components/       # React components
+│   ├── common/       # Shared components
+│   ├── features/     # Feature-specific components
+│   ├── layout/       # Layout components
+│   └── ui/           # UI primitives
+├── lib/              # Utilities and helpers
+│   ├── api/          # API client
+│   ├── auth/         # Auth logic
+│   └── utils/        # Utility functions
+└── public/           # Static assets
 ```
 
 ### Backend
-```bash
-cd backend
-npm install
-npm run dev
 ```
+backend/
+├── src/
+│   ├── controllers/  # Route controllers
+│   ├── models/       # Database models
+│   ├── routes/       # API routes
+│   ├── middleware/   # Express middleware
+│   └── utils/        # Utility functions
+└── tests/            # Test files
+```
+
+## 🔧 **Commands**
+
+| Command | Description |
+|---------|-------------|
+| `npm run dev` | Run both frontend and backend |
+| `npm run dev:frontend` | Run frontend only |
+| `npm run dev:backend` | Run backend only |
+| `npm run build` | Build both apps |
+| `npm run install:all` | Install all dependencies |
 
 ## 📊 **Features Implemented**
 
@@ -94,6 +142,20 @@ npm run dev
 - **Typography**: Poppins font family
 - **Components**: shadcn/ui with custom styling
 - **Accessibility**: WCAG 2.1 compliant
+
+## 🚀 **Deployment**
+
+### Frontend (Vercel)
+```bash
+cd frontend
+vercel --prod
+```
+
+### Backend (AWS)
+```bash
+cd backend
+serverless deploy
+```
 
 ---
 

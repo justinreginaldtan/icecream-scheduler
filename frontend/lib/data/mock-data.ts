@@ -1,4 +1,5 @@
 // Mock data for Sweet Solutions
+// TODO: Replace with live data from AWS API Gateway
 
 export interface Employee {
   id: number
@@ -42,7 +43,7 @@ export interface PayrollEntry {
   period: string
 }
 
-// TODO: Replace with live data from AWS API Gateway
+// TODO: Replace with live data from backend API
 export const employees: Employee[] = [
   {
     id: 1,

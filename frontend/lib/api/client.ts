@@ -34,6 +34,28 @@ class ApiClient {
       }
     }
 
+    // Mock get current user data
+    if (endpoint === '/api/auth/me' && method === 'GET') {
+      const storedToken = typeof window !== 'undefined' ? localStorage.getItem('auth-token') : null
+      if (!storedToken) {
+        return {
+          success: false,
+          error: 'Invalid token or user not found.'
+        }
+      }
+      return {
+        success: true,
+        data: {
+          user: {
+            id: '1',
+            email: 'mari.lisa@example.com',
+            name: 'Mari Lisa',
+            role: 'manager'
+          }
+        }
+      }
+    }
+
     // Mock employees data
     if (endpoint === '/api/employees' && method === 'GET') {
       return {
@@ -75,7 +97,16 @@ class ApiClient {
       const data = await response.json()
 
       if (!response.ok) {
-        throw new Error(data.error || `HTTP error! status: ${response.status}`)
+        // If backend is not available or token is invalid, use mock data instead of throwing
+        if (response.status >= 500 || response.status === 403) {
+          console.warn('Backend not available or authentication failed, using mock data for development')
+          return this.getMockData(endpoint, options.method || 'GET')
+        }
+        // For other client errors (4xx), still return the error response
+        return {
+          success: false,
+          error: data.error || `HTTP error! status: ${response.status}`
+        }
       }
 
       return data
@@ -88,7 +119,11 @@ class ApiClient {
         return this.getMockData(endpoint, options.method || 'GET')
       }
       
-      throw error
+      // Return error response instead of throwing
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Unknown error occurred'
+      }
     }
   }
 

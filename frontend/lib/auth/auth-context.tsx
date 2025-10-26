@@ -40,6 +40,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             setUser(response.data.user)
           } else {
             // Token is invalid, clear it
+            console.warn('Invalid token or user not found, clearing auth data')
             localStorage.removeItem('auth-token')
           }
         }
