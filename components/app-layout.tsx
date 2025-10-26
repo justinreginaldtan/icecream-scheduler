@@ -6,6 +6,7 @@ import { useState } from "react"
 import { useAuth } from "@/lib/auth-context"
 import { Sidebar } from "./sidebar"
 import { Header } from "./header"
+import { PageTransition } from "./page-transition"
 
 export function AppLayout({ children }: { children: React.ReactNode }) {
   const { isLoading } = useAuth()
@@ -27,7 +28,9 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
         style={{ marginLeft: isCollapsed ? '5rem' : '16rem' }}
       >
         <Header />
-        <main className="flex-1 p-8">{children}</main>
+        <main className="flex-1">
+          <PageTransition>{children}</PageTransition>
+        </main>
       </div>
     </div>
   )
