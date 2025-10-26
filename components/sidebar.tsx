@@ -43,14 +43,15 @@ export function Sidebar({ onCollapseChange }: { onCollapseChange?: (collapsed: b
   return (
     <aside 
         className={cn(
-          "fixed left-0 top-0 z-40 h-screen border-r border-[#8BD9D6] bg-gradient-to-b from-[#A0E7E5] to-[#B9F3F2] sidebar-transition shadow-xl",
+          "fixed left-0 top-0 z-40 h-screen border-r border-[#B8EDE1] bg-gradient-to-b from-[#B8EDE1] to-[#A0E7E5] sidebar-transition shadow-xl",
+          "before:content-[''] before:absolute before:left-0 before:top-0 before:h-full before:w-px before:bg-[rgba(255,255,255,0.4)] before:blur-[1px]",
           isCollapsed ? "w-20" : "w-64"
         )}
       >
         <div className="flex h-full flex-col">
           <div className="flex h-16 items-center justify-between border-b border-[#8BD9D6]/50 px-4">
             {!isCollapsed && (
-              <h1 className="text-xl font-bold text-white drop-shadow-sm">Sweet Solutions</h1>
+              <h1 className="text-xl font-bold text-white drop-shadow-sm font-heading tracking-tight">Sweet Solutions</h1>
             )}
             <button
               onClick={handleToggle}
@@ -66,7 +67,7 @@ export function Sidebar({ onCollapseChange }: { onCollapseChange?: (collapsed: b
               <div key={sectionName}>
                 {!isCollapsed && (
                   <div className="px-3 mb-2">
-                    <p className="text-xs font-semibold uppercase tracking-wider text-white/60">
+                    <p className="text-xs font-semibold uppercase tracking-wider text-white/60 font-heading">
                       {sectionName}
                     </p>
                   </div>
@@ -78,18 +79,18 @@ export function Sidebar({ onCollapseChange }: { onCollapseChange?: (collapsed: b
                       <Link
                         key={item.name}
                         href={item.href}
-                        className={cn(
-                          "relative flex items-center gap-3 rounded-2xl px-3 py-2.5 text-sm font-medium transition-all duration-200 group",
-                          isActive
-                            ? "bg-white/40 text-white shadow-lg hover:bg-white/50 hover:shadow-xl hover:scale-[1.02]"
-                            : "text-white/80 hover:text-white hover:bg-white/20 hover:shadow-md",
-                        )}
+                      className={cn(
+                        "relative flex items-center gap-3 rounded-2xl px-3 py-2.5 text-sm font-medium transition-all duration-[300ms] cubic-bezier(0.22,1,0.36,1) group",
+                        isActive
+                          ? "bg-white/25 text-white shadow-lg hover:bg-white/35 hover:shadow-xl hover:scale-[1.02]"
+                          : "text-[#27524F] hover:text-white hover:bg-white/15 hover:shadow-md",
+                      )}
                         data-testid={`nav-${item.name.toLowerCase()}`}
                         title={isCollapsed ? item.name : undefined}
                       >
                         {/* Active scoop indicator */}
                         {isActive && (
-                          <div className="absolute -left-1 top-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-[#FFB7B2] shadow-sm" />
+                          <div className="absolute -left-1 top-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-[#F86E5A] shadow-sm sidebar-indicator" />
                         )}
                         
                         <item.icon 
@@ -112,7 +113,7 @@ export function Sidebar({ onCollapseChange }: { onCollapseChange?: (collapsed: b
 
           <div className="border-t border-white/30 p-4 pt-3">
             {!isCollapsed && (
-              <p className="text-xs font-semibold bg-gradient-to-r from-[#FFB7B2] to-[#FFEE93] bg-clip-text text-transparent">
+              <p className="text-xs font-semibold text-[#27524F]">
                 Sweet Solutions
               </p>
             )}

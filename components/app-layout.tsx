@@ -21,7 +21,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <div className="flex min-h-screen bg-[#FFF3EA]">
+    <div className="flex min-h-screen" style={{ background: 'linear-gradient(to bottom, #FBE5CF 0%, #FFF6EF 100%)' }}>
       <Sidebar onCollapseChange={setIsCollapsed} />
       <div 
         className="flex flex-1 flex-col transition-all duration-300"

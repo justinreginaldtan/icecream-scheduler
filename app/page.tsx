@@ -24,10 +24,10 @@ export default function DashboardPage() {
   return (
     <AppLayout>
           <div className="p-8 sm:p-10 lg:p-12">
-            <div className="mb-10 flex items-center justify-between">
+            <div className="mb-12 flex items-center justify-between header-section">
               <div>
-                <h1 className="text-3xl font-bold text-[var(--text)]">Welcome back, {user?.name.split(" ")[0]}</h1>
-                <p className="text-[color:rgba(51,51,51,.65)] mt-1">Overview of your team and schedule</p>
+                <h1 className="text-3xl font-bold text-[#2A1E16] dashboard-headline">Welcome back, {user?.name.split(" ")[0]}</h1>
+                <p className="text-[#666] mt-3 text-base leading-relaxed">Overview of your team and schedule</p>
               </div>
               <Button
                 variant="outline"
@@ -39,60 +39,60 @@ export default function DashboardPage() {
             </div>
 
             <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4 mb-10">
-              <div className="bg-gradient-to-br from-[#A0E7E5] to-[#FFEE93] p-[2px] rounded-2xl shadow-md hover:shadow-lg transition-all duration-200 hover:scale-[1.02] card-enter" style={{ animationDelay: '0ms' }}>
-                <div className="bg-white rounded-2xl p-6 h-full">
+              <div className="bg-gradient-to-br from-[#8ADDD0] to-[#A0E7E5] p-[2px] rounded-2xl shadow-md hover:shadow-lg transition-all duration-200 hover:scale-[1.02] card-enter" style={{ animationDelay: '0ms' }}>
+                <div className="bg-white rounded-2xl p-6 h-full hover:bg-[#F0FFFE]/30 transition-colors">
                   <div className="flex items-start justify-between mb-4">
                     <div className="flex-1">
-                      <p className="text-sm font-medium text-[#666] mb-1">Total Employees</p>
-                      <p className="text-3xl font-bold text-[#333] mb-1">{totalEmployees}</p>
-                      <p className="text-xs text-[#999]">Active team members</p>
+                      <p className="text-sm font-semibold text-[#666] mb-2 font-heading">Total Employees</p>
+                      <p className="text-3xl font-bold text-[#2A1E16] mb-2 font-heading">{totalEmployees}</p>
+                      <p className="text-xs text-[#666]">Active team members</p>
                     </div>
-                    <div className="bg-gradient-to-br from-[#A0E7E5] to-[#B9F3F2] rounded-xl p-2.5 shadow-sm">
+                    <div className="bg-gradient-to-br from-[#8ADDD0] to-[#B9F3F2] rounded-xl p-2.5 shadow-sm transition-all duration-[200ms] ease-out hover:shadow-md hover:shadow-[rgba(248,110,90,0.15)] hover:scale-[1.05]">
                       <Users className="h-6 w-6 text-[#49A0B0]" />
                     </div>
                   </div>
                 </div>
               </div>
 
-              <div className="bg-gradient-to-br from-[#FFB7B2] to-[#FFEE93] p-[2px] rounded-2xl shadow-md hover:shadow-lg transition-all duration-200 hover:scale-[1.02] card-enter" style={{ animationDelay: '50ms' }}>
-                <div className="bg-white rounded-2xl p-6 h-full">
+              <div className="bg-gradient-to-br from-[#F86E5A] to-[#FFB7B2] p-[2px] rounded-2xl shadow-md hover:shadow-lg transition-all duration-200 hover:scale-[1.02] card-enter" style={{ animationDelay: '50ms' }}>
+                <div className="bg-white rounded-2xl p-6 h-full hover:bg-[#FFF8F6]/30 transition-colors">
                   <div className="flex items-start justify-between mb-4">
                     <div className="flex-1">
-                      <p className="text-sm font-medium text-[#666] mb-1">Hours This Week</p>
-                      <p className="text-3xl font-bold text-[#333] mb-1">{totalHoursThisWeek}</p>
-                      <p className="text-xs text-[#999]">Scheduled hours</p>
+                      <p className="text-sm font-semibold text-[#666] mb-2 font-heading">Hours This Week</p>
+                      <p className="text-3xl font-bold text-[#2A1E16] mb-2 font-heading">{totalHoursThisWeek}</p>
+                      <p className="text-xs text-[#666]">Scheduled hours</p>
                     </div>
-                    <div className="bg-gradient-to-br from-[#FFB7B2] to-[#FFD1CE] rounded-xl p-2.5 shadow-sm">
+                    <div className="bg-gradient-to-br from-[#FFB7B2] to-[#FFD1CE] rounded-xl p-2.5 shadow-sm transition-all duration-[200ms] ease-out hover:shadow-md hover:shadow-[rgba(248,110,90,0.15)] hover:scale-[1.05]">
                       <Clock className="h-6 w-6 text-[#E85F52]" />
                     </div>
                   </div>
                 </div>
               </div>
 
-              <div className="bg-gradient-to-br from-[#FFEE93] to-[#A0E7E5] p-[2px] rounded-2xl shadow-md hover:shadow-lg transition-all duration-200 hover:scale-[1.02] card-enter" style={{ animationDelay: '100ms' }}>
-                <div className="bg-white rounded-2xl p-6 h-full">
+              <div className="bg-gradient-to-br from-[#8ADDD0] to-[#D4F4ED] p-[2px] rounded-2xl shadow-md hover:shadow-lg transition-all duration-200 hover:scale-[1.02] card-enter" style={{ animationDelay: '100ms' }}>
+                <div className="bg-white rounded-2xl p-6 h-full hover:bg-[#FFFEF0]/30 transition-colors">
                   <div className="flex items-start justify-between mb-4">
                     <div className="flex-1">
-                      <p className="text-sm font-medium text-[#666] mb-1">Pending Requests</p>
-                      <p className="text-3xl font-bold text-[#333] mb-1">{pendingRequests}</p>
-                      <p className="text-xs text-[#999]">Awaiting approval</p>
+                      <p className="text-sm font-semibold text-[#666] mb-2 font-heading">Pending Requests</p>
+                      <p className="text-3xl font-bold text-[#2A1E16] mb-2 font-heading">{pendingRequests}</p>
+                      <p className="text-xs text-[#666]">Awaiting approval</p>
                     </div>
-                    <div className="bg-gradient-to-br from-[#FFEE93] to-[#FFF5B8] rounded-xl p-2.5 shadow-sm">
+                    <div className="bg-gradient-to-br from-[#FFEE93] to-[#FFF5B8] rounded-xl p-2.5 shadow-sm transition-all duration-[200ms] ease-out hover:shadow-md hover:shadow-[rgba(248,110,90,0.15)] hover:scale-[1.05]">
                       <FileText className="h-6 w-6 text-[#D4A847]" />
                     </div>
                   </div>
                 </div>
               </div>
 
-              <div className="bg-gradient-to-br from-[#A0E7E5] to-[#FFB7B2] p-[2px] rounded-2xl shadow-md hover:shadow-lg transition-all duration-200 hover:scale-[1.02] card-enter" style={{ animationDelay: '150ms' }}>
-                <div className="bg-white rounded-2xl p-6 h-full">
+              <div className="bg-gradient-to-br from-[#A0E7E5] to-[#8ADDD0] p-[2px] rounded-2xl shadow-md hover:shadow-lg transition-all duration-200 hover:scale-[1.02] card-enter" style={{ animationDelay: '150ms' }}>
+                <div className="bg-white rounded-2xl p-6 h-full hover:bg-[#F0FFFE]/30 transition-colors">
                   <div className="flex items-start justify-between mb-4">
                     <div className="flex-1">
-                      <p className="text-sm font-medium text-[#666] mb-1">Upcoming Shifts</p>
-                      <p className="text-3xl font-bold text-[#333] mb-1">{upcomingShifts}</p>
-                      <p className="text-xs text-[#999]">Next 7 days</p>
+                      <p className="text-sm font-semibold text-[#666] mb-2 font-heading">Upcoming Shifts</p>
+                      <p className="text-3xl font-bold text-[#2A1E16] mb-2 font-heading">{upcomingShifts}</p>
+                      <p className="text-xs text-[#666]">Next 7 days</p>
                     </div>
-                    <div className="bg-gradient-to-br from-[#A0E7E5] to-[#B9F3F2] rounded-xl p-2.5 shadow-sm">
+                    <div className="bg-gradient-to-br from-[#8ADDD0] to-[#B9F3F2] rounded-xl p-2.5 shadow-sm transition-all duration-[200ms] ease-out hover:shadow-md hover:shadow-[rgba(248,110,90,0.15)] hover:scale-[1.05]">
                       <TrendingUp className="h-6 w-6 text-[#49A0B0]" />
                     </div>
                   </div>
@@ -103,8 +103,8 @@ export default function DashboardPage() {
             <div className="grid gap-8 lg:grid-cols-2">
               <Card>
                 <CardHeader>
-                  <CardTitle className="text-[var(--text)]">Your Next Shift</CardTitle>
-                  <CardDescription>Upcoming schedule details</CardDescription>
+                  <CardTitle className="font-heading">Your Next Shift</CardTitle>
+                  <CardDescription className="text-[#666]">Upcoming schedule details</CardDescription>
                 </CardHeader>
                 <CardContent>
                   {nextShift ? (
@@ -148,8 +148,8 @@ export default function DashboardPage() {
 
               <Card>
                 <CardHeader>
-                  <CardTitle className="text-[var(--text)]">Recent Activity</CardTitle>
-                  <CardDescription>Latest updates and changes</CardDescription>
+                  <CardTitle className="font-heading">Recent Activity</CardTitle>
+                  <CardDescription className="text-[#666]">Latest updates and changes</CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">

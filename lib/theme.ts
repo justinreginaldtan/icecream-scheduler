@@ -1,15 +1,17 @@
 // Sweet Solutions Ice Cream Shop Theme
 export const theme = {
   colors: {
-    bg: "#FFF3EA", // melted vanilla ice cream background - warm and cozy
+    bg: "#FCE8D9", // warm waffle tone background
     surface: "#FFFFFF",
-    text: "#333333", // warm gray
-    border: "#E8E3DD", // soft warm border
-    primary: "#FFB7B2", // strawberry pink
+    text: "#1E1E1E", // dark text for premium contrast
+    textSecondary: "#666666", // secondary text
+    border: "#E8D9C9", // soft warm border
+    primary: "#F86E5A", // premium coral
+    sidebarText: "#27524F", // dark mint green for sidebar
     strawberry: "#FFB7B2", // strawberry pink
     mint: "#A0E7E5", // mint blue
     vanilla: "#FFEE93", // vanilla cream
-    muted: "#FFF3EA",
+    muted: "#FCE8D9",
     shadow: {
       sm: "0 1px 2px 0 rgb(0 0 0 / 0.03)",
       md: "0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05)",
