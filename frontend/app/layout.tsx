@@ -1,16 +1,23 @@
 import type React from "react"
 import type { Metadata } from "next"
-import { Poppins } from "next/font/google"
+import { Inter, Lora } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
 import "./globals.css"
 import { Toaster } from "@/components/ui/toaster"
 import { AuthProvider } from "@/lib/auth/auth-context"
 import { SidebarProvider } from "@/lib/sidebar-context"
 
-const poppins = Poppins({
+const inter = Inter({
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
-  variable: "--font-poppins",
+  variable: "--font-inter",
+  display: "swap",
+})
+
+const lora = Lora({
+  subsets: ["latin"],
+  weight: ["500", "600", "700"],
+  variable: "--font-lora",
+  display: "swap",
 })
 
 export const metadata: Metadata = {
@@ -32,23 +39,23 @@ export default function RootLayout({
       <head>
         <style>{`
           :root {
-            --bg: linear-gradient(to bottom, #FBE5CF 0%, #FFF6EF 100%);
-            --bg-vanilla-warm: #FBE5CF;
-            --bg-vanilla-light: #FFF6EF;
+            --bg: linear-gradient(to bottom, #FFFDFC 0%, #FFF5EC 20%);
+            --bg-vanilla-warm: #FFFDFC;
+            --bg-vanilla-light: #FFF5EC;
             --surface: #FFFFFF;
-            --text: #2A1E16;
-            --border: rgba(0,0,0,0.06);
-            --primary: #F86E5A;
-            --primary-bright: #FF8B6E;
-            --primary-gradient: linear-gradient(to bottom right, #F86E5A, #FF8B6E);
-            --brandBlue: #49B6C2;
-            --brandPink: #F04E98;
-            --muted: #FFF6EF;
-            --sidebar: #B8EDE1;
+            --text: #4E463E;
+            --border: rgba(0,0,0,0.04);
+            --primary: #C46A2F;
+            --primary-bright: #D07A3D;
+            --primary-gradient: linear-gradient(135deg, #C46A2F 0%, #A45328 100%);
+            --brandBlue: #9CCBEB;
+            --brandPink: #F9A9A7;
+            --muted: #FFF5EC;
+            --sidebar: #E8F4F1;
           }
         `}</style>
       </head>
-      <body className={`${poppins.variable} font-sans antialiased`}>
+      <body className={`${inter.variable} ${lora.variable} font-sans antialiased`}>
         <SidebarProvider>
           <AuthProvider>
             {children}

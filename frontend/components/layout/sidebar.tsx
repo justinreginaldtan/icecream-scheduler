@@ -72,9 +72,7 @@ export function Sidebar() {
         )}
         style={{ 
           background: 'var(--sidebar-bg)',
-          backgroundImage: 'linear-gradient(180deg, rgba(220, 243, 238, 1) 0%, rgba(191, 232, 222, 1) 100%)',
-          boxShadow: 'inset -2px 0 8px rgba(0, 0, 0, 0.04), 4px 0 16px rgba(0, 0, 0, 0.02)',
-          borderRight: '1.5px solid rgba(70, 113, 106, 0.25)',
+          boxShadow: '0 4px 12px rgba(0, 0, 0, 0.04)',
           backdropFilter: 'var(--card-glass-blur)',
           WebkitBackdropFilter: 'var(--card-glass-blur)',
           transition: 'all var(--transition-slow) var(--ease-out-cubic)'
@@ -83,8 +81,7 @@ export function Sidebar() {
         <div className="flex h-full flex-col">
           {/* Logo and Branding - Clickable Toggle */}
           <div className="px-4 pt-6 pb-6" style={{ 
-            borderBottom: '1.5px solid rgba(70, 113, 106, 0.2)',
-            background: 'linear-gradient(to bottom, rgba(220, 243, 238, 0.3), transparent)'
+            borderBottom: '1px solid rgba(0,0,0,0.05)'
           }}>
             <div 
               onClick={toggleSidebar}
@@ -127,28 +124,21 @@ export function Sidebar() {
                 key={item.name}
                 href={item.href}
                 className={cn(
-                  "relative flex items-center rounded-lg px-3 py-2.5 text-sm font-medium focus-visible:ring-2 focus-visible:ring-[var(--brandBlue)] focus-visible:outline-none group/item cursor-pointer",
-                  "transition-all duration-200 ease-out",
-                  isActive
-                    ? "bg-[#B7E7DF] text-[#1A5F5B]"
-                    : "text-[#2A2A2A] hover:translate-x-[2px] hover:bg-[color:rgba(183,231,223,.2)]",
-                  isCollapsed ? "justify-center px-2" : "gap-3"
+                  "sidebar-nav-link relative flex items-center rounded-lg px-3 py-2.5 text-sm font-medium focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[var(--focus-ring)] focus-visible:outline-none group/item cursor-pointer transition-all duration-200 ease-out",
+                  isCollapsed ? "justify-center px-2" : "gap-3",
+                  isActive && "sidebar-nav-link-active"
                 )}
                 style={{
                   animation: `fadeInUp 0.4s ease forwards`,
-                  animationDelay: `${index * 0.06}s`,
-                  ...(isActive && { 
-                    boxShadow: 'inset 3px 0 0 var(--berry-500), 0 2px 8px rgba(226, 87, 68, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.3)',
-                    background: 'linear-gradient(90deg, rgba(183, 231, 223, 0.5) 0%, rgba(191, 232, 222, 0.35) 100%)',
-                    borderLeft: '3px solid var(--berry-500)'
-                  })
+                  animationDelay: `${index * 0.06}s`
                 }}
+                data-active={isActive}
                 data-testid={`nav-${item.name.toLowerCase().replace(' ', '-')}`}
               >
                 <item.icon className={cn(
                   "h-5 w-5 flex-shrink-0 transition-all duration-200 ease-out",
-                  "group-hover/item:translate-y-[-2px] group-hover/item:rotate-3",
-                  isActive ? "text-[#1A5F5B]" : "text-[color:rgba(42,42,42,.6)]"
+                  "group-hover/item:-translate-y-[2px]",
+                  isActive ? "text-[var(--primary)]" : "text-[color:rgba(76,89,86,0.7)]"
                 )} />
                 {/* Show label if expanded */}
                 {!isCollapsed && (
@@ -179,22 +169,17 @@ export function Sidebar() {
                 key={item.name}
                 href={item.href}
                 className={cn(
-                  "relative flex items-center rounded-lg px-3 py-2.5 text-sm font-medium focus-visible:ring-2 focus-visible:ring-[var(--brandBlue)] focus-visible:outline-none group/item cursor-pointer",
-                  "transition-all duration-200 ease-out",
-                  isActive
-                    ? "bg-[#B7E7DF] text-[#1A5F5B]"
-                    : "text-[#2A2A2A] hover:bg-[color:rgba(183,231,223,.3)]",
-                  isCollapsed ? "justify-center px-2" : "gap-3"
+                  "sidebar-nav-link relative flex items-center rounded-lg px-3 py-2.5 text-sm font-medium focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[var(--focus-ring)] focus-visible:outline-none group/item cursor-pointer transition-all duration-200 ease-out",
+                  isCollapsed ? "justify-center px-2" : "gap-3",
+                  isActive && "sidebar-nav-link-active"
                 )}
-                style={{
-                  ...(isActive && { boxShadow: '0 1px 2px rgba(0, 0, 0, 0.05)' })
-                }}
+                data-active={isActive}
                 data-testid={`nav-${item.name.toLowerCase().replace(' ', '-')}`}
               >
                 <item.icon className={cn(
                   "h-5 w-5 flex-shrink-0 transition-all duration-200 ease-out",
-                  "group-hover/item:translate-y-[-2px] group-hover/item:rotate-3",
-                  isActive ? "text-[#1A5F5B]" : "text-[color:rgba(42,42,42,.6)]"
+                  "group-hover/item:-translate-y-[2px]",
+                  isActive ? "text-[var(--primary)]" : "text-[color:rgba(76,89,86,0.7)]"
                 )} />
                 {/* Show label if expanded */}
                 {!isCollapsed && (
