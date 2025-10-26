@@ -81,8 +81,8 @@ export default function DashboardPage() {
       <div className="px-6 md:px-8 py-8 animate-fade-in">
             <div className="mb-10 flex items-center justify-between">
               <div className="animate-slide-up">
-                <h1 className="text-3xl font-bold text-[var(--text)] mb-2">Welcome back, {user?.name.split(" ")[0]}</h1>
-                <p className="text-[color:rgba(44,42,41,.6)] text-base">
+                <h1 className="mb-2" style={{ fontSize: '2rem', fontWeight: 'bold', letterSpacing: '-0.02em', color: '#2C2A29' }}>Welcome back, {user?.name.split(" ")[0]}</h1>
+                <p className="text-sm" style={{ color: '#7A7A7A' }}>
                   {isEmployee ? "Your schedule and team updates" : "Overview of your team and schedule"}
                 </p>
               </div>
@@ -99,7 +99,7 @@ export default function DashboardPage() {
             <div className={`grid gap-4 mb-10 ${isEmployee ? 'md:grid-cols-3' : 'md:grid-cols-2 lg:grid-cols-4'}`}>
               {/* Total Employees - Hidden for employees */}
               {!isEmployee && (
-                <Card className="group bg-white shadow-sm rounded-xl hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 animate-slide-up border-2 border-[#F7F5F3] hover:border-[#E5E0DB]">
+                <Card className="group bg-white border-1 hover:shadow-lg transition-all duration-300 animate-slide-up" style={{ borderRadius: '14px', boxShadow: '0 4px 12px rgba(0,0,0,0.05)', border: '1px solid rgba(247,245,243,0.8)' }}>
                   <CardHeader className="flex flex-row items-center justify-between pb-3 px-4 pt-4">
                     <div className="space-y-1">
                       <CardTitle className="text-xs font-medium text-[color:rgba(44,42,41,.6)]">
@@ -115,7 +115,7 @@ export default function DashboardPage() {
               )}
 
               {/* Hours This Week - Minimal for employees */}
-              <Card className={`group shadow-sm rounded-xl transition-all duration-300 animate-slide-up ${isEmployee ? 'bg-white hover:from-[color:rgba(142,213,226,.05)] hover:shadow-md' : 'bg-white hover:shadow-md hover:-translate-y-0.5'} border-2 border-[#E5F7F8] hover:border-[#B8EBEE]`}>
+              <Card className={`group bg-white transition-all duration-300 animate-slide-up`} style={{ borderRadius: '14px', boxShadow: '0 4px 12px rgba(0,0,0,0.05)', border: '1px solid rgba(229,247,248,0.5)' }}>
                 <CardHeader className="flex flex-row items-center justify-between pb-3 px-4 pt-4">
                   <div className="space-y-1">
                     <CardTitle className="text-xs font-medium text-[color:rgba(44,42,41,.6)]">
@@ -130,7 +130,7 @@ export default function DashboardPage() {
               </Card>
 
               {/* My Requests / Pending Requests */}
-              <Card className={`group shadow-sm rounded-xl transition-all duration-300 animate-slide-up cursor-pointer bg-white border-2 border-[#FEF0F0] hover:border-[#FCD5D5] hover:shadow-md hover:-translate-y-0.5`}
+              <Card className={`group bg-white transition-all duration-300 animate-slide-up cursor-pointer hover:shadow-lg`} style={{ borderRadius: '14px', boxShadow: '0 4px 12px rgba(0,0,0,0.05)', border: '1px solid rgba(244,108,91,0.15)' }}
                     onClick={() => nav.navigate('/requests')}>
                 <CardHeader className="pb-3 px-4 pt-4">
                   <div className="flex items-center justify-between mb-2">
@@ -153,7 +153,7 @@ export default function DashboardPage() {
               </Card>
 
               {/* My Shifts / Upcoming Shifts */}
-              <Card className={`group shadow-sm rounded-xl transition-all duration-300 animate-slide-up cursor-pointer bg-white border-2 border-[#E5F7F8] hover:border-[#B8EBEE] hover:shadow-md hover:-translate-y-0.5`}
+              <Card className={`group bg-white transition-all duration-300 animate-slide-up cursor-pointer hover:shadow-lg`} style={{ borderRadius: '14px', boxShadow: '0 4px 12px rgba(0,0,0,0.05)', border: '1px solid rgba(229,247,248,0.5)' }}
                     onClick={() => nav.navigate('/schedule')}>
                 <CardHeader className="pb-3 px-4 pt-4">
                   <div className="flex items-center justify-between mb-2">
@@ -183,7 +183,7 @@ export default function DashboardPage() {
             {/* Bottom Section - Large Next Shift Card for Employees, Split for Admins */}
             <div className={`grid gap-6 ${isEmployee ? 'lg:grid-cols-1 max-w-4xl mx-auto' : 'lg:grid-cols-2'}`}>
               {/* Your Next Shift Card - Large and prominent for employees */}
-              <Card className={`group rounded-2xl transition-all duration-300 animate-slide-up bg-white border-2 border-[#E5F7F8] hover:border-[#B8EBEE] ${isEmployee ? 'shadow-md' : 'shadow-sm hover:shadow-md'} hover:-translate-y-0.5`}>
+              <Card className={`group transition-all duration-300 animate-slide-up bg-white hover:shadow-lg`} style={{ borderRadius: '14px', boxShadow: '0 4px 12px rgba(0,0,0,0.05)', border: '1px solid rgba(229,247,248,0.5)' }}>
                 <CardHeader className={`${isEmployee ? 'pb-6 px-8 pt-8' : 'pb-4'}`}>
                   <CardTitle className={`${isEmployee ? 'text-2xl' : 'text-lg'} font-bold text-[#2C2A29] flex items-center gap-3 ${isEmployee ? 'mb-2' : ''}`}>
                     <div className={`${isEmployee ? 'p-3 rounded-xl' : 'p-2 rounded-lg'} bg-[#E5F7F8] group-hover:bg-[#D8F2F5] transition-colors duration-300`}>
@@ -255,7 +255,7 @@ export default function DashboardPage() {
 
               {/* Recent Activity Card - Hidden for employees */}
               {!isEmployee && (
-                <Card className="group bg-white border-2 border-[#F7F5F3] hover:border-[#E5E0DB] shadow-sm rounded-xl hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 animate-slide-up">
+                <Card className="group bg-white hover:shadow-lg transition-all duration-300 animate-slide-up" style={{ borderRadius: '14px', boxShadow: '0 4px 12px rgba(0,0,0,0.05)', border: '1px solid rgba(247,245,243,0.8)' }}>
                   <CardHeader className="pb-4">
                     <CardTitle className="text-lg font-semibold text-[#2C2A29] flex items-center gap-2">
                       <div className="p-2 rounded-lg bg-[#F7F5F3] group-hover:bg-[#F0EDE9] transition-colors duration-300">

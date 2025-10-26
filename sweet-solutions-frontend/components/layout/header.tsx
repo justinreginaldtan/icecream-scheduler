@@ -9,12 +9,16 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { Bell, LogOut, User, ChevronDown } from "lucide-react"
+import { Bell, LogOut, User, ChevronDown, Menu } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useAuth } from "@/lib/auth/auth-context"
+import { useSidebar } from "@/lib/sidebar-context"
+import { useState, useEffect } from "react"
 
 export function Header() {
   const { user, logout } = useAuth()
+  const { toggleSidebar, isCollapsed } = useSidebar()
+  const [showToggle, setShowToggle] = useState(false)
 
   const initials =
     user?.name
@@ -23,21 +27,41 @@ export function Header() {
       .join("")
       .toUpperCase() || "U"
 
+  useEffect(() => {
+    const handleResize = () => {
+      setShowToggle(window.innerWidth < 1024)
+    }
+    handleResize()
+    window.addEventListener("resize", handleResize)
+    return () => window.removeEventListener("resize", handleResize)
+  }, [])
+
   return (
-    <header role="banner" data-testid="global-header" className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-[var(--border)] bg-[var(--surface)] px-6 shadow-sm">
-      {/* Left: Logo/Brand */}
-      <div className="flex items-center">
-        <div className="flex items-center gap-3">
-          <img 
-            src="/howdyslogo.png" 
-            alt="Howdy Homemade Logo" 
-            className="h-8 w-8 object-contain"
-          />
-          <div>
-            <h1 className="text-lg font-semibold text-[var(--brandBlue)]">Howdy Homemade</h1>
-            <p className="text-xs font-medium text-[var(--brandPink)]">Sweet Solutions</p>
+    <header role="banner" data-testid="global-header" className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-[var(--border)] bg-[var(--surface)] px-6 shadow-sm" style={{ borderTop: '3px solid #F46C5B' }}>
+      {/* Left: Toggle + Logo/Brand */}
+      <div className="flex items-center gap-3">
+        {showToggle && (
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={toggleSidebar}
+            className="h-9 w-9 rounded-lg focus-visible:ring-2 focus-visible:ring-[var(--brandBlue)] focus-visible:outline-none"
+            aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+          >
+            <Menu className="h-5 w-5" />
+          </Button>
+        )}
+          <div className="flex items-center gap-3">
+            <img 
+              src="/howdyslogo.png" 
+              alt="Howdy Homemade Logo" 
+              className="h-8 w-8 object-contain"
+            />
+            <div>
+              <h1 className="text-lg font-semibold text-[var(--brandBlue)]">Howdy Homemade</h1>
+              <p className="text-xs font-medium text-[var(--brandPink)]">Sweet Solutions</p>
+            </div>
           </div>
-        </div>
       </div>
 
       {/* Right: Actions */}

@@ -5,8 +5,8 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  /* Handcrafted Local Ice Cream Shop Theme */
-  --background: #FFF9F5; /* Cream background */
+  /* Premium Handcrafted Local Ice Cream Shop Theme */
+  --background: #FFFCF9; /* Clean warm white */
   --foreground: #2C2A29; /* Soft brownish text */
   --card: #ffffff;
   --card-foreground: #2c2a29;
@@ -31,6 +31,10 @@
   --card-border-pink: #FEF0F0;
   --card-border-neutral: #F7F5F3;
   --radius: 0.75rem;
+  --sidebar-width-expanded: 200px;
+  --sidebar-width-collapsed: 72px;
+  --sidebar-transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --sidebar-label-transition: opacity 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   --sidebar: #ffffff;
   --sidebar-foreground: #2c2a29;
   --sidebar-primary: #3BAFDA; /* Howdy Blue */

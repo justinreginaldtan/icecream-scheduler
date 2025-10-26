@@ -5,6 +5,7 @@ import { Analytics } from "@vercel/analytics/next"
 import "./globals.css"
 import { Toaster } from "@/components/ui/toaster"
 import { AuthProvider } from "@/lib/auth/auth-context"
+import { SidebarProvider } from "@/lib/sidebar-context"
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -43,10 +44,12 @@ export default function RootLayout({
         `}</style>
       </head>
       <body className={`${poppins.variable} font-sans antialiased`}>
-        <AuthProvider>
-          {children}
-          <Toaster />
-        </AuthProvider>
+        <SidebarProvider>
+          <AuthProvider>
+            {children}
+            <Toaster />
+          </AuthProvider>
+        </SidebarProvider>
         <Analytics />
       </body>
     </html>
