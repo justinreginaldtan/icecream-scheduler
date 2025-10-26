@@ -64,9 +64,15 @@ export default function SettingsPage() {
   return (
     <AppLayout>
       <div className="px-6 md:px-8 py-8">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-[var(--text)]">Settings</h1>
-          <p className="text-[color:rgba(44,42,41,.6)] mt-1">Manage your account and preferences</p>
+        <div className="mb-10 animate-slide-up">
+          <div>
+            <h1 className="mb-2" style={{ fontSize: '2.5rem', fontWeight: '700', lineHeight: '1.1', color: '#2A2A2A', fontFamily: 'var(--font-display)' }}>
+              Settings
+            </h1>
+            <p className="text-base" style={{ color: '#575757', fontWeight: '500' }}>
+              Manage your account and preferences
+            </p>
+          </div>
         </div>
 
         <div className="space-y-6 max-w-3xl">

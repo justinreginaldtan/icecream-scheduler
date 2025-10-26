@@ -71,15 +71,21 @@ export function Sidebar() {
           isMobile && isCollapsed ? "-translate-x-full" : "translate-x-0"
         )}
         style={{ 
-          background: 'var(--sidebar-bg)', 
-          boxShadow: 'inset -2px 0 6px rgba(0, 0, 0, 0.05)',
-          borderRight: '0.5px solid rgba(0,0,0,0.05)',
-          transition: 'all 0.3s cubic-bezier(0.22, 1, 0.36, 1)'
+          background: 'var(--sidebar-bg)',
+          backgroundImage: 'linear-gradient(180deg, rgba(220, 243, 238, 1) 0%, rgba(191, 232, 222, 1) 100%)',
+          boxShadow: 'inset -2px 0 8px rgba(0, 0, 0, 0.04), 4px 0 16px rgba(0, 0, 0, 0.02)',
+          borderRight: '1.5px solid rgba(70, 113, 106, 0.25)',
+          backdropFilter: 'var(--card-glass-blur)',
+          WebkitBackdropFilter: 'var(--card-glass-blur)',
+          transition: 'all var(--transition-slow) var(--ease-out-cubic)'
         }}
       >
         <div className="flex h-full flex-col">
           {/* Logo and Branding - Clickable Toggle */}
-          <div className="px-4 pt-6 pb-6 border-b border-[var(--border)]">
+          <div className="px-4 pt-6 pb-6" style={{ 
+            borderBottom: '1.5px solid rgba(70, 113, 106, 0.2)',
+            background: 'linear-gradient(to bottom, rgba(220, 243, 238, 0.3), transparent)'
+          }}>
             <div 
               onClick={toggleSidebar}
               aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
@@ -125,13 +131,17 @@ export function Sidebar() {
                   "transition-all duration-200 ease-out",
                   isActive
                     ? "bg-[#B7E7DF] text-[#1A5F5B]"
-                    : "text-[#2A2A2A] hover:bg-[color:rgba(183,231,223,.3)]",
+                    : "text-[#2A2A2A] hover:translate-x-[2px] hover:bg-[color:rgba(183,231,223,.2)]",
                   isCollapsed ? "justify-center px-2" : "gap-3"
                 )}
                 style={{
                   animation: `fadeInUp 0.4s ease forwards`,
                   animationDelay: `${index * 0.06}s`,
-                  ...(isActive && { boxShadow: '0 1px 2px rgba(0, 0, 0, 0.05)' })
+                  ...(isActive && { 
+                    boxShadow: 'inset 3px 0 0 var(--berry-500), 0 2px 8px rgba(226, 87, 68, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.3)',
+                    background: 'linear-gradient(90deg, rgba(183, 231, 223, 0.5) 0%, rgba(191, 232, 222, 0.35) 100%)',
+                    borderLeft: '3px solid var(--berry-500)'
+                  })
                 }}
                 data-testid={`nav-${item.name.toLowerCase().replace(' ', '-')}`}
               >

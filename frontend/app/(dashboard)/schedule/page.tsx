@@ -93,12 +93,17 @@ export default function SchedulePage() {
   return (
     <AppLayout>
       <div className="px-6 md:px-8 py-8">
-        <div className="mb-8 flex items-center justify-between">
-          <div>
-            <h1 className="text-3xl font-bold text-[var(--text)]">Weekly Schedule</h1>
-            <p className="text-[color:rgba(44,42,41,.6)] mt-1">Manage shifts and team availability</p>
-          </div>
-          <div className="flex items-center gap-3">
+        <div className="mb-10 animate-slide-up">
+          <div className="flex items-start justify-between">
+            <div>
+              <h1 className="mb-2" style={{ fontSize: '2.5rem', fontWeight: '700', lineHeight: '1.1', color: '#2A2A2A', fontFamily: 'var(--font-display)' }}>
+                Weekly Schedule
+              </h1>
+              <p className="text-base" style={{ color: '#575757', fontWeight: '500' }}>
+                Build your team's schedule for the week ahead
+              </p>
+            </div>
+            <div className="flex items-center gap-3">
             <Button
               variant="outline"
               className="border-[var(--border)] text-[var(--text)] hover:bg-[var(--muted)] focus-visible:ring-2 focus-visible:ring-[var(--brandBlue)] focus-visible:outline-none bg-transparent"
@@ -108,13 +113,15 @@ export default function SchedulePage() {
             </Button>
             <Button
               onClick={handleAddShift}
-              className="bg-[var(--primary)] text-white hover:bg-[color:rgba(244,108,91,.9)] focus-visible:ring-2 focus-visible:ring-[var(--brandBlue)] focus-visible:outline-none"
+              variant="default"
+              style={{ borderRadius: 'var(--radius-md)' }}
               data-testid="add-shift-button"
               aria-label="Add new shift"
             >
               <Plus className="mr-2 h-4 w-4" />
-              Add Shift
+              Schedule a Shift
             </Button>
+            </div>
           </div>
         </div>
 
@@ -123,7 +130,7 @@ export default function SchedulePage() {
             <CardTitle className="text-[var(--text)]">
               Week of {weekDates[0].toLocaleDateString("en-US", { month: "long", day: "numeric" })}
             </CardTitle>
-            <CardDescription>Click on a shift to edit or remove it</CardDescription>
+            <CardDescription>Tap any shift to make changes or see details</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="overflow-x-auto">
@@ -179,8 +186,27 @@ export default function SchedulePage() {
 
             {/* Empty State */}
             {shifts.length === 0 && (
-              <div className="text-center py-12">
-                <p className="text-[color:rgba(44,42,41,.7)]">No shifts scheduled yet — add one above!</p>
+              <div className="text-center py-16 space-y-5">
+                <div className="mx-auto w-20 h-20 bg-gradient-to-br from-[rgba(220,243,238,0.3)] to-[rgba(183,231,223,0.2)] rounded-2xl flex items-center justify-center shadow-[0_4px_12px_rgba(0,0,0,0.06)]">
+                  <Calendar className="h-10 w-10 text-[color:rgba(68,176,156,0.7)]" />
+                </div>
+                <div className="space-y-2.5">
+                      <h3 className="text-xl font-bold" style={{ color: 'var(--charcoal-800)', fontFamily: 'var(--font-display)' }}>
+                    All set — smooth as cream
+                  </h3>
+                  <p className="text-sm max-w-sm mx-auto leading-relaxed" style={{ color: 'var(--charcoal-600)', fontWeight: '400' }}>
+                    Your schedule is clear this week. Ready to scoop your first shift?
+                  </p>
+                </div>
+                <Button
+                  onClick={handleAddShift}
+                  variant="default"
+                  className="mt-4"
+                  style={{ borderRadius: 'var(--radius-md)', paddingLeft: '1.5rem', paddingRight: '1.5rem' }}
+                >
+                  <Plus className="mr-2 h-4 w-4" />
+                  Schedule Your First Shift
+                </Button>
               </div>
             )}
           </CardContent>

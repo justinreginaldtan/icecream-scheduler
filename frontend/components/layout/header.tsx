@@ -37,7 +37,21 @@ export function Header() {
   }, [])
 
   return (
-    <header role="banner" data-testid="global-header" className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-[var(--border)] bg-[var(--surface)] shadow-sm" style={{ borderTop: '3px solid #F46C5B', paddingLeft: '24px', paddingRight: '24px' }}>
+    <header 
+      role="banner" 
+      data-testid="global-header" 
+      className="sticky top-0 z-30 flex h-16 items-center justify-between" 
+      style={{ 
+        borderTop: '3px solid var(--berry-500)',
+        borderBottom: '1px solid var(--border-subtle)',
+        background: 'rgba(255, 255, 255, 0.95)',
+        backdropFilter: 'blur(12px)',
+        WebkitBackdropFilter: 'blur(12px)',
+        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.04)',
+        paddingLeft: '24px', 
+        paddingRight: '24px' 
+      }}
+    >
       {/* Left: Toggle + Logo/Brand */}
       <div className="flex items-center gap-4">
         {showToggle && (

@@ -76,25 +76,41 @@ export default function DashboardPage() {
 
   return (
     <AppLayout>
-      <div className="animate-fade-in">
-            <div className="mb-10 flex items-center justify-between">
-              <div className="animate-slide-up">
-                <h1 className="mb-1" style={{ fontSize: '2rem', fontWeight: '700', lineHeight: '1.15', color: '#2A2A2A' }}>Welcome back, {user?.name.split(" ")[0]}</h1>
-                <p className="text-sm font-normal" style={{ opacity: '0.75', color: '#333333' }}>
-                  {isEmployee ? "Your schedule and team updates" : "Overview of your team and schedule"}
-                </p>
+      <div className="animate-fade-in" style={{ paddingTop: 'var(--space-hero-vertical)' }}>
+            {/* Hero Welcome Section - Warm & Inviting */}
+            <div className="mb-16 animate-slide-up">
+              <div className="flex items-start justify-between max-w-[var(--grid-max-width)]">
+                <div>
+                  <h1 className="mb-2" style={{ 
+                    fontSize: '2.5rem', 
+                    fontWeight: '700', 
+                    lineHeight: '1.1', 
+                    color: '#2A2A2A',
+                    fontFamily: 'var(--font-display)'
+                  }}>
+                    Welcome back, {user?.name.split(" ")[0]}
+                  </h1>
+                  <p className="text-base" style={{ 
+                    color: '#575757',
+                    fontWeight: '500'
+                  }}>
+                    {isEmployee ? "Here's what's happening with your schedule" : "Here's what's happening with your team"}
+                  </p>
+                </div>
+                <Button
+                  variant="outline"
+                  className="hidden sm:flex border-[var(--border)] text-[var(--text)] hover:bg-[color:rgba(183,231,223,0.15)] hover:border-[var(--brandBlue)] focus-visible:ring-2 focus-visible:ring-[var(--brandBlue)] focus-visible:outline-none bg-transparent"
+                  data-testid="date-range-selector"
+                  style={{ borderRadius: 'var(--radius-md)' }}
+                >
+                  {dateRange} <ChevronDown className="ml-2 h-4 w-4" />
+                </Button>
               </div>
-              <Button
-                variant="outline"
-                className="border-[var(--border)] text-[var(--text)] hover:bg-[var(--muted)] hover:border-[var(--brandBlue)] focus-visible:ring-2 focus-visible:ring-[var(--brandBlue)] focus-visible:outline-none bg-transparent transition-all duration-200 animate-slide-up"
-                data-testid="date-range-selector"
-              >
-                {dateRange} <ChevronDown className="ml-2 h-4 w-4" />
-              </Button>
             </div>
 
-            {/* KPI Cards - Minimal for employees, full for admins */}
-            <div className={`grid gap-4 mb-10 ${isEmployee ? 'md:grid-cols-3' : 'md:grid-cols-2 lg:grid-cols-4'}`}>
+            {/* KPI Cards - Varied Visual Weight & Staggered Animation */}
+            <div className={`grid gap-8 mb-16 stagger-children max-w-[var(--grid-max-width)] ${isEmployee ? 'md:grid-cols-3' : 'md:grid-cols-2 lg:grid-cols-4'}`}
+                 style={{ paddingLeft: 'var(--space-kpi-horizontal)', paddingRight: 'var(--space-kpi-horizontal)' }}>
               {/* Total Employees - Hidden for employees */}
               {!isEmployee && (
                 <Card className="group bg-white border-1 hover:shadow-lg transition-all duration-300 animate-slide-up" style={{ borderRadius: '14px', boxShadow: '0 4px 12px rgba(0,0,0,0.05)', border: '1px solid rgba(247,245,243,0.8)' }}>
@@ -179,7 +195,8 @@ export default function DashboardPage() {
             </div>
 
             {/* Bottom Section - Large Next Shift Card for Employees, Split for Admins */}
-            <div className={`grid gap-6 ${isEmployee ? 'lg:grid-cols-1 max-w-4xl mx-auto' : 'lg:grid-cols-2'}`}>
+            <div className={`grid gap-8 ${isEmployee ? 'lg:grid-cols-1 max-w-4xl mx-auto' : 'lg:grid-cols-2'} max-w-[var(--grid-max-width)]`}
+                 style={{ paddingLeft: 'var(--space-kpi-horizontal)', paddingRight: 'var(--space-kpi-horizontal)' }}>
               {/* Your Next Shift Card - Large and prominent for employees */}
               <Card className={`group transition-all duration-300 animate-slide-up bg-white hover:shadow-lg`} style={{ borderRadius: '14px', boxShadow: '0 4px 12px rgba(0,0,0,0.05)', border: '1px solid rgba(229,247,248,0.5)' }}>
                 <CardHeader className={`${isEmployee ? 'pb-6 px-8 pt-8' : 'pb-4'}`}>
@@ -220,30 +237,32 @@ export default function DashboardPage() {
                       </div>
                     </div>
                   ) : (
-                    <div className={`text-center ${isEmployee ? 'py-20' : 'py-16'} space-y-6`}>
-                      <div className={`mx-auto ${isEmployee ? 'w-24 h-24' : 'w-20 h-20'} bg-gradient-to-br from-[color:rgba(142,213,226,.15)] to-[color:rgba(255,107,157,.1)] rounded-3xl flex items-center justify-center shadow-sm`}>
-                        <Calendar className={`${isEmployee ? 'h-12 w-12' : 'h-10 w-10'} text-[color:rgba(142,213,226,.6)]`} />
+                    <div className={`text-center ${isEmployee ? 'py-16' : 'py-12'} space-y-5`}>
+                      <div className={`mx-auto ${isEmployee ? 'w-20 h-20' : 'w-16 h-16'} bg-gradient-to-br from-[rgba(220,243,238,0.3)] to-[rgba(183,231,223,0.2)] rounded-2xl flex items-center justify-center shadow-[0_4px_12px_rgba(0,0,0,0.06)]`}>
+                        <Calendar className={`${isEmployee ? 'h-10 w-10' : 'h-8 w-8'} text-[color:rgba(68,176,156,0.7)]`} />
                       </div>
-                      <div className="space-y-3">
-                        <h3 className={`${isEmployee ? 'text-2xl' : 'text-xl'} font-bold text-[var(--text)]`}>
-                          {isEmployee ? "You're all clear! 🎉" : "No upcoming shifts"}
+                      <div className="space-y-2.5">
+                        <h3 className={`${isEmployee ? 'text-xl' : 'text-lg'} font-bold`} style={{ color: 'var(--charcoal-800)', fontFamily: 'var(--font-display)' }}>
+                          {isEmployee ? "All set — smooth as cream" : "Ready to scoop your first shift?"}
                         </h3>
-                        <p className={`text-[${isEmployee ? '15px' : '14px'}] text-[color:rgba(26,26,26,.6)] max-w-md mx-auto leading-relaxed font-medium`}>
+                        <p className="text-sm max-w-sm mx-auto leading-relaxed" style={{ color: 'var(--charcoal-600)', fontWeight: '400' }}>
                           {isEmployee 
-                            ? "No shifts scheduled yet. Check back soon or reach out to your manager if you have questions."
-                            : "Ready to schedule your first shift? Let's get your schedule set up."
+                            ? "No shifts on the calendar yet. We'll reach out soon with your schedule!"
+                            : "Let's set up your team's first shift and get everyone in sync."
                           }
                         </p>
                       </div>
                       {!isEmployee && (
                         <Button
                           onClick={() => setIsShiftModalOpen(true)}
-                          className="bg-[#F46C5B] text-white hover:bg-[#E55A4A] hover:shadow-lg focus-visible:ring-2 focus-visible:ring-[#F46C5B] focus-visible:outline-none transition-all duration-300 rounded-full px-6 py-2"
+                          variant="default"
+                          className="mt-4"
+                          style={{ borderRadius: 'var(--radius-md)', paddingLeft: '1.5rem', paddingRight: '1.5rem' }}
                           data-testid="create-first-shift"
-                          aria-label="Create your first shift"
+                          aria-label="Schedule your first shift"
                         >
                           <Plus className="mr-2 h-4 w-4" />
-                          Create First Shift
+                          Scoop Your First Shift
                         </Button>
                       )}
                     </div>

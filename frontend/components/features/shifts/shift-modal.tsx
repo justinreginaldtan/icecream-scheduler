@@ -151,9 +151,9 @@ export function ShiftModal({ isOpen, onClose, shift }: ShiftModalProps) {
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
-          <DialogTitle className="text-foreground">{shift ? "Edit Shift" : "Add New Shift"}</DialogTitle>
+          <DialogTitle className="text-foreground">{shift ? "Edit Shift" : "Schedule a New Shift"}</DialogTitle>
           <DialogDescription>
-            {shift ? "Update the shift details below." : "Fill in the details to create a new shift."}
+            {shift ? "Make changes to your shift below." : "Set up a shift for your team — who, when, and where they'll be working."}
           </DialogDescription>
         </DialogHeader>
 
@@ -252,10 +252,10 @@ export function ShiftModal({ isOpen, onClose, shift }: ShiftModalProps) {
                 {isLoading ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Deleting...
+                    Removing...
                   </>
                 ) : (
-                  "Delete"
+                  "Remove Shift"
                 )}
               </Button>
             )}
@@ -272,10 +272,10 @@ export function ShiftModal({ isOpen, onClose, shift }: ShiftModalProps) {
               {isLoading ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  {shift ? "Updating..." : "Saving..."}
+                  {shift ? "Updating..." : "Adding shift..."}
                 </>
               ) : (
-                <>{shift ? "Update" : "Create"} Shift</>
+                <>{shift ? "Save Changes" : "Add Shift"}</>
               )}
             </Button>
           </DialogFooter>

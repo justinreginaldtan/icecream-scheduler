@@ -93,31 +93,37 @@ export default function PayrollPage() {
   return (
     <AppLayout>
       <div className="px-6 md:px-8 py-8">
-        <div className="mb-8 flex items-center justify-between">
-          <div>
-            <h1 className="text-3xl font-bold text-[var(--text)]">Payroll</h1>
-            <p className="text-[color:rgba(44,42,41,.6)] mt-1">Track hours and compensation for your team</p>
+        <div className="mb-10 animate-slide-up">
+          <div className="flex items-start justify-between">
+            <div>
+              <h1 className="mb-2" style={{ fontSize: '2.5rem', fontWeight: '700', lineHeight: '1.1', color: '#2A2A2A', fontFamily: 'var(--font-display)' }}>
+                Payroll
+              </h1>
+              <p className="text-base" style={{ color: '#575757', fontWeight: '500' }}>
+                Track hours and compensation for your team
+              </p>
+            </div>
+            <Button
+              type="button"
+              onClick={handleExportCSV}
+              disabled={isExporting}
+              aria-busy={isExporting}
+              variant="default"
+              data-testid="export-csv-button"
+            >
+              {isExporting ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Exporting...
+                </>
+              ) : (
+                <>
+                  <Download className="mr-2 h-4 w-4" />
+                  Export to CSV
+                </>
+              )}
+            </Button>
           </div>
-          <Button
-            type="button"
-            onClick={handleExportCSV}
-            disabled={isExporting}
-            aria-busy={isExporting}
-            className="bg-[var(--primary)] text-white hover:bg-[color:rgba(244,108,91,.9)] focus-visible:ring-2 focus-visible:ring-[var(--brandBlue)] focus-visible:outline-none"
-            data-testid="export-csv-button"
-          >
-            {isExporting ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Exporting...
-              </>
-            ) : (
-              <>
-                <Download className="mr-2 h-4 w-4" />
-                Export to CSV
-              </>
-            )}
-          </Button>
         </div>
 
         <div className="grid gap-6 md:grid-cols-3 mb-8">

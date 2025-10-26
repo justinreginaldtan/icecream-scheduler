@@ -58,9 +58,15 @@ export default function EmployeesPage() {
     <AppLayout>
       <div className="px-6 md:px-8 py-8">
         {/* Page Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-[var(--text)]">Team Members</h1>
-          <p className="text-[color:rgba(44,42,41,.6)] mt-1">Manage your staff and their information</p>
+        <div className="mb-10 animate-slide-up">
+          <div>
+            <h1 className="mb-2" style={{ fontSize: '2.5rem', fontWeight: '700', lineHeight: '1.1', color: '#2A2A2A', fontFamily: 'var(--font-display)' }}>
+              Team Members
+            </h1>
+            <p className="text-base" style={{ color: '#575757', fontWeight: '500' }}>
+              Get to know your amazing crew
+            </p>
+          </div>
         </div>
 
         {/* Stats Overview */}

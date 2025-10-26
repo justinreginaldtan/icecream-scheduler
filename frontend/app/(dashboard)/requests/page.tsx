@@ -5,7 +5,7 @@ import { AppLayout } from "@/components/layout/app-layout"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { Check, X, Calendar, Loader2 } from "lucide-react"
+import { Check, X, Calendar, Loader2, FileText } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import apiClient from "@/lib/api/client"
 import { useAuth } from "@/lib/auth/auth-context"
@@ -118,9 +118,15 @@ export default function RequestsPage() {
   return (
     <AppLayout>
       <div className="px-6 md:px-8 py-8">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-[var(--text)]">Time-Off Requests</h1>
-          <p className="text-[color:rgba(44,42,41,.6)] mt-1">Review and manage employee time-off requests</p>
+        <div className="mb-10 animate-slide-up">
+          <div>
+            <h1 className="mb-2" style={{ fontSize: '2.5rem', fontWeight: '700', lineHeight: '1.1', color: '#2A2A2A', fontFamily: 'var(--font-display)' }}>
+              Time-Off Requests
+            </h1>
+            <p className="text-base" style={{ color: '#575757', fontWeight: '500' }}>
+              Review and respond to your team's requests
+            </p>
+          </div>
         </div>
 
         <div className="grid gap-6 md:grid-cols-3 mb-8">
@@ -209,7 +215,8 @@ export default function RequestsPage() {
                           onClick={() => handleApprove(request._id)}
                           disabled={!!isLoading}
                           aria-busy={isLoading === "approve"}
-                          className="bg-green-600 text-white hover:bg-green-700 focus-visible:ring-2 focus-visible:ring-[var(--brandBlue)] focus-visible:outline-none"
+                          variant="default"
+                          className="bg-green-600 text-white hover:bg-green-700"
                           data-testid={`approve-request-${request._id}`}
                         >
                           {isLoading === "approve" ? (
@@ -253,8 +260,18 @@ export default function RequestsPage() {
               })}
 
               {requests.length === 0 && (
-                <div className="text-center py-12">
-                  <p className="text-[color:rgba(44,42,41,.6)]">No time-off requests at this time</p>
+                <div className="text-center py-16 space-y-5">
+                  <div className="mx-auto w-20 h-20 bg-gradient-to-br from-[rgba(220,243,238,0.3)] to-[rgba(183,231,223,0.2)] rounded-2xl flex items-center justify-center shadow-[0_4px_12px_rgba(0,0,0,0.06)]">
+                    <FileText className="h-10 w-10 text-[color:rgba(68,176,156,0.7)]" />
+                  </div>
+                  <div className="space-y-2.5">
+                    <h3 className="text-xl font-bold" style={{ color: 'var(--charcoal-800)', fontFamily: 'var(--font-display)' }}>
+                      All caught up
+                    </h3>
+                    <p className="text-sm max-w-sm mx-auto leading-relaxed" style={{ color: 'var(--charcoal-600)', fontWeight: '400' }}>
+                      No time-off requests waiting for review right now.
+                    </p>
+                  </div>
                 </div>
               )}
             </div>
