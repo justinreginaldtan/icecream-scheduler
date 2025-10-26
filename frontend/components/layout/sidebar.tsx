@@ -71,7 +71,7 @@ export function Sidebar() {
           isMobile && isCollapsed ? "-translate-x-full" : "translate-x-0"
         )}
         style={{ 
-          background: 'linear-gradient(to bottom, #D5EFEA, #BFE7DC)', 
+          background: 'var(--sidebar-bg)', 
           boxShadow: 'inset -2px 0 6px rgba(0, 0, 0, 0.05)',
           borderRight: '0.5px solid rgba(0,0,0,0.05)',
           transition: 'all 0.3s cubic-bezier(0.22, 1, 0.36, 1)'

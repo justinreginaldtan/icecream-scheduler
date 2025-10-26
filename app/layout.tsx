@@ -50,7 +50,7 @@ export default function RootLayout({
           }
         `}</style>
       </head>
-      <body className={`${fredoka.variable} ${nunitoSans.variable} font-sans antialiased`} style={{ background: 'linear-gradient(to bottom, #FBE5CF 0%, #FFF6EF 100%)' }}>
+      <body className={`${fredoka.variable} ${nunitoSans.variable} font-sans antialiased`}>
         <AuthProvider>
           {children}
           <Toaster />

@@ -4,13 +4,13 @@
 
 This project is split into **two separate repositories** for optimal team collaboration and AWS deployment:
 
-### Frontend (`sweet-solutions-frontend/`)
+### Frontend (`frontend/`)
 - **Framework**: Next.js 16 with App Router
 - **UI**: Radix UI + Tailwind CSS
 - **State**: React Context + Custom Hooks
 - **Deployment**: Vercel (recommended)
 
-### Backend (`sweet-solutions-backend/`)
+### Backend (`backend/`)
 - **Framework**: Express.js + Node.js
 - **Database**: MongoDB with Mongoose
 - **Authentication**: JWT tokens
@@ -57,22 +57,22 @@ serverless deploy
 
 ## 👥 **Team Roles**
 
-- **Frontend Developer**: `sweet-solutions-frontend/`
-- **Backend Developer**: `sweet-solutions-backend/`
+- **Frontend Developer**: `frontend/`
+- **Backend Developer**: `backend/`
 - **DevOps**: AWS deployment and configuration
 
 ## 🔧 **Development Commands**
 
 ### Frontend
 ```bash
-cd sweet-solutions-frontend
+cd frontend
 npm install
 npm run dev
 ```
 
 ### Backend
 ```bash
-cd sweet-solutions-backend
+cd backend
 npm install
 npm run dev
 ```

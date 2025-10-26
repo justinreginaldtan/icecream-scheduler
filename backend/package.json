@@ -1,5 +1,5 @@
 {
-  "name": "sweet-solutions-backend",
+  "name": "backend",
   "version": "1.0.0",
   "description": "Backend API for Sweet Solutions scheduling and payroll management",
   "main": "src/server.js",

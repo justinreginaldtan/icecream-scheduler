@@ -43,10 +43,12 @@ export function Sidebar({ onCollapseChange }: { onCollapseChange?: (collapsed: b
   return (
     <aside 
         className={cn(
-          "fixed left-0 top-0 z-40 h-screen border-r border-[#B8EDE1] bg-gradient-to-b from-[#B8EDE1] to-[#A0E7E5] sidebar-transition shadow-xl",
-          "before:content-[''] before:absolute before:left-0 before:top-0 before:h-full before:w-px before:bg-[rgba(255,255,255,0.4)] before:blur-[1px]",
+          "fixed left-0 top-0 z-40 h-screen border-r border-[#B8EDE1] sidebar-transition shadow-xl before:content-[''] before:absolute before:left-0 before:top-0 before:h-full before:w-px before:bg-[rgba(255,255,255,0.4)] before:blur-[1px]",
           isCollapsed ? "w-20" : "w-64"
         )}
+        style={{
+          background: 'var(--sidebar-bg)'
+        }}
       >
         <div className="flex h-full flex-col">
           <div className="flex h-16 items-center justify-between border-b border-[#8BD9D6]/50 px-4">

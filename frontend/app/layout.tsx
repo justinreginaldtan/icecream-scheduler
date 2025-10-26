@@ -32,14 +32,19 @@ export default function RootLayout({
       <head>
         <style>{`
           :root {
-            --bg: #FFF9F5;
+            --bg: linear-gradient(to bottom, #FBE5CF 0%, #FFF6EF 100%);
+            --bg-vanilla-warm: #FBE5CF;
+            --bg-vanilla-light: #FFF6EF;
             --surface: #FFFFFF;
-            --text: #2C2A29;
-            --border: #E5E0DB;
-            --primary: #F46C5B;
+            --text: #2A1E16;
+            --border: rgba(0,0,0,0.06);
+            --primary: #F86E5A;
+            --primary-bright: #FF8B6E;
+            --primary-gradient: linear-gradient(to bottom right, #F86E5A, #FF8B6E);
             --brandBlue: #49B6C2;
             --brandPink: #F04E98;
-            --muted: #F7EFEA;
+            --muted: #FFF6EF;
+            --sidebar: #B8EDE1;
           }
         `}</style>
       </head>

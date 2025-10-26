@@ -11,14 +11,14 @@ function Card({ className, ...props }: React.ComponentProps<'div'>) {
         className,
       )}
       style={{
-        background: 'linear-gradient(to bottom right, #FFFFFF, #FFF6F0)',
-        boxShadow: '0 2px 6px rgba(0, 0, 0, 0.04), 0 10px 22px rgba(0, 0, 0, 0.08)',
+        background: 'var(--card-gradient)',
+        boxShadow: 'var(--shadow-card)',
       }}
       onMouseEnter={(e) => {
-        e.currentTarget.style.boxShadow = '0 6px 16px rgba(0, 0, 0, 0.08), 0 12px 28px rgba(255, 180, 130, 0.15)'
+        e.currentTarget.style.boxShadow = 'var(--shadow-card-hover)'
       }}
       onMouseLeave={(e) => {
-        e.currentTarget.style.boxShadow = '0 2px 6px rgba(0, 0, 0, 0.04), 0 10px 22px rgba(0, 0, 0, 0.08)'
+        e.currentTarget.style.boxShadow = 'var(--shadow-card)'
       }}
       {...props}
     />

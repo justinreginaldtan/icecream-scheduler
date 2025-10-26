@@ -75,11 +75,21 @@ module.exports = {
           DEFAULT: "var(--card)",
           foreground: "var(--card-foreground)",
         },
-        // Howdy Homemade brand colors - Phase 1
+        // Sweet Solutions brand colors
         brandBlue: "var(--brandBlue)",
         brandPink: "var(--brandPink)",
         howdyBlue: "#3BAFDA",
         howdyPink: "#F9A5B8",
+        // Premium colors - Phase 2
+        vanillaWarm: "#FBE5CF",
+        vanillaLight: "#FFF6EF",
+        coralPrimary: "#F86E5A",
+        coralBright: "#FF8B6E",
+        mintFresh: "#CDEDE5",
+        mintLight: "#A0E7E5",
+        cocoaText: "#2C2015",
+        cocoaSoft: "#5C4C3F",
+        peachTint: "#FFE9D1",
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -88,8 +98,10 @@ module.exports = {
       },
       fontFamily: {
         'sans': ['Poppins', 'Nunito Sans', 'system-ui', 'sans-serif'],
+        'heading': ['Fredoka', 'Baloo 2', 'system-ui', 'sans-serif'],
         'poppins': ['Poppins', 'system-ui', 'sans-serif'],
         'nunito': ['Nunito Sans', 'system-ui', 'sans-serif'],
+        'fredoka': ['Fredoka', 'system-ui', 'sans-serif'],
       },
       fontSize: {
         'xs': ['0.75rem', { lineHeight: '1rem' }],
@@ -105,6 +117,11 @@ module.exports = {
         '7xl': ['4.5rem', { lineHeight: '1' }],
         '8xl': ['6rem', { lineHeight: '1' }],
         '9xl': ['8rem', { lineHeight: '1' }],
+      },
+      boxShadow: {
+        'card': '0 2px 6px rgba(0,0,0,0.04), 0 10px 22px rgba(0,0,0,0.08)',
+        'card-hover': '0 8px 18px rgba(0,0,0,0.08), 0 14px 28px rgba(255, 180, 130, 0.18)',
+        'button': '0 4px 12px rgba(248,110,90,0.3)',
       },
       keyframes: {
         "accordion-down": {

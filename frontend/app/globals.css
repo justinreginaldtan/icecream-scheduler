@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600;700&family=Baloo+2:wght@400;500;600;700;800&family=Nunito+Sans:ital,opsz,wght@0,6..12,400..1000;1,6..12,400..1000&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Nunito+Sans:ital,opsz,wght@0,6..12,400..1000;1,6..12,400..1000&family=Fredoka:wght@300;400;500;600;700&family=Baloo+2:wght@400;500;600;700;800&display=swap');
 @import "tailwindcss";
 @import "tw-animate-css";
 
@@ -8,29 +8,29 @@
   /* Sweet Solutions Premium Theme - Phase 2 Refined */
   
   /* Core Brand Colors - Enhanced */
-  --vanilla-warm: #FBE5CF;
-  --vanilla-light: #FFF6EF;
+  --vanilla-warm: #F8DAB5;
+  --vanilla-light: #FFF5EA;
   --coral-primary: #F86E5A;
   --coral-bright: #FF8B6E;
-  --mint-fresh: #CDEDE5;
+  --mint-fresh: #B8E8E5;
   --mint-light: #A0E7E5;
   --peach-tint: #FFE9D1;
-  --cocoa-text: #2C2015;
+  --cocoa-text: #3C2F28;
   --cocoa-soft: #5C4C3F;
   
-  /* Sidebar Harmony - Mint-Peach Mix */
-  --sidebar-bg: linear-gradient(to bottom, #CDEDE5 0%, #E6F5F0 100%);
+  /* Sidebar Harmony - Mint-Peach Mix with Cooler Gelato Tone */
+  --sidebar-bg: linear-gradient(135deg, #C0E6E3 0%, #D8F0ED 50%, #E8F5F2 100%);
   
   /* Semantic Colors */
-  --background: linear-gradient(to bottom, #FBE5CF 0%, #FFF6EF 100%);
-  --background-overlay: linear-gradient(to bottom, rgba(255,255,255,0.25), rgba(255,255,255,0));
-  --foreground: #2C2015;
+  --background: linear-gradient(to bottom, #F8DAB5 0%, #FFF5EA 50%, #FFF8F0 100%);
+  --background-overlay: linear-gradient(to bottom, rgba(255,240,220,0.15), rgba(255,255,255,0));
+  --foreground: #3C2F28;
   --body-text: #5C4C3F;
-  --card: #ffffff;
-  --card-gradient: linear-gradient(to bottom right, #FFFFFF, #FFF6F0);
-  --card-foreground: #2C2015;
+  --card: #FEFCF9;
+  --card-gradient: linear-gradient(135deg, #FEFCF9 0%, #FFF9F3 50%, #FFF6F0 100%);
+  --card-foreground: #3C2F28;
   --popover: #ffffff;
-  --popover-foreground: #2C2015;
+  --popover-foreground: #3C2F28;
   --primary: var(--coral-primary);
   --primary-foreground: #ffffff;
   --primary-gradient: linear-gradient(to bottom right, #F86E5A, #FF8B6E);
@@ -52,25 +52,38 @@
   --sidebar-foreground: #2C2015;
   --sidebar-primary: var(--coral-primary);
   --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: rgba(255,255,255,0.25);
-  --sidebar-accent-foreground: #2C2015;
+  --sidebar-accent: rgba(255,255,255,0.35);
+  --sidebar-accent-foreground: #3C2F28;
   --sidebar-border: rgba(0,0,0,0.08);
   --sidebar-ring: var(--mint-light);
   
-  /* Premium Shadows - Enhanced Depth */
-  --shadow-card: 0 2px 6px rgba(0,0,0,0.03), 0 10px 24px rgba(0,0,0,0.06);
-  --shadow-card-hover: 0 4px 12px rgba(0,0,0,0.04), 0 16px 32px rgba(0,0,0,0.08);
-  --shadow-button: 0 2px 8px rgba(0,0,0,0.1), 0 4px 12px rgba(248,110,90,0.3);
-  --shadow-button-hover: 0 3px 10px rgba(0,0,0,0.12), 0 6px 16px rgba(248,110,90,0.35);
+  /* Sidebar dimensions */
+  --sidebar-width-expanded: 200px;
+  --sidebar-width-collapsed: 72px;
+  --sidebar-transition: all 0.08s ease-in-out;
+  --sidebar-label-transition: opacity 0.08s ease-in-out;
+  
+  /* Premium Shadows - Enhanced Depth with Warmth */
+  --shadow-card: 0 2px 8px rgba(200,180,160,0.08), 0 12px 28px rgba(150,140,120,0.08);
+  --shadow-card-hover: 0 4px 16px rgba(200,180,160,0.12), 0 20px 40px rgba(180,160,140,0.12);
+  --shadow-button: 0 2px 8px rgba(248,110,90,0.25), 0 4px 16px rgba(248,110,90,0.2);
+  --shadow-button-hover: 0 3px 12px rgba(255,120,100,0.3), 0 8px 24px rgba(248,110,90,0.25);
   --shadow-sm: 0 1px 2px rgba(0,0,0,0.02);
   --shadow-md: 0 4px 8px rgba(0,0,0,0.04), 0 2px 4px rgba(0,0,0,0.04);
   --shadow-lg: 0 10px 20px rgba(0,0,0,0.05), 0 4px 8px rgba(0,0,0,0.05);
   --shadow-xl: 0 20px 32px rgba(0,0,0,0.06), 0 8px 16px rgba(0,0,0,0.06);
+  
+  /* Legacy brand colors for backward compatibility */
+  --bg: #FFF9F5;
+  --surface: #ffffff;
+  --text: #3C2F28;
+  --brandBlue: #3BAFDA;
+  --brandPink: #F9A5B8;
 }
 
 @theme inline {
-  --font-sans: "Nunito Sans", system-ui, sans-serif;
-  --font-heading: "Fredoka", "Baloo 2", system-ui, sans-serif;
+  --font-sans: "Poppins", "Nunito Sans", "system-ui", sans-serif;
+  --font-heading: "Fredoka", "Baloo 2", "system-ui", sans-serif;
   --font-mono: "Geist Mono", "Geist Mono Fallback";
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -103,6 +116,13 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+
+  /* Brand color tokens for Tailwind utility classes */
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-text: var(--text);
+  --color-brandBlue: var(--brandBlue);
+  --color-brandPink: var(--brandPink);
 }
 
 @layer base {
@@ -114,11 +134,12 @@
   body {
     background: var(--background);
     min-height: 100vh;
-    font-family: var(--font-sans), system-ui, sans-serif;
+    @apply text-foreground;
+    font-family: var(--font-sans);
     color: var(--body-text);
     line-height: 1.6;
-    position: relative;
     transition: all 0.08s ease-in-out;
+    position: relative;
   }
   
   /* Gradient Overlay for Light Direction */
@@ -162,33 +183,18 @@
     opacity: 0.5;
   }
   
-  /* Refined Heading Typography - Editorial Feel with Airy Spacing */
+  /* Refined Heading Typography - Editorial Feel with Enhanced Spacing */
   h1, h2, h3, h4, h5, h6, .font-heading {
-    font-family: var(--font-heading), system-ui, sans-serif;
+    font-family: var(--font-heading);
     color: var(--cocoa-text);
     font-weight: 500;
     letter-spacing: 0.75px;
     line-height: 1.4;
-    margin-bottom: 1.25rem;
-  }
-  
-  /* Dashboard Headlines */
-  .dashboard-headline {
-    font-family: var(--font-heading), system-ui, sans-serif;
-    font-weight: 600;
-    letter-spacing: 0.75px;
-    line-height: 1.4;
-    color: var(--cocoa-text);
     margin-bottom: 1.75rem;
   }
   
-  /* Enhanced Vertical Rhythm */
-  .header-section {
-    margin-bottom: 3rem;
-  }
-  
   /* Premium Card Styling with Material Feel */
-  .card, .dashboard-box, .stat-card, [class*="card"], [class*="Card"] {
+  .card, [class*="Card"] {
     background: var(--card-gradient);
     border-radius: 16px;
     box-shadow: var(--shadow-card);
@@ -200,9 +206,6 @@
   
   /* Inner Shadows and Microgradient for Tactile Softness */
   .card::before,
-  .dashboard-box::before,
-  .stat-card::before,
-  [class*="card"]::before,
   [class*="Card"]::before {
     content: '';
     position: absolute;
@@ -217,91 +220,9 @@
     z-index: 1;
   }
   
-  /* Hover States with Enhanced Depth */
-  .card:hover, .dashboard-box:hover, .stat-card:hover, 
-  [class*="card"]:hover, [class*="Card"]:hover {
+  .card:hover, [class*="Card"]:hover {
     transform: translateY(-2px);
     box-shadow: var(--shadow-card-hover);
-  }
-  
-  /* Premium Button Styling */
-  button[class*="primary"], .btn-primary, button[type="submit"], 
-  [class*="Button"][class*="primary"] {
-    background: var(--primary-gradient);
-    box-shadow: var(--shadow-button);
-    border-radius: 16px;
-    transition: all 0.08s ease-in-out;
-    border: none;
-    position: relative;
-    overflow: hidden;
-  }
-  
-  /* Enhanced Vertical Gloss with Warmth */
-  button[class*="primary"]::before,
-  .btn-primary::before,
-  button[type="submit"]::before,
-  [class*="Button"][class*="primary"]::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(to bottom, rgba(255,255,255,0.35), rgba(255,180,120,0.08), transparent);
-    border-radius: 16px;
-    pointer-events: none;
-  }
-  
-  /* Button Hover with Enhanced Depth and Warmth */
-  button[class*="primary"]:hover, .btn-primary:hover, 
-  button[type="submit"]:hover, [class*="Button"][class*="primary"]:hover {
-    transform: translateY(-1px);
-    box-shadow: var(--shadow-button-hover);
-    background: linear-gradient(to bottom right, #FF8B6E, #F86E5A);
-  }
-  
-  /* Sidebar Premium Styling */
-  .sidebar, [class*="sidebar"], [class*="Sidebar"] {
-    background: var(--sidebar);
-    position: relative;
-  }
-  
-  /* Subtle Heart Motif on Sidebar with Brand Presence */
-  .sidebar::after,
-  [class*="sidebar"]::after,
-  [class*="Sidebar"]::after {
-    content: '🍦';
-    position: absolute;
-    bottom: 2rem;
-    left: 2rem;
-    font-size: 2.5rem;
-    opacity: 0.025;
-    pointer-events: none;
-    filter: blur(0.5px);
-  }
-  
-  /* Body Text Styling with Airy Feel */
-  p, span, div, input, textarea, select, label, a {
-    font-family: var(--font-sans), system-ui, sans-serif;
-    color: var(--body-text);
-    line-height: 1.75;
-    letter-spacing: 0.01em;
-  }
-  
-  /* Enhanced vertical spacing between text groups */
-  p + p {
-    margin-top: 1.25rem;
-  }
-  
-  h1 + p, h2 + p, h3 + p, h4 + p, h5 + p, h6 + p {
-    margin-top: 1.5rem;
-  }
-  
-  /* Additional vertical spacing for card content */
-  .card > * + *,
-  .dashboard-box > * + *,
-  .stat-card > * + * {
-    margin-top: 1.125rem;
   }
   
   /* Smooth transitions - under 100ms */
@@ -313,6 +234,43 @@
   section {
     margin-bottom: 2rem;
   }
+  
+  /* Body Text Styling with Airy Feel */
+  p, span, div, input, textarea, select, label, a {
+    color: var(--body-text);
+    line-height: 1.75;
+    letter-spacing: 0.01em;
+  }
+  
+  /* Enhanced vertical spacing between text groups */
+  p + p {
+    margin-top: 1.5rem;
+  }
+  
+  h1 + p, h2 + p, h3 + p, h4 + p, h5 + p, h6 + p {
+    margin-top: 2rem;
+  }
+  
+  /* Additional vertical spacing for card content */
+  .card > * + *,
+  [class*="Card"] > * + * {
+    margin-top: 1.25rem;
+  }
+  
+  /* Subtle Brand Motif in Sidebar */
+  .sidebar::after,
+  [class*="sidebar"]::after,
+  [class*="Sidebar"]::after {
+    content: '🍦';
+    position: absolute;
+    bottom: 2.5rem;
+    right: 1rem;
+    font-size: 3rem;
+    opacity: 0.025;
+    pointer-events: none;
+    filter: blur(1px);
+    z-index: 0;
+  }
 }
 
 @layer components {
@@ -323,27 +281,56 @@
 }
 
 @layer utilities {
-  /* Utility Classes */
-  .sidebar-indicator {
-    animation: spring-indicator 0.3s ease-out forwards;
+  /* Dashboard animations */
+  .animate-fade-in {
+    animation: fadeIn 0.6s ease-out forwards;
   }
   
-  @keyframes spring-indicator {
-    0% { transform: scaleY(0); }
-    50% { transform: scaleY(1.1); }
-    100% { transform: scaleY(1); }
+  .animate-slide-up {
+    animation: slideUp 0.8s ease-out forwards;
+    animation-delay: calc(var(--animation-delay, 0) * 0.1s);
   }
   
-  .sidebar-transition {
-    transition: all 0.08s ease-in-out;
+  /* Brand utilities */
+  .text-howdy-blue {
+    color: var(--brandBlue);
   }
   
-  .font-heading {
-    font-family: var(--font-heading), system-ui, sans-serif;
-    letter-spacing: 0.75px;
-    color: var(--cocoa-text);
-    font-weight: 500;
-    line-height: 1.4;
+  .text-howdy-pink {
+    color: var(--brandPink);
+  }
+  
+  .bg-howdy-blue {
+    background-color: var(--brandBlue);
+  }
+  
+  .bg-howdy-pink {
+    background-color: var(--brandPink);
+  }
+  
+  .border-howdy-blue {
+    border-color: var(--brandBlue);
+  }
+  
+  .border-howdy-pink {
+    border-color: var(--brandPink);
+  }
+  
+  /* Enhanced 8pt spacing utilities */
+  .space-8pt > * + * {
+    margin-top: 0.5rem; /* 8px */
+  }
+  
+  .space-16pt > * + * {
+    margin-top: 1rem; /* 16px */
+  }
+  
+  .space-24pt > * + * {
+    margin-top: 1.5rem; /* 24px */
+  }
+  
+  .space-32pt > * + * {
+    margin-top: 2rem; /* 32px */
   }
   
   /* Responsive spacing helpers */
@@ -353,5 +340,86 @@
   
   .space-large {
     margin-bottom: 3rem;
+  }
+  
+  .font-heading {
+    font-family: var(--font-heading);
+    letter-spacing: 0.75px;
+    color: var(--cocoa-text);
+    font-weight: 500;
+    line-height: 1.4;
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  
+  @keyframes slideUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  /* Premium Spring Animation */
+  @keyframes spring-indicator {
+    0% { transform: scaleY(0); }
+    50% { transform: scaleY(1.1); }
+    100% { transform: scaleY(1); }
+  }
+  
+  .sidebar-indicator {
+    animation: spring-indicator 0.3s ease-out forwards;
+  }
+  
+  .sidebar-transition {
+    transition: all 0.08s ease-in-out;
+  }
+  
+  /* Enhanced button gloss and warmth */
+  button[class*="primary"], .btn-primary, button[type="submit"] {
+    position: relative;
+    overflow: hidden;
+  }
+  
+  button[class*="primary"]::before,
+  .btn-primary::before,
+  button[type="submit"]::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(to bottom, rgba(255,255,255,0.35), rgba(255,180,120,0.08), transparent);
+    border-radius: 16px;
+    pointer-events: none;
+  }
+  
+  button[class*="primary"]:hover,
+  .btn-primary:hover,
+  button[type="submit"]:hover {
+    background: linear-gradient(to bottom right, #FF8B6E, #F86E5A);
+    transform: translateY(-1px);
   }
 }
