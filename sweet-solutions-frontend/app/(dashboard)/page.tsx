@@ -64,12 +64,10 @@ export default function DashboardPage() {
   if (loading) {
     return (
       <AppLayout>
-        <div className="px-6 md:px-8 py-8">
-          <div className="flex items-center justify-center h-64">
-            <div className="text-center animate-fade-in">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[var(--primary)] mx-auto"></div>
-              <p className="mt-3 text-[color:rgba(44,42,41,.6)] font-medium">Loading dashboard...</p>
-            </div>
+        <div className="flex items-center justify-center h-64">
+          <div className="text-center animate-fade-in">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[var(--primary)] mx-auto"></div>
+            <p className="mt-3 text-[color:rgba(44,42,41,.6)] font-medium">Loading dashboard...</p>
           </div>
         </div>
       </AppLayout>
@@ -78,11 +76,11 @@ export default function DashboardPage() {
 
   return (
     <AppLayout>
-      <div className="px-6 md:px-8 py-8 animate-fade-in">
+      <div className="animate-fade-in">
             <div className="mb-10 flex items-center justify-between">
               <div className="animate-slide-up">
-                <h1 className="mb-2" style={{ fontSize: '2rem', fontWeight: 'bold', letterSpacing: '-0.02em', color: '#2C2A29' }}>Welcome back, {user?.name.split(" ")[0]}</h1>
-                <p className="text-sm" style={{ color: '#7A7A7A' }}>
+                <h1 className="mb-1" style={{ fontSize: '2rem', fontWeight: '700', lineHeight: '1.15', color: '#2A2A2A' }}>Welcome back, {user?.name.split(" ")[0]}</h1>
+                <p className="text-sm font-normal" style={{ opacity: '0.75', color: '#333333' }}>
                   {isEmployee ? "Your schedule and team updates" : "Overview of your team and schedule"}
                 </p>
               </div>

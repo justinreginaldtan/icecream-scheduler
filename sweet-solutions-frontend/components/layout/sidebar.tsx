@@ -71,38 +71,74 @@ export function Sidebar() {
           isMobile && isCollapsed ? "-translate-x-full" : "translate-x-0"
         )}
         style={{ 
-          background: 'linear-gradient(to bottom, #E0F4F0, #C5ECE3)', 
+          background: 'linear-gradient(to bottom, #D5EFEA, #BFE7DC)', 
           boxShadow: 'inset -2px 0 6px rgba(0, 0, 0, 0.05)',
-          borderRight: '1px solid rgba(0,0,0,0.05)',
-          transition: 'var(--sidebar-transition)'
+          borderRight: '0.5px solid rgba(0,0,0,0.05)',
+          transition: 'all 0.3s cubic-bezier(0.22, 1, 0.36, 1)'
         }}
       >
         <div className="flex h-full flex-col">
+          {/* Logo and Branding - Clickable Toggle */}
+          <div className="px-4 pt-6 pb-6 border-b border-[var(--border)]">
+            <div 
+              onClick={toggleSidebar}
+              aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+              role="button"
+              className={cn(
+                "cursor-pointer transition-transform duration-300 hover:scale-105 active:scale-95",
+                "flex items-center gap-3 mb-2",
+                isCollapsed ? "justify-center" : "justify-start"
+              )}
+            >
+              <img 
+                src="/howdyslogo.png" 
+                alt="Howdy Homemade Logo" 
+                className={cn(
+                  "object-contain flex-shrink-0 transition-all duration-300",
+                  isCollapsed ? "h-7 w-7 rotate-3" : "h-8 w-8 rotate-0"
+                )}
+                style={{
+                  transform: isCollapsed ? 'scale(0.9)' : 'scale(1)'
+                }}
+              />
+              {!isCollapsed && (
+                <div>
+                  <h1 className="text-lg font-semibold text-[var(--brandBlue)] leading-tight">Howdy Homemade</h1>
+                  <p className="text-xs font-medium text-[var(--brandPink)] leading-tight">Sweet Solutions</p>
+                </div>
+              )}
+            </div>
+          </div>
+
           {/* Navigation Content */}
-          <nav className="flex-1 px-2 space-y-1" style={{ paddingTop: '1.25rem' }}>
-          {visibleNavigation.map((item) => {
-            const isActive = pathname === item.href
-            return (
+          <nav className="flex-1 flex flex-col px-3 py-4 overflow-y-auto">
+            {/* Main nav items */}
+            <div className="space-y-2">
+              {visibleNavigation.filter(item => item.name !== 'Settings').map((item, index) => {
+                const isActive = pathname === item.href
+                return (
               <Link
                 key={item.name}
                 href={item.href}
                 className={cn(
-                  "relative flex items-center rounded-lg px-3 py-2.5 text-sm font-medium focus-visible:ring-2 focus-visible:ring-[var(--brandBlue)] focus-visible:outline-none group/item cursor-pointer transition-all duration-150 ease",
+                  "relative flex items-center rounded-lg px-3 py-2.5 text-sm font-medium focus-visible:ring-2 focus-visible:ring-[var(--brandBlue)] focus-visible:outline-none group/item cursor-pointer",
+                  "transition-all duration-200 ease-out",
                   isActive
                     ? "bg-[#B7E7DF] text-[#1A5F5B]"
-                    : "text-[color:rgba(44,42,41,.7)] hover:bg-[color:rgba(183,231,223,.3)]",
+                    : "text-[#2A2A2A] hover:bg-[color:rgba(183,231,223,.3)]",
                   isCollapsed ? "justify-center px-2" : "gap-3"
                 )}
-                style={
-                  isActive
-                    ? { boxShadow: '0 1px 2px rgba(0, 0, 0, 0.05)' }
-                    : {}
-                }
+                style={{
+                  animation: `fadeInUp 0.4s ease forwards`,
+                  animationDelay: `${index * 0.06}s`,
+                  ...(isActive && { boxShadow: '0 1px 2px rgba(0, 0, 0, 0.05)' })
+                }}
                 data-testid={`nav-${item.name.toLowerCase().replace(' ', '-')}`}
               >
                 <item.icon className={cn(
-                  "h-5 w-5 flex-shrink-0 transition-transform duration-150 ease group-hover/item:scale-105",
-                  isActive ? "text-[#1A5F5B]" : "text-[color:rgba(44,42,41,.6)]"
+                  "h-5 w-5 flex-shrink-0 transition-all duration-200 ease-out",
+                  "group-hover/item:translate-y-[-2px] group-hover/item:rotate-3",
+                  isActive ? "text-[#1A5F5B]" : "text-[color:rgba(42,42,42,.6)]"
                 )} />
                 {/* Show label if expanded */}
                 {!isCollapsed && (
@@ -117,13 +153,59 @@ export function Sidebar() {
                   </div>
                 )}
               </Link>
-            )
-          })}
-        </nav>
+                )
+              })}
+            </div>
 
+            {/* Separator */}
+            <div className="my-3 border-t border-[var(--border)]" />
 
-      </div>
-    </aside>
+            {/* Settings at bottom */}
+            <div className="space-y-2 pb-8">
+              {visibleNavigation.filter(item => item.name === 'Settings').map((item) => {
+                const isActive = pathname === item.href
+                return (
+              <Link
+                key={item.name}
+                href={item.href}
+                className={cn(
+                  "relative flex items-center rounded-lg px-3 py-2.5 text-sm font-medium focus-visible:ring-2 focus-visible:ring-[var(--brandBlue)] focus-visible:outline-none group/item cursor-pointer",
+                  "transition-all duration-200 ease-out",
+                  isActive
+                    ? "bg-[#B7E7DF] text-[#1A5F5B]"
+                    : "text-[#2A2A2A] hover:bg-[color:rgba(183,231,223,.3)]",
+                  isCollapsed ? "justify-center px-2" : "gap-3"
+                )}
+                style={{
+                  ...(isActive && { boxShadow: '0 1px 2px rgba(0, 0, 0, 0.05)' })
+                }}
+                data-testid={`nav-${item.name.toLowerCase().replace(' ', '-')}`}
+              >
+                <item.icon className={cn(
+                  "h-5 w-5 flex-shrink-0 transition-all duration-200 ease-out",
+                  "group-hover/item:translate-y-[-2px] group-hover/item:rotate-3",
+                  isActive ? "text-[#1A5F5B]" : "text-[color:rgba(42,42,42,.6)]"
+                )} />
+                {/* Show label if expanded */}
+                {!isCollapsed && (
+                  <span className="truncate whitespace-nowrap transition-opacity duration-300">
+                    {item.name}
+                  </span>
+                )}
+                {/* Tooltip when collapsed */}
+                {isCollapsed && (
+                  <div className="absolute left-full ml-2 px-3 py-1.5 bg-[#2C2A29] text-white text-xs rounded-lg opacity-0 pointer-events-none group-hover/item:opacity-100 transition-all duration-150 ease whitespace-nowrap z-50 shadow-lg">
+                    {item.name}
+                  </div>
+                )}
+              </Link>
+                )
+              })}
+            </div>
+          </nav>
+
+        </div>
+      </aside>
     </>
   )
 }

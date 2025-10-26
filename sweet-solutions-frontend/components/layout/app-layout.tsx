@@ -3,7 +3,6 @@
 import type React from "react"
 import { useAuth } from "@/lib/auth/auth-context"
 import { Sidebar } from "./sidebar"
-import { Header } from "./header"
 import { useSidebar } from "@/lib/sidebar-context"
 import { useState, useEffect } from "react"
 
@@ -32,16 +31,16 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex min-h-screen bg-[var(--bg)]">
       <Sidebar />
-      <div 
+      <main 
         className="flex flex-1 flex-col"
         style={{
-          paddingLeft: isMobile ? '0' : isCollapsed ? '72px' : '200px',
-          transition: 'padding-left 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
+          marginLeft: isMobile ? '0' : isCollapsed ? '72px' : '200px',
+          transition: 'margin-left 0.3s cubic-bezier(0.22, 1, 0.36, 1)',
+          padding: '2.75rem'
         }}
       >
-        <Header />
-        <main className="flex-1">{children}</main>
-      </div>
+        {children}
+      </main>
     </div>
   )
 }
