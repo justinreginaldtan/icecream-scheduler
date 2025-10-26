@@ -45,12 +45,12 @@ export default function LoginPage() {
   const isFormValid = email && password
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-[var(--bg)] p-4">
-      <Card className="w-full max-w-md border-[var(--border)] bg-[var(--surface)] shadow-sm">
+    <div className="flex min-h-screen items-center justify-center bg-[#FFF3EA] p-4">
+      <Card className="w-full max-w-md border-[#E8E3DD] bg-white shadow-lg">
         <CardHeader className="space-y-1 text-center">
-          <CardTitle className="text-2xl font-semibold text-[var(--text)]">Sweet Solutions</CardTitle>
-          <div className="h-0.5 w-16 mx-auto rounded-full bg-[var(--brandBlue)]" />
-          <CardDescription>Sign in to access scheduling and payroll</CardDescription>
+          <CardTitle className="text-2xl font-semibold text-[#333333]">Sweet Solutions</CardTitle>
+          <div className="h-0.5 w-16 mx-auto rounded-full bg-[#A0E7E5]" />
+          <CardDescription className="text-[#666666]">Sign in to access scheduling and payroll</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
@@ -87,9 +87,10 @@ export default function LoginPage() {
             )}
             <Button
               type="submit"
+              variant="gradient"
               disabled={isLoading || !isFormValid}
               aria-busy={isLoading}
-              className="w-full bg-[var(--primary)] text-white hover:bg-[color:rgba(244,108,91,.9)] focus-visible:ring-2 focus-visible:ring-[var(--brandBlue)] focus-visible:outline-none"
+              className="w-full"
               data-testid="login-button"
             >
               {isLoading ? "Signing in..." : "Sign In"}
@@ -97,11 +98,10 @@ export default function LoginPage() {
           </form>
 
           <div
-            className="mt-6 space-y-2 rounded-lg p-4 text-sm"
-            style={{ backgroundColor: "var(--muted)", borderLeft: "3px solid var(--brandBlue)" }}
+            className="mt-6 space-y-2 rounded-lg p-4 text-sm bg-[#FFF3EA] border-l-4 border-[#A0E7E5]"
           >
-            <p className="font-medium text-[var(--brandPink)]">Demo Accounts:</p>
-            <div className="space-y-1 text-[color:rgba(44,42,41,.7)]">
+            <p className="font-medium text-[#FFB7B2]">Demo Accounts:</p>
+            <div className="space-y-1 text-[#666666]">
               <p>
                 <strong>Manager:</strong> mari.lisa@example.com / demo123
               </p>

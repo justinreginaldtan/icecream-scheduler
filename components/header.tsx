@@ -24,15 +24,15 @@ export function Header() {
       .toUpperCase() || "U"
 
   return (
-    <header className="sticky top-0 z-30 flex h-16 items-center justify-end border-b border-[var(--border)] bg-[var(--surface)] px-6">
+    <header className="sticky top-0 z-30 flex h-16 items-center justify-end border-b border-[#E8E3DD] bg-white px-6 shadow-sm">
       <div className="flex items-center gap-3">
         <Button
           variant="ghost"
           size="icon"
-          className="relative focus-visible:ring-2 focus-visible:ring-[var(--brandBlue)] focus-visible:outline-none"
+          className="relative focus-visible:ring-2 focus-visible:ring-[#A0E7E5] focus-visible:outline-none rounded-2xl"
         >
           <Bell className="h-5 w-5" />
-          <span className="absolute right-1.5 top-1.5 h-2 w-2 rounded-full bg-[var(--brandPink)]" />
+          <span className="absolute right-1.5 top-1.5 h-2 w-2 rounded-full bg-[#FFB7B2]" />
         </Button>
 
         {/* User Menu */}
@@ -40,11 +40,11 @@ export function Header() {
           <DropdownMenuTrigger asChild>
             <Button
               variant="ghost"
-              className="relative h-10 w-10 rounded-full focus-visible:ring-2 focus-visible:ring-[var(--brandBlue)] focus-visible:outline-none"
+              className="relative h-10 w-10 rounded-full focus-visible:ring-2 focus-visible:ring-[#A0E7E5] focus-visible:outline-none"
             >
               <Avatar>
                 <AvatarImage src="/placeholder.svg?height=40&width=40" alt="User" />
-                <AvatarFallback className="bg-[var(--primary)] text-white">{initials}</AvatarFallback>
+                <AvatarFallback className="bg-gradient-to-r from-[#FFB7B2] to-[#A0E7E5] text-white">{initials}</AvatarFallback>
               </Avatar>
             </Button>
           </DropdownMenuTrigger>

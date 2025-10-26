@@ -4,42 +4,49 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  /* Sweet Solutions Theme - Cream & Coral Palette with Howdy Brand Colors */
-  --background: #fff9f5; /* Cream background */
-  --foreground: #2c2a29; /* Dark text */
+  /* Sweet Solutions Ice Cream Shop Theme */
+  --background: #FFF3EA; /* Melted vanilla ice cream background - warm and cozy */
+  --foreground: #333333; /* Warm gray text - dark for readability */
   --card: #ffffff;
-  --card-foreground: #2c2a29;
+  --card-foreground: #333333;
   --popover: #ffffff;
-  --popover-foreground: #2c2a29;
-  --primary: #f46c5b; /* Coral accent */
+  --popover-foreground: #333333;
+  --primary: #FFB7B2; /* Strawberry pink */
   --primary-foreground: #ffffff;
-  --secondary: #fff9f5;
-  --secondary-foreground: #2c2a29;
-  --muted: #f7efea;
-  --muted-foreground: #6b6866;
-  --accent: #f46c5b;
+  --secondary: #FFF3EA;
+  --secondary-foreground: #333333;
+  --muted: #FFF3EA;
+  --muted-foreground: #666666;
+  --accent: #FFB7B2; /* Strawberry pink */
   --accent-foreground: #ffffff;
   --destructive: #dc2626;
   --destructive-foreground: #ffffff;
-  --border: #e5e0db;
-  --input: #e5e0db;
-  --ring: #49b6c2; /* Updated to brandBlue for focus rings */
-  --radius: 0.75rem;
+  --border: #E8E3DD; /* Soft warm border */
+  --input: #E8E3DD;
+  --ring: #A0E7E5; /* Mint blue for focus rings */
+  --radius: 1rem; /* 2xl rounded corners */
   --sidebar: #ffffff;
-  --sidebar-foreground: #2c2a29;
-  --sidebar-primary: #f46c5b;
+  --sidebar-foreground: #333333;
+  --sidebar-primary: #FFB7B2;
   --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: #fff9f5;
-  --sidebar-accent-foreground: #2c2a29;
-  --sidebar-border: #e5e0db;
-  --sidebar-ring: #49b6c2; /* Updated to brandBlue */
+  --sidebar-accent: #FFF3EA;
+  --sidebar-accent-foreground: #333333;
+  --sidebar-border: #E8E3DD;
+  --sidebar-ring: #A0E7E5;
 
-  /* Howdy Homemade brand colors - consolidated tokens */
-  --bg: #fff9f5;
+  /* Ice Cream Shop brand colors */
+  --bg: #FFF3EA;
   --surface: #ffffff;
-  --text: #2c2a29;
-  --brandBlue: #49b6c2; /* Teal-blue from Howdy header */
-  --brandPink: #f04e98; /* Hot pink banner */
+  --text: #333333;
+  --strawberry: #FFB7B2; /* Strawberry pink */
+  --mint: #A0E7E5; /* Mint blue */
+  --vanilla: #FFEE93; /* Vanilla cream */
+  
+  /* Shadows for depth */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.03);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.06), 0 4px 6px -4px rgb(0 0 0 / 0.06);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.08), 0 8px 10px -6px rgb(0 0 0 / 0.08);
 }
 
 @theme inline {
@@ -81,8 +88,9 @@
   --color-bg: var(--bg);
   --color-surface: var(--surface);
   --color-text: var(--text);
-  --color-brandBlue: var(--brandBlue);
-  --color-brandPink: var(--brandPink);
+  --color-strawberry: var(--strawberry);
+  --color-mint: var(--mint);
+  --color-vanilla: var(--vanilla);
 }
 
 @layer base {
@@ -91,5 +99,23 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+@layer utilities {
+  /* Wiggle animation for playful interactions */
+  @keyframes wiggle {
+    0%, 100% { transform: rotate(0deg); }
+    25% { transform: rotate(-5deg); }
+    75% { transform: rotate(5deg); }
+  }
+  
+  .wiggle:hover {
+    animation: wiggle 0.5s ease-in-out infinite;
+  }
+  
+  /* Smooth sidebar transitions */
+  .sidebar-transition {
+    transition: all 300ms ease-in-out;
   }
 }

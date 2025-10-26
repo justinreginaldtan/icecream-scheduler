@@ -28,18 +28,19 @@ export default function RootLayout({
       <head>
         <style>{`
           :root {
-            --bg: #FFF9F5;
+            --bg: #FFF3EA;
             --surface: #FFFFFF;
-            --text: #2C2A29;
-            --border: #E5E0DB;
-            --primary: #F46C5B;
-            --brandBlue: #49B6C2;
-            --brandPink: #F04E98;
-            --muted: #F7EFEA;
+            --text: #333333;
+            --border: #E8E3DD;
+            --primary: #FFB7B2;
+            --strawberry: #FFB7B2;
+            --mint: #A0E7E5;
+            --vanilla: #FFEE93;
+            --muted: #FFF3EA;
           }
         `}</style>
       </head>
-      <body className={`${poppins.variable} font-sans antialiased`}>
+      <body className={`${poppins.variable} font-sans antialiased bg-[#FFF3EA]`}>
         <AuthProvider>
           {children}
           <Toaster />
