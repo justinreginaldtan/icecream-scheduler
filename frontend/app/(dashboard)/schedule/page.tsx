@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useMemo } from "react"
 import { AppLayout } from "@/components/layout/app-layout"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -8,14 +8,17 @@ import { Plus, ChevronDown } from "lucide-react"
 import { ShiftModal } from "@/components/features/shifts/shift-modal"
 import apiClient from "@/lib/api/client"
 import { useAuth } from "@/lib/auth/auth-context"
+import type { Shift, Employee } from "@/lib/data/mock-data"
+import { useToast } from "@/hooks/use-toast"
 
 export default function SchedulePage() {
   const { user } = useAuth()
+  const { toast } = useToast()
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const [selectedShift, setSelectedShift] = useState<any>(null)
+  const [selectedShift, setSelectedShift] = useState<Shift | null>(null)
   const [dateRange, setDateRange] = useState("This week")
-  const [employees, setEmployees] = useState([])
-  const [shifts, setShifts] = useState([])
+  const [employees, setEmployees] = useState<Employee[]>([])
+  const [shifts, setShifts] = useState<Shift[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -29,8 +32,19 @@ export default function SchedulePage() {
           apiClient.getShifts()
         ])
         
-        if (employeesRes.success) setEmployees(employeesRes.data || [])
-        if (shiftsRes.success) setShifts(shiftsRes.data || [])
+        if (employeesRes.success) {
+          setEmployees((employeesRes.data || []).map((emp: any) => ({
+            ...emp,
+            id: emp.id?.toString?.() ?? "",
+          })))
+        }
+        if (shiftsRes.success) {
+          setShifts((shiftsRes.data || []).map((shift: any) => ({
+            ...shift,
+            id: shift.id?.toString?.() ?? "",
+            employeeId: shift.employeeId?.toString?.() ?? "",
+          })))
+        }
       } catch (error) {
         console.error('Error fetching schedule data:', error)
       } finally {
@@ -57,12 +71,12 @@ export default function SchedulePage() {
     return weekDates
   }
 
-  const weekDates = getWeekDates()
+  const weekDates = useMemo(getWeekDates, [])
 
   // Group shifts by date and employee
   const getShiftForDateAndEmployee = (date: Date, employeeId: string) => {
     const dateStr = date.toISOString().split("T")[0]
-    return shifts.find((shift) => shift.date === dateStr && shift.employee === employeeId)
+    return shifts.find((shift) => shift.date === dateStr && shift.employeeId === employeeId)
   }
 
   const handleAddShift = () => {
@@ -70,9 +84,38 @@ export default function SchedulePage() {
     setIsModalOpen(true)
   }
 
-  const handleEditShift = (shift: any) => {
+  const handleEditShift = (shift: Shift) => {
     setSelectedShift(shift)
     setIsModalOpen(true)
+  }
+
+  const handleDateRangeClick = () => {
+    const options = ["This week", "Next week", "Last week"] as const
+    const currentIndex = options.indexOf(dateRange as typeof options[number])
+    const nextValue = options[(currentIndex + 1) % options.length]
+    setDateRange(nextValue)
+    toast({
+      title: "Date range updated",
+      description: `Showing ${nextValue.toLowerCase()}.`,
+      className: "bg-[var(--brandBlue)] text-white border-[var(--brandBlue)]",
+    })
+  }
+
+  const handleShiftCreated = (newShift: Shift) => {
+    setShifts((prev) => [...prev, newShift])
+  }
+
+  const handleShiftUpdated = (updatedShift: Shift) => {
+    setShifts((prev) => prev.map((shift) => (shift.id === updatedShift.id ? updatedShift : shift)))
+  }
+
+  const handleShiftDeleted = (shiftId: string) => {
+    setShifts((prev) => prev.filter((shift) => shift.id !== shiftId))
+  }
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false)
+    setSelectedShift(null)
   }
 
   if (loading) {
@@ -108,6 +151,7 @@ export default function SchedulePage() {
               variant="outline"
               className="border-[var(--border)] text-[var(--text)] hover:bg-[var(--muted)] focus-visible:ring-2 focus-visible:ring-[var(--brandBlue)] focus-visible:outline-none bg-transparent"
               data-testid="date-range-selector"
+              onClick={handleDateRangeClick}
             >
               {dateRange} <ChevronDown className="ml-2 h-4 w-4" />
             </Button>
@@ -148,7 +192,7 @@ export default function SchedulePage() {
                 </div>
 
                 {employees.map((employee) => (
-                  <div key={employee._id} className="grid grid-cols-8 gap-2 mb-3">
+                  <div key={employee.id} className="grid grid-cols-8 gap-2 mb-3">
                     <div className="flex items-center">
                       <div>
                         <div className="font-medium text-sm text-[var(--text)]">{employee.name}</div>
@@ -157,7 +201,7 @@ export default function SchedulePage() {
                     </div>
 
                     {weekDates.map((date, idx) => {
-                      const shift = getShiftForDateAndEmployee(date, employee._id)
+                      const shift = getShiftForDateAndEmployee(date, employee.id)
                       return (
                         <div key={idx} className="min-h-[60px]">
                           {shift ? (
@@ -166,7 +210,7 @@ export default function SchedulePage() {
                               onClick={() => handleEditShift(shift)}
                               className="w-full h-full rounded-lg bg-[color:rgba(73,182,194,.1)] border border-[color:rgba(73,182,194,.2)] p-2 text-left transition-colors duration-200 hover:bg-[color:rgba(73,182,194,.2)] focus-visible:ring-2 focus-visible:ring-[var(--brandBlue)] focus-visible:outline-none"
                               aria-label={`Edit shift for ${employee.name} on ${date.toLocaleDateString()}`}
-                              data-testid={`shift-${employee._id}-${idx}`}
+                              data-testid={`shift-${employee.id}-${idx}`}
                             >
                               <div className="text-xs font-medium text-[var(--text)]">
                                 {shift.startTime} - {shift.endTime}
@@ -214,7 +258,14 @@ export default function SchedulePage() {
       </div>
 
       {/* Shift Modal */}
-      <ShiftModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} shift={selectedShift} />
+      <ShiftModal
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        shift={selectedShift}
+        onCreate={handleShiftCreated}
+        onUpdate={handleShiftUpdated}
+        onDelete={handleShiftDeleted}
+      />
     </AppLayout>
   )
 }

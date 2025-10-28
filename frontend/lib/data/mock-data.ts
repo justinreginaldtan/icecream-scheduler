@@ -2,28 +2,29 @@
 // TODO: Replace with live data from AWS API Gateway
 
 export interface Employee {
-  id: number
+  id: string
   name: string
   role: string
-  hours: number
+  hoursPerWeek: number
   email?: string
   phone?: string
   availability?: string[]
 }
 
 export interface Shift {
-  id: number
-  employeeId: number
+  id: string
+  employeeId: string
   employeeName: string
   date: string
   startTime: string
   endTime: string
   role: string
+  status: "scheduled" | "completed" | "pending"
 }
 
 export interface TimeOffRequest {
-  id: number
-  employeeId: number
+  id: string
+  employeeId: string
   employeeName: string
   startDate: string
   endDate: string
@@ -33,8 +34,8 @@ export interface TimeOffRequest {
 }
 
 export interface PayrollEntry {
-  id: number
-  employeeId: number
+  id: string
+  employeeId: string
   employeeName: string
   role: string
   hoursWorked: number
@@ -43,40 +44,79 @@ export interface PayrollEntry {
   period: string
 }
 
+import { User } from "../auth/auth-context"
+
 // TODO: Replace with live data from backend API
+
+export const users: User[] = [
+  {
+    id: "user-mari",
+    name: "Mari Lisa",
+    email: "mari.lisa@example.com",
+    role: "manager",
+  },
+  {
+    id: "user-justin",
+    name: "Justin Tan",
+    email: "justin.tan@example.com",
+    role: "employee",
+  },
+]
+
 export const employees: Employee[] = [
   {
-    id: 1,
+    id: "emp-1",
     name: "Mari Lisa",
     role: "Store Manager",
-    hours: 40,
+    hoursPerWeek: 40,
     email: "mari.lisa@example.com",
     phone: "(555) 123-4567",
   },
-  { id: 2, name: "Vidhi Patel", role: "Shift Lead", hours: 35, email: "vidhi@howdy.com", phone: "(555) 234-5678" },
   {
-    id: 3,
+    id: "emp-2",
+    name: "Vidhi Patel",
+    role: "Shift Lead",
+    hoursPerWeek: 35,
+    email: "vidhi@howdy.com",
+    phone: "(555) 234-5678",
+  },
+  {
+    id: "emp-3",
     name: "Chatcha Mantapaneewat",
     role: "Scooper",
-    hours: 25,
+    hoursPerWeek: 25,
     email: "chatcha@howdy.com",
     phone: "(555) 345-6789",
   },
-  { id: 4, name: "Natalie Tran", role: "Barista", hours: 28, email: "natalie@howdy.com", phone: "(555) 456-7890" },
-  { id: 5, name: "Rayan Rashid", role: "Cashier", hours: 30, email: "rayan@howdy.com", phone: "(555) 567-8901" },
   {
-    id: 6,
+    id: "emp-4",
+    name: "Natalie Tran",
+    role: "Barista",
+    hoursPerWeek: 28,
+    email: "natalie@howdy.com",
+    phone: "(555) 456-7890",
+  },
+  {
+    id: "emp-5",
+    name: "Rayan Rashid",
+    role: "Cashier",
+    hoursPerWeek: 30,
+    email: "rayan@howdy.com",
+    phone: "(555) 567-8901",
+  },
+  {
+    id: "emp-6",
     name: "Justin Tan",
     role: "Scheduler / Developer",
-    hours: 10,
+    hoursPerWeek: 10,
     email: "justin.tan@example.com",
     phone: "(555) 678-9012",
   },
   {
-    id: 7,
+    id: "emp-7",
     name: "James Harris",
     role: "Scooper",
-    hours: 20,
+    hoursPerWeek: 20,
     email: "james@howdy.com",
     phone: "(555) 789-0123",
   },
@@ -84,56 +124,61 @@ export const employees: Employee[] = [
 
 export const shifts: Shift[] = [
   {
-    id: 1,
-    employeeId: 1,
+    id: "shift-1",
+    employeeId: "emp-1",
     employeeName: "Mari Lisa",
     date: "2025-01-20",
     startTime: "09:00",
     endTime: "17:00",
     role: "Store Manager",
+    status: "scheduled",
   },
   {
-    id: 2,
-    employeeId: 2,
+    id: "shift-2",
+    employeeId: "emp-2",
     employeeName: "Vidhi Patel",
     date: "2025-01-20",
     startTime: "10:00",
     endTime: "18:00",
     role: "Shift Lead",
+    status: "scheduled",
   },
   {
-    id: 3,
-    employeeId: 3,
+    id: "shift-3",
+    employeeId: "emp-3",
     employeeName: "Chatcha Mantapaneewat",
     date: "2025-01-20",
     startTime: "12:00",
     endTime: "17:00",
     role: "Scooper",
+    status: "scheduled",
   },
   {
-    id: 4,
-    employeeId: 4,
+    id: "shift-4",
+    employeeId: "emp-4",
     employeeName: "Natalie Tran",
     date: "2025-01-21",
     startTime: "11:00",
     endTime: "19:00",
     role: "Barista",
+    status: "scheduled",
   },
   {
-    id: 5,
-    employeeId: 5,
+    id: "shift-5",
+    employeeId: "emp-5",
     employeeName: "Rayan Rashid",
     date: "2025-01-21",
     startTime: "13:00",
     endTime: "21:00",
     role: "Cashier",
+    status: "scheduled",
   },
 ]
 
 export const timeOffRequests: TimeOffRequest[] = [
   {
-    id: 1,
-    employeeId: 3,
+    id: "request-1",
+    employeeId: "emp-3",
     employeeName: "Chatcha Mantapaneewat",
     startDate: "2025-01-25",
     endDate: "2025-01-27",
@@ -142,8 +187,8 @@ export const timeOffRequests: TimeOffRequest[] = [
     submittedDate: "2025-01-15",
   },
   {
-    id: 2,
-    employeeId: 4,
+    id: "request-2",
+    employeeId: "emp-4",
     employeeName: "Natalie Tran",
     startDate: "2025-02-01",
     endDate: "2025-02-01",
@@ -152,8 +197,8 @@ export const timeOffRequests: TimeOffRequest[] = [
     submittedDate: "2025-01-16",
   },
   {
-    id: 3,
-    employeeId: 5,
+    id: "request-3",
+    employeeId: "emp-5",
     employeeName: "Rayan Rashid",
     startDate: "2025-01-18",
     endDate: "2025-01-19",
@@ -165,8 +210,8 @@ export const timeOffRequests: TimeOffRequest[] = [
 
 export const payrollData: PayrollEntry[] = [
   {
-    id: 1,
-    employeeId: 1,
+    id: "payroll-1",
+    employeeId: "emp-1",
     employeeName: "Mari Lisa",
     role: "Store Manager",
     hoursWorked: 160,
@@ -175,8 +220,8 @@ export const payrollData: PayrollEntry[] = [
     period: "January 2025",
   },
   {
-    id: 2,
-    employeeId: 2,
+    id: "payroll-2",
+    employeeId: "emp-2",
     employeeName: "Vidhi Patel",
     role: "Shift Lead",
     hoursWorked: 140,
@@ -185,8 +230,8 @@ export const payrollData: PayrollEntry[] = [
     period: "January 2025",
   },
   {
-    id: 3,
-    employeeId: 3,
+    id: "payroll-3",
+    employeeId: "emp-3",
     employeeName: "Chatcha Mantapaneewat",
     role: "Scooper",
     hoursWorked: 100,
@@ -195,8 +240,8 @@ export const payrollData: PayrollEntry[] = [
     period: "January 2025",
   },
   {
-    id: 4,
-    employeeId: 4,
+    id: "payroll-4",
+    employeeId: "emp-4",
     employeeName: "Natalie Tran",
     role: "Barista",
     hoursWorked: 112,
@@ -205,8 +250,8 @@ export const payrollData: PayrollEntry[] = [
     period: "January 2025",
   },
   {
-    id: 5,
-    employeeId: 5,
+    id: "payroll-5",
+    employeeId: "emp-5",
     employeeName: "Rayan Rashid",
     role: "Cashier",
     hoursWorked: 120,
@@ -215,8 +260,8 @@ export const payrollData: PayrollEntry[] = [
     period: "January 2025",
   },
   {
-    id: 6,
-    employeeId: 6,
+    id: "payroll-6",
+    employeeId: "emp-6",
     employeeName: "Justin Tan",
     role: "Scheduler / Developer",
     hoursWorked: 40,
@@ -225,8 +270,8 @@ export const payrollData: PayrollEntry[] = [
     period: "January 2025",
   },
   {
-    id: 7,
-    employeeId: 7,
+    id: "payroll-7",
+    employeeId: "emp-7",
     employeeName: "James Harris",
     role: "Scooper",
     hoursWorked: 80,

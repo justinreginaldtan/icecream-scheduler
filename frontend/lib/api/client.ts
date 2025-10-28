@@ -1,3 +1,5 @@
+import { employees, shifts, timeOffRequests, users, payrollData, type Shift, type TimeOffRequest, type PayrollEntry } from "../data/mock-data"
+
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'
 
 interface ApiResponse<T = any> {
@@ -11,26 +13,33 @@ interface ApiResponse<T = any> {
 class ApiClient {
   private baseURL: string
   private token: string | null = null
+  private mockEmployees = [...employees]
+  private mockShifts: Shift[] = [...shifts]
+  private mockTimeOffRequests: TimeOffRequest[] = [...timeOffRequests]
+  private mockPayroll: PayrollEntry[] = [...payrollData]
 
   constructor(baseURL: string) {
     this.baseURL = baseURL
     this.token = typeof window !== 'undefined' ? localStorage.getItem('auth-token') : null
   }
 
-  private getMockData(endpoint: string, method: string): ApiResponse {
+  private getMockData(endpoint: string, method: string, options: RequestInit = {}): ApiResponse {
     // Mock login data
     if (endpoint === '/api/auth/login' && method === 'POST') {
-      return {
-        success: true,
-        data: {
-          token: 'mock-jwt-token',
-          user: {
-            id: '1',
-            email: 'mari.lisa@example.com',
-            name: 'Mari Lisa',
-            role: 'manager'
+      const { email } = JSON.parse(options.body as string);
+      const user = users.find(u => u.email === email);
+      if (user) {
+        return {
+          success: true,
+          data: {
+            token: 'mock-jwt-token',
+            user
           }
         }
+      }
+      return {
+        success: false,
+        error: 'Invalid credentials'
       }
     }
 
@@ -43,29 +52,116 @@ class ApiClient {
           error: 'Invalid token or user not found.'
         }
       }
+      const user = users.find(u => u.id === '1'); //Hacky way to get a user
       return {
         success: true,
         data: {
-          user: {
-            id: '1',
-            email: 'mari.lisa@example.com',
-            name: 'Mari Lisa',
-            role: 'manager'
-          }
+          user
         }
       }
     }
 
-    // Mock employees data
     if (endpoint === '/api/employees' && method === 'GET') {
       return {
         success: true,
-        data: [
-          { id: '1', name: 'Mari Lisa', role: 'Store Manager', email: 'mari.lisa@example.com', phone: '(555) 123-4567', hours: 40 },
-          { id: '2', name: 'Vidhi Patel', role: 'Shift Lead', email: 'vidhi@howdy.com', phone: '(555) 234-5678', hours: 35 },
-          { id: '3', name: 'Chatcha Mantapaneewat', role: 'Scooper', email: 'chatcha@howdy.com', phone: '(555) 345-6789', hours: 25 }
-        ],
-        count: 3
+        data: this.mockEmployees.map((employee) => ({ ...employee })),
+        count: this.mockEmployees.length
+      }
+    }
+
+    if (endpoint === '/api/shifts' && method === 'GET') {
+      return {
+        success: true,
+        data: this.mockShifts.map((shift) => ({ ...shift })),
+        count: this.mockShifts.length
+      }
+    }
+
+    if (endpoint.startsWith('/api/shifts') && method === 'POST') {
+      const partialShift = JSON.parse(options.body as string);
+      const newShift: Shift = {
+        ...partialShift,
+        id: `shift-${Date.now()}`,
+        status: partialShift.status ?? "scheduled",
+      }
+      this.mockShifts.push(newShift);
+      return {
+        success: true,
+        data: newShift
+      }
+    }
+
+    if (endpoint.startsWith('/api/shifts/') && method === 'PUT') {
+      const updatedShift = JSON.parse(options.body as string);
+      const id = endpoint.split('/').pop();
+      const index = this.mockShifts.findIndex((s) => s.id === id);
+      if (index !== -1) {
+        this.mockShifts[index] = {
+          ...this.mockShifts[index],
+          ...updatedShift,
+          id: this.mockShifts[index].id,
+        };
+        return {
+          success: true,
+          data: this.mockShifts[index]
+        }
+      }
+    }
+
+    if (endpoint.startsWith('/api/shifts/') && method === 'DELETE') {
+      const id = endpoint.split('/').pop();
+      const index = this.mockShifts.findIndex((s) => s.id === id);
+      if (index !== -1) {
+        this.mockShifts.splice(index, 1);
+        return {
+          success: true
+        }
+      }
+    }
+
+    if (endpoint.startsWith('/api/requests') && method === 'GET') {
+      return {
+        success: true,
+        data: this.mockTimeOffRequests.map((request) => ({ ...request })),
+        count: this.mockTimeOffRequests.length
+      }
+    }
+
+    if (endpoint.startsWith('/api/requests/') && endpoint.endsWith('/approve') && method === 'PUT') {
+      const id = endpoint.split('/')[3];
+      const index = this.mockTimeOffRequests.findIndex((r) => r.id === id);
+      if (index !== -1) {
+        this.mockTimeOffRequests[index] = {
+          ...this.mockTimeOffRequests[index],
+          status: "approved",
+        }
+        return {
+          success: true,
+          data: this.mockTimeOffRequests[index]
+        }
+      }
+    }
+
+    if (endpoint.startsWith('/api/requests/') && endpoint.endsWith('/deny') && method === 'PUT') {
+      const id = endpoint.split('/')[3];
+      const index = this.mockTimeOffRequests.findIndex((r) => r.id === id);
+      if (index !== -1) {
+        this.mockTimeOffRequests[index] = {
+          ...this.mockTimeOffRequests[index],
+          status: "denied",
+        }
+        return {
+          success: true,
+          data: this.mockTimeOffRequests[index]
+        }
+      }
+    }
+
+    if (endpoint === "/api/payroll" && method === "GET") {
+      return {
+        success: true,
+        data: this.mockPayroll.map((entry) => ({ ...entry })),
+        count: this.mockPayroll.length,
       }
     }
 
@@ -81,50 +177,7 @@ class ApiClient {
     endpoint: string,
     options: RequestInit = {}
   ): Promise<ApiResponse<T>> {
-    const url = `${this.baseURL}${endpoint}`
-    
-    const config: RequestInit = {
-      headers: {
-        'Content-Type': 'application/json',
-        ...(this.token && { Authorization: `Bearer ${this.token}` }),
-        ...options.headers,
-      },
-      ...options,
-    }
-
-    try {
-      const response = await fetch(url, config)
-      const data = await response.json()
-
-      if (!response.ok) {
-        // If backend is not available or token is invalid, use mock data instead of throwing
-        if (response.status >= 500 || response.status === 403) {
-          console.warn('Backend not available or authentication failed, using mock data for development')
-          return this.getMockData(endpoint, options.method || 'GET')
-        }
-        // For other client errors (4xx), still return the error response
-        return {
-          success: false,
-          error: data.error || `HTTP error! status: ${response.status}`
-        }
-      }
-
-      return data
-    } catch (error) {
-      console.error('API request failed:', error)
-      
-      // If it's a network error and we're in development, return mock data
-      if (error instanceof TypeError && error.message.includes('Failed to fetch')) {
-        console.warn('Backend not available, using mock data for development')
-        return this.getMockData(endpoint, options.method || 'GET')
-      }
-      
-      // Return error response instead of throwing
-      return {
-        success: false,
-        error: error instanceof Error ? error.message : 'Unknown error occurred'
-      }
-    }
+    return Promise.resolve(this.getMockData(endpoint, options.method || 'GET', options));
   }
 
   // Auth methods
@@ -278,28 +331,32 @@ class ApiClient {
   }
 
   async exportPayroll(period?: string) {
-    const queryParams = new URLSearchParams()
-    if (period) queryParams.append('period', period)
-    
-    const endpoint = `/api/payroll/export${queryParams.toString() ? `?${queryParams.toString()}` : ''}`
-    
-    const response = await fetch(`${this.baseURL}${endpoint}`, {
-      headers: {
-        ...(this.token && { Authorization: `Bearer ${this.token}` }),
-      },
-    })
+    const target = period
+      ? this.mockPayroll.filter((entry) => entry.period === period)
+      : this.mockPayroll
 
-    if (!response.ok) {
-      throw new Error('Failed to export payroll')
-    }
+    const csvHeader = "Employee,Role,Hours Worked,Hourly Rate,Total Pay,Period"
+    const csvRows = target.map((entry) =>
+      [
+        entry.employeeName,
+        entry.role,
+        entry.hoursWorked,
+        entry.hourlyRate,
+        entry.totalPay,
+        entry.period,
+      ].join(","),
+    )
 
-    const blob = await response.blob()
+    const csvContent = [csvHeader, ...csvRows].join("\n")
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" })
     const url = window.URL.createObjectURL(blob)
-    const a = document.createElement('a')
+    const a = document.createElement("a")
     a.href = url
-    a.download = `payroll-${period || 'all'}.csv`
+    a.download = `payroll-${period || 'mock'}.csv`
     a.click()
     window.URL.revokeObjectURL(url)
+
+    return { success: true }
   }
 
   async updatePayrollStatus(id: string, status: string) {

@@ -31,41 +31,33 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   // Load user from localStorage on mount
   useEffect(() => {
-    const loadUser = async () => {
-      try {
-        const token = localStorage.getItem('auth-token')
-        if (token) {
-          const response = await apiClient.getCurrentUser()
-          if (response.success && response.data?.user) {
-            setUser(response.data.user)
-          } else {
-            // Token is invalid, clear it
-            console.warn('Invalid token or user not found, clearing auth data')
-            localStorage.removeItem('auth-token')
+        const loadUser = async () => {
+          try {
+            const storedUser = localStorage.getItem('sweet-solutions-user');
+            if (storedUser) {
+              setUser(JSON.parse(storedUser));
+            }
+          } catch (error) {
+            console.error('Failed to load user:', error)
+            localStorage.removeItem('sweet-solutions-user');
+          } finally {
+            setIsLoading(false)
           }
         }
-      } catch (error) {
-        console.error('Failed to load user:', error)
-        localStorage.removeItem('auth-token')
-      } finally {
-        setIsLoading(false)
-      }
-    }
-
     loadUser()
   }, [])
 
-  // Redirect logic
   useEffect(() => {
     if (isLoading) return
 
-    // If not logged in and not on login page, redirect to login
-    if (!user && pathname !== '/login') {
+    const publicPaths = ['/login', '/unauthorized']
+    const pathIsPublic = publicPaths.includes(pathname)
+
+    if (!user && !pathIsPublic) {
       router.push('/login')
     }
 
-    // If logged in and on login page, redirect to dashboard
-    if (user && pathname === '/login') {
+    if (user && pathIsPublic) {
       router.push('/')
     }
   }, [user, pathname, router, isLoading])
@@ -75,6 +67,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const response = await apiClient.login(email, password)
       if (response.success && response.data?.user) {
         setUser(response.data.user)
+        localStorage.setItem('sweet-solutions-user', JSON.stringify(response.data.user));
         localStorage.setItem('auth-token', response.data.token || '')
         return true
       }

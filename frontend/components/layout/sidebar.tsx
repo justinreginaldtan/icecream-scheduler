@@ -2,10 +2,9 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { LayoutDashboard, Calendar, Users, DollarSign, FileText, Settings } from "lucide-react"
+import { LayoutDashboard, Calendar, Users, DollarSign, FileText, Settings, LogOut } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useAuth } from "@/lib/auth/auth-context"
-import { useNav } from "@/lib/utils/navigation"
 import { useSidebar } from "@/lib/sidebar-context"
 import { useState, useEffect, useRef } from "react"
 
@@ -20,9 +19,8 @@ const navigation = [
 
 export function Sidebar() {
   const pathname = usePathname()
-  const { user } = useAuth()
-  const nav = useNav()
-  const { isCollapsed, toggleSidebar } = useSidebar()
+  const { user, logout } = useAuth()
+  const { isCollapsed, toggleSidebar, setIsCollapsed } = useSidebar()
   const [isMobile, setIsMobile] = useState(false)
   const sidebarRef = useRef<HTMLElement>(null)
 
@@ -71,18 +69,15 @@ export function Sidebar() {
           isMobile && isCollapsed ? "-translate-x-full" : "translate-x-0"
         )}
         style={{ 
-          background: 'var(--sidebar-bg)',
-          boxShadow: '0 4px 12px rgba(0, 0, 0, 0.04)',
-          backdropFilter: 'var(--card-glass-blur)',
-          WebkitBackdropFilter: 'var(--card-glass-blur)',
-          transition: 'all var(--transition-slow) var(--ease-out-cubic)'
+          background: 'var(--sidebar-bg)', 
+          boxShadow: 'var(--shadow-sidebar)',
+          borderRight: '1px solid var(--sidebar-border)',
+          transition: 'all 0.3s cubic-bezier(0.22, 1, 0.36, 1)'
         }}
       >
         <div className="flex h-full flex-col">
           {/* Logo and Branding - Clickable Toggle */}
-          <div className="px-4 pt-6 pb-6" style={{ 
-            borderBottom: '1px solid rgba(0,0,0,0.05)'
-          }}>
+          <div className="px-4 pt-6 pb-6 border-b border-[var(--border)]">
             <div 
               onClick={toggleSidebar}
               aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
@@ -105,9 +100,8 @@ export function Sidebar() {
                 }}
               />
               {!isCollapsed && (
-                <div>
-                  <h1 className="text-lg font-semibold text-[var(--brandBlue)] leading-tight">Howdy Homemade</h1>
-                  <p className="text-xs font-medium text-[var(--brandPink)] leading-tight">Sweet Solutions</p>
+                <div className="flex items-center gap-1">
+                  <h1 className="text-lg font-semibold text-[var(--sidebar-text-active)] leading-tight">Howdy Homemade</h1>
                 </div>
               )}
             </div>
@@ -124,21 +118,24 @@ export function Sidebar() {
                 key={item.name}
                 href={item.href}
                 className={cn(
-                  "sidebar-nav-link relative flex items-center rounded-lg px-3 py-2.5 text-sm font-medium focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[var(--focus-ring)] focus-visible:outline-none group/item cursor-pointer transition-all duration-200 ease-out",
-                  isCollapsed ? "justify-center px-2" : "gap-3",
-                  isActive && "sidebar-nav-link-active"
+                  "relative flex items-center rounded-lg px-3 py-2.5 text-sm font-medium focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:outline-none group/item cursor-pointer",
+                  "transition-all duration-200 ease-out",
+                  isActive
+                    ? "bg-mint-100 text-[var(--sidebar-icon-active)]"
+                    : "text-[var(--sidebar-text)] hover:bg-mint-50",
+                  isCollapsed ? "justify-center px-2" : "gap-3"
                 )}
                 style={{
                   animation: `fadeInUp 0.4s ease forwards`,
-                  animationDelay: `${index * 0.06}s`
+                  animationDelay: `${index * 0.06}s`,
+                  ...(isActive && { boxShadow: '0 1px 2px rgba(0, 0, 0, 0.05)' })
                 }}
-                data-active={isActive}
                 data-testid={`nav-${item.name.toLowerCase().replace(' ', '-')}`}
               >
                 <item.icon className={cn(
                   "h-5 w-5 flex-shrink-0 transition-all duration-200 ease-out",
-                  "group-hover/item:-translate-y-[2px]",
-                  isActive ? "text-[var(--primary)]" : "text-[color:rgba(76,89,86,0.7)]"
+                  "group-hover/item:translate-y-[-2px] group-hover/item:rotate-3",
+                  isActive ? "text-[var(--sidebar-icon-active)]" : "text-[var(--sidebar-icon)]"
                 )} />
                 {/* Show label if expanded */}
                 {!isCollapsed && (
@@ -169,17 +166,22 @@ export function Sidebar() {
                 key={item.name}
                 href={item.href}
                 className={cn(
-                  "sidebar-nav-link relative flex items-center rounded-lg px-3 py-2.5 text-sm font-medium focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[var(--focus-ring)] focus-visible:outline-none group/item cursor-pointer transition-all duration-200 ease-out",
-                  isCollapsed ? "justify-center px-2" : "gap-3",
-                  isActive && "sidebar-nav-link-active"
+                  "relative flex items-center rounded-lg px-3 py-2.5 text-sm font-medium focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:outline-none group/item cursor-pointer",
+                  "transition-all duration-200 ease-out",
+                  isActive
+                    ? "bg-mint-100 text-[var(--sidebar-icon-active)]"
+                    : "text-[var(--sidebar-text)] hover:bg-mint-50",
+                  isCollapsed ? "justify-center px-2" : "gap-3"
                 )}
-                data-active={isActive}
+                style={{
+                  ...(isActive && { boxShadow: '0 1px 2px rgba(0, 0, 0, 0.05)' })
+                }}
                 data-testid={`nav-${item.name.toLowerCase().replace(' ', '-')}`}
               >
                 <item.icon className={cn(
                   "h-5 w-5 flex-shrink-0 transition-all duration-200 ease-out",
-                  "group-hover/item:-translate-y-[2px]",
-                  isActive ? "text-[var(--primary)]" : "text-[color:rgba(76,89,86,0.7)]"
+                  "group-hover/item:translate-y-[-2px] group-hover/item:rotate-3",
+                  isActive ? "text-[var(--sidebar-icon-active)]" : "text-[var(--sidebar-icon)]"
                 )} />
                 {/* Show label if expanded */}
                 {!isCollapsed && (
@@ -196,6 +198,41 @@ export function Sidebar() {
               </Link>
                 )
               })}
+            </div>
+
+            {/* Logout Button */}
+            <div className="mt-auto">
+              <button
+                onClick={() => {
+                  if (isMobile) {
+                    setIsCollapsed(true)
+                  }
+                  logout()
+                }}
+                className={cn(
+                  "relative flex items-center rounded-lg px-3 py-2.5 text-sm font-medium focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:outline-none group/item cursor-pointer w-full",
+                  "transition-all duration-200 ease-out",
+                  "text-[var(--sidebar-text)] hover:bg-mint-50",
+                  isCollapsed ? "justify-center px-2" : "gap-3"
+                )}
+                data-testid="logout-button"
+              >
+                <LogOut className={cn(
+                  "h-5 w-5 flex-shrink-0 transition-all duration-200 ease-out",
+                  "group-hover/item:translate-y-[-2px] group-hover/item:rotate-3",
+                  "text-[var(--sidebar-icon)]"
+                )} />
+                {!isCollapsed && (
+                  <span className="truncate whitespace-nowrap transition-opacity duration-300">
+                    Logout
+                  </span>
+                )}
+                {isCollapsed && (
+                  <div className="absolute left-full ml-2 px-3 py-1.5 bg-[#2C2A29] text-white text-xs rounded-lg opacity-0 pointer-events-none group-hover/item:opacity-100 transition-all duration-150 ease whitespace-nowrap z-50 shadow-lg">
+                    Logout
+                  </div>
+                )}
+              </button>
             </div>
           </nav>
 

@@ -18,18 +18,22 @@ import { useToast } from "@/hooks/use-toast"
 import apiClient from "@/lib/api/client"
 import { Loader2 } from "lucide-react"
 import { useAuth } from "@/lib/auth/auth-context"
+import type { Shift } from "@/lib/data/mock-data"
 
 interface ShiftModalProps {
   isOpen: boolean
   onClose: () => void
-  shift?: any
+  shift?: Shift | null
+  onCreate?: (shift: Shift) => void
+  onUpdate?: (shift: Shift) => void
+  onDelete?: (shiftId: string) => void
 }
 
-export function ShiftModal({ isOpen, onClose, shift }: ShiftModalProps) {
+export function ShiftModal({ isOpen, onClose, shift, onCreate, onUpdate, onDelete }: ShiftModalProps) {
   const { user } = useAuth()
   const { toast } = useToast()
   const [isLoading, setIsLoading] = useState(false)
-  const [employees, setEmployees] = useState([])
+  const [employees, setEmployees] = useState<Array<{ id: string; name: string; role: string }>>([])
   const [formData, setFormData] = useState({
     employeeId: "",
     date: "",
@@ -45,7 +49,12 @@ export function ShiftModal({ isOpen, onClose, shift }: ShiftModalProps) {
       try {
         const response = await apiClient.getEmployees()
         if (response.success) {
-          setEmployees(response.data || [])
+          const items = Array.isArray(response.data) ? response.data : []
+          setEmployees(items.map((emp: any) => ({
+            id: emp.id?.toString?.() ?? "",
+            name: emp.name,
+            role: emp.role,
+          })))
         }
       } catch (error) {
         console.error('Error fetching employees:', error)
@@ -58,7 +67,7 @@ export function ShiftModal({ isOpen, onClose, shift }: ShiftModalProps) {
   useEffect(() => {
     if (shift) {
       setFormData({
-        employeeId: shift.employee?.toString() || shift.employeeId?.toString() || "",
+        employeeId: shift.employeeId?.toString() || "",
         date: shift.date,
         startTime: shift.startTime,
         endTime: shift.endTime,
@@ -81,9 +90,10 @@ export function ShiftModal({ isOpen, onClose, shift }: ShiftModalProps) {
 
     try {
       // Transform form data to match API expectations
+      const employeeMatch = employees.find((emp) => emp.id === formData.employeeId)
       const shiftData = {
-        employee: formData.employeeId,
-        employeeName: employees.find(emp => emp._id === formData.employeeId)?.name || "",
+        employeeId: formData.employeeId,
+        employeeName: employeeMatch?.name || "",
         date: formData.date,
         startTime: formData.startTime,
         endTime: formData.endTime,
@@ -92,19 +102,25 @@ export function ShiftModal({ isOpen, onClose, shift }: ShiftModalProps) {
       }
 
       if (shift) {
-        await apiClient.updateShift(shift._id, shiftData)
+        const response = await apiClient.updateShift(shift.id, shiftData)
         toast({
           title: "Shift updated",
           description: "The shift has been updated successfully.",
           className: "bg-[var(--brandBlue)] text-white border-[var(--brandBlue)]",
         })
+        if (response.success && response.data) {
+          onUpdate?.(response.data as Shift)
+        }
       } else {
-        await apiClient.createShift(shiftData)
+        const response = await apiClient.createShift(shiftData)
         toast({
           title: "Shift saved",
           description: "A new shift has been added to the schedule.",
           className: "bg-[var(--brandBlue)] text-white border-[var(--brandBlue)]",
         })
+        if (response.success && response.data) {
+          onCreate?.(response.data as Shift)
+        }
       }
 
       onClose()
@@ -133,6 +149,7 @@ export function ShiftModal({ isOpen, onClose, shift }: ShiftModalProps) {
         variant: "destructive",
         className: "bg-[var(--brandPink)] text-white border-[var(--brandPink)]",
       })
+      onDelete?.(shift.id)
       onClose()
     } catch (error) {
       toast({
@@ -172,7 +189,7 @@ export function ShiftModal({ isOpen, onClose, shift }: ShiftModalProps) {
                 </SelectTrigger>
                 <SelectContent>
                   {employees.map((emp) => (
-                    <SelectItem key={emp._id} value={emp._id.toString()}>
+                    <SelectItem key={emp.id} value={emp.id.toString()}>
                       {emp.name} - {emp.role}
                     </SelectItem>
                   ))}
