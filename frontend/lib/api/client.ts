@@ -1,3 +1,5 @@
+import { employees, shifts, timeOffRequests, users } from '../data/mock-data';
+
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'
 
 interface ApiResponse<T = any> {
@@ -17,20 +19,23 @@ class ApiClient {
     this.token = typeof window !== 'undefined' ? localStorage.getItem('auth-token') : null
   }
 
-  private getMockData(endpoint: string, method: string): ApiResponse {
+  private getMockData(endpoint: string, method: string, options: RequestInit = {}): ApiResponse {
     // Mock login data
     if (endpoint === '/api/auth/login' && method === 'POST') {
-      return {
-        success: true,
-        data: {
-          token: 'mock-jwt-token',
-          user: {
-            id: '1',
-            email: 'mari.lisa@example.com',
-            name: 'Mari Lisa',
-            role: 'manager'
+      const { email } = JSON.parse(options.body as string);
+      const user = users.find(u => u.email === email);
+      if (user) {
+        return {
+          success: true,
+          data: {
+            token: 'mock-jwt-token',
+            user
           }
         }
+      }
+      return {
+        success: false,
+        error: 'Invalid credentials'
       }
     }
 
@@ -43,29 +48,94 @@ class ApiClient {
           error: 'Invalid token or user not found.'
         }
       }
+      const user = users.find(u => u.id === '1'); //Hacky way to get a user
       return {
         success: true,
         data: {
-          user: {
-            id: '1',
-            email: 'mari.lisa@example.com',
-            name: 'Mari Lisa',
-            role: 'manager'
-          }
+          user
         }
       }
     }
 
-    // Mock employees data
     if (endpoint === '/api/employees' && method === 'GET') {
       return {
         success: true,
-        data: [
-          { id: '1', name: 'Mari Lisa', role: 'Store Manager', email: 'mari.lisa@example.com', phone: '(555) 123-4567', hours: 40 },
-          { id: '2', name: 'Vidhi Patel', role: 'Shift Lead', email: 'vidhi@howdy.com', phone: '(555) 234-5678', hours: 35 },
-          { id: '3', name: 'Chatcha Mantapaneewat', role: 'Scooper', email: 'chatcha@howdy.com', phone: '(555) 345-6789', hours: 25 }
-        ],
-        count: 3
+        data: employees,
+        count: employees.length
+      }
+    }
+
+    if (endpoint === '/api/shifts' && method === 'GET') {
+      return {
+        success: true,
+        data: shifts,
+        count: shifts.length
+      }
+    }
+
+    if (endpoint.startsWith('/api/shifts') && method === 'POST') {
+      const newShift = JSON.parse(options.body as string);
+      newShift.id = shifts.length + 1;
+      shifts.push(newShift);
+      return {
+        success: true,
+        data: newShift
+      }
+    }
+
+    if (endpoint.startsWith('/api/shifts/') && method === 'PUT') {
+      const updatedShift = JSON.parse(options.body as string);
+      const id = endpoint.split('/').pop();
+      const index = shifts.findIndex(s => s.id.toString() === id);
+      if (index !== -1) {
+        shifts[index] = { ...shifts[index], ...updatedShift };
+        return {
+          success: true,
+          data: shifts[index]
+        }
+      }
+    }
+
+    if (endpoint.startsWith('/api/shifts/') && method === 'DELETE') {
+      const id = endpoint.split('/').pop();
+      const index = shifts.findIndex(s => s.id.toString() === id);
+      if (index !== -1) {
+        shifts.splice(index, 1);
+        return {
+          success: true
+        }
+      }
+    }
+
+    if (endpoint.startsWith('/api/requests') && method === 'GET') {
+      return {
+        success: true,
+        data: timeOffRequests,
+        count: timeOffRequests.length
+      }
+    }
+
+    if (endpoint.startsWith('/api/requests/') && endpoint.endsWith('/approve') && method === 'PUT') {
+      const id = endpoint.split('/')[3];
+      const index = timeOffRequests.findIndex(r => r.id.toString() === id);
+      if (index !== -1) {
+        timeOffRequests[index].status = 'approved';
+        return {
+          success: true,
+          data: timeOffRequests[index]
+        }
+      }
+    }
+
+    if (endpoint.startsWith('/api/requests/') && endpoint.endsWith('/deny') && method === 'PUT') {
+      const id = endpoint.split('/')[3];
+      const index = timeOffRequests.findIndex(r => r.id.toString() === id);
+      if (index !== -1) {
+        timeOffRequests[index].status = 'denied';
+        return {
+          success: true,
+          data: timeOffRequests[index]
+        }
       }
     }
 
@@ -81,50 +151,7 @@ class ApiClient {
     endpoint: string,
     options: RequestInit = {}
   ): Promise<ApiResponse<T>> {
-    const url = `${this.baseURL}${endpoint}`
-    
-    const config: RequestInit = {
-      headers: {
-        'Content-Type': 'application/json',
-        ...(this.token && { Authorization: `Bearer ${this.token}` }),
-        ...options.headers,
-      },
-      ...options,
-    }
-
-    try {
-      const response = await fetch(url, config)
-      const data = await response.json()
-
-      if (!response.ok) {
-        // If backend is not available or token is invalid, use mock data instead of throwing
-        if (response.status >= 500 || response.status === 403) {
-          console.warn('Backend not available or authentication failed, using mock data for development')
-          return this.getMockData(endpoint, options.method || 'GET')
-        }
-        // For other client errors (4xx), still return the error response
-        return {
-          success: false,
-          error: data.error || `HTTP error! status: ${response.status}`
-        }
-      }
-
-      return data
-    } catch (error) {
-      console.error('API request failed:', error)
-      
-      // If it's a network error and we're in development, return mock data
-      if (error instanceof TypeError && error.message.includes('Failed to fetch')) {
-        console.warn('Backend not available, using mock data for development')
-        return this.getMockData(endpoint, options.method || 'GET')
-      }
-      
-      // Return error response instead of throwing
-      return {
-        success: false,
-        error: error instanceof Error ? error.message : 'Unknown error occurred'
-      }
-    }
+    return Promise.resolve(this.getMockData(endpoint, options.method || 'GET', options));
   }
 
   // Auth methods
