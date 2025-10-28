@@ -17,14 +17,9 @@
   --cream-400: #FFE8C8;
   --cream-500: #F5DDB8;
   
-  /* Mint Family - Fresh, cooling accent (Vibrant) */
-  --mint-50: #F0FDF9;
-  --mint-100: #E0FAF4;
-  --mint-200: #C5F5E8;
-  --mint-300: #A3F3E3;
-  --mint-400: #7AF0D9;
-  --mint-500: #52EDCF;
-  --mint-600: #3BDBC0;
+  /* Mint Family - Fresh, cooling accent (Showcase) */
+  --mint-500: #48EAD0;
+  --mint-600: #32D8B8;
 
   /* Green Family - For success states */
   --green-100: #F0FDF4;
@@ -32,15 +27,10 @@
   --success: var(--green-500);
   
   
-  /* Berry Family - Rich, energetic (Vibrant) */
-  --berry-50: #FFF5F2;
-  --berry-100: #FFEAE5;
-  --berry-200: #FFD8D0;
-  --berry-300: #FFC1B3;
-  --berry-400: #FF8B75;
-  --berry-500: #FF7A5C; /* Primary Accent */
-  --berry-600: #E86A4F; /* Darker for hover */
-  --berry-700: #D15A42; /* Darkest for borders/active */
+  /* Berry Family - Rich, energetic (Showcase) */
+  --berry-500: #FF7050; /* Primary Accent */
+  --berry-600: #E86042; /* Darker for hover */
+  --berry-700: #D15035; /* Darkest for borders/active */
     
     /* Charcoal Family - Depth, contrast, professional */
     --charcoal-50: #FAFAFA;
@@ -61,9 +51,9 @@
     --body-text-muted: var(--charcoal-600);
   
     /* Surfaces & Hierarchy */
-    --surface-1: linear-gradient(180deg, white 0%, var(--cream-100) 100%); /* More pronounced gradient */
+    --surface-1: linear-gradient(180deg, white 0%, var(--cream-200) 100%); /* Showcase gradient */
     --surface-2: white;
-    --surface-3: var(--cream-200);
+    --surface-3: var(--cream-300);
     
     /* Accent & Actions */
     --accent: var(--berry-500);
@@ -77,11 +67,11 @@
     --border-medium: var(--charcoal-200);
     --border-strong: var(--charcoal-300);
     
-    /* Shadows (Final Polish) */
+    /* Shadows (Showcase) */
     --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.07), 0 1px 2px 0 rgba(0, 0, 0, 0.03);
-    --shadow-md: 0 8px 16px -4px rgba(0, 0, 0, 0.15), 0 4px 8px -4px rgba(0, 0, 0, 0.1), inset 0 1px 1px rgba(255, 255, 255, 0.75);
-    --shadow-lg: 0 16px 32px -6px rgba(0, 0, 0, 0.15), 0 6px 12px -6px rgba(0, 0, 0, 0.1);
-    --shadow-xl: 0 28px 56px -12px rgba(0, 0, 0, 0.2), 0 12px 24px -12px rgba(0, 0, 0, 0.15);
+    --shadow-md: 0 12px 24px -6px rgba(0, 0, 0, 0.2), 0 6px 12px -6px rgba(0, 0, 0, 0.15), inset 0 1px 1px rgba(255, 255, 255, 0.75);
+    --shadow-lg: 0 20px 40px -8px rgba(0, 0, 0, 0.2), 0 8px 16px -8px rgba(0, 0, 0, 0.15);
+    --shadow-xl: 0 32px 64px -14px rgba(0, 0, 0, 0.25), 0 14px 28px -14px rgba(0, 0, 0, 0.2);
   
     /* Sidebar */
     --sidebar-bg: var(--cream-100);
@@ -363,13 +353,14 @@
   .dashboard-section-title {
     font-family: var(--font-display);
     font-weight: 600;
-    font-size: 1.25rem;
+    font-size: 1.5rem;
     padding-bottom: 0.5rem;
     border-bottom: 1px solid var(--border-subtle);
     margin-bottom: 1rem;
   }
 
   .border-accent {
+    border-width: 2px;
     border-color: var(--accent);
   }
 
