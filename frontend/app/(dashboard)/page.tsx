@@ -61,11 +61,11 @@ export default function DashboardPage() {
 
         {/* 1. Today's Summary */}
         <motion.div variants={cardVariants}>
-          <Card className="group">
+          <Card className="group border-accent">
             <CardHeader>
               <CardTitle className="flex items-center justify-between">
                 <span>Today's Summary</span>
-                <span className="text-sm font-medium text-green-500 flex items-center">
+                <span className="text-sm font-medium text-success flex items-center">
                   <AlertCircle className="h-4 w-4 mr-1" /> Fully Staffed
                 </span>
               </CardTitle>
@@ -89,29 +89,32 @@ export default function DashboardPage() {
 
         {/* 2. Current Shifts */}
         <div>
-          <h2 className="section-title text-xl mb-4">Current Shifts</h2>
+          <h2 className="dashboard-section-title">Current Shifts</h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <Card><CardContent className="p-4">Ava – Scooper, 3h 17m</CardContent></Card>
-            <Card><CardContent className="p-4">Leo – Cashier, 2h 45m</CardContent></Card>
-            <Card><CardContent className="p-4">Mia – Toppings, 1h 5m</CardContent></Card>
-            <Card className="border-dashed"><CardContent className="p-4 text-body-text-muted">+2 more</CardContent></Card>
+            <Card className="p-3"><CardContent>Ava – Scooper, 3h 17m</CardContent></Card>
+            <Card className="p-3"><CardContent>Leo – Cashier, 2h 45m</CardContent></Card>
+            <Card className="p-3"><CardContent>Mia – Toppings, 1h 5m</CardContent></Card>
+            <Card className="p-3 border-dashed"><CardContent className="text-body-text-muted">+2 more</CardContent></Card>
           </div>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Main Content Column */}
           <div className="lg:col-span-2 space-y-8">
             {/* 3. Pending Actions */}
             <div>
-              <h2 className="section-title text-xl mb-4">Pending Actions</h2>
-              <div className="space-y-3">
-                <Card className="p-4 flex items-center justify-between"><span>Time Off: Justin Tan (Oct 28-30)</span><Button variant="outline" size="sm">Review</Button></Card>
-                <Card className="p-4 flex items-center justify-between"><span>Shift Swap: Ava for Leo (Oct 29)</span><Button variant="outline" size="sm">Review</Button></Card>
-              </div>
+              <h2 className="dashboard-section-title">Pending Actions</h2>
+              <Card>
+                <CardContent className="divide-y divide-border-subtle">
+                  <div className="p-4 flex items-center justify-between"><span>Time Off: Justin Tan (Oct 28-30)</span><Button variant="outline" size="sm">Review</Button></div>
+                  <div className="p-4 flex items-center justify-between"><span>Shift Swap: Ava for Leo (Oct 29)</span><Button variant="outline" size="sm">Review</Button></div>
+                </CardContent>
+              </Card>
             </div>
 
             {/* 5. Recent Activity Feed */}
             <div>
-              <h2 className="section-title text-xl mb-4">Recent Activity</h2>
+              <h2 className="dashboard-section-title">Recent Activity</h2>
               <Card>
                 <CardContent>
                   <div className="space-y-2.5 pt-6">
@@ -129,30 +132,35 @@ export default function DashboardPage() {
             </div>
           </div>
 
+          {/* Sidebar Column (Unified Action Panel) */}
           <div className="space-y-8">
-            {/* 4. Quick Actions */}
-            <div>
-              <h2 className="section-title text-xl mb-4">Quick Actions</h2>
-              <div className="flex flex-col space-y-2">
-                <Button>Create Shift</Button>
-                <Button variant="outline">Approve All</Button>
-                <Button variant="outline">Run Payroll</Button>
+            <Card className="p-4">
+              {/* 4. Quick Actions */}
+              <div>
+                <h2 className="dashboard-section-title">Quick Actions</h2>
+                <div className="flex flex-col space-y-2">
+                  <Button className="btn-primary">Create Shift</Button>
+                  <Button variant="outline">Approve All</Button>
+                  <Button variant="outline">Run Payroll</Button>
+                </div>
               </div>
-            </div>
 
-            {/* 6. Sweet Moment */}
-            <div>
-              <h2 className="section-title text-xl mb-4">Sweet Moment</h2>
-              <Card className="bg-mint-100 border-mint-200">
-                <CardHeader>
-                  <CardTitle className="text-lg">Staff of the Week</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="font-bold text-lg">🎉 Ava!</p>
-                  <p className="text-sm text-body-text-muted">For amazing customer feedback.</p>
-                </CardContent>
-              </Card>
-            </div>
+              <hr className="my-6 border-border-subtle" />
+
+              {/* 6. Sweet Moment */}
+              <div>
+                <h2 className="dashboard-section-title">Sweet Moment</h2>
+                <Card className="bg-mint-100 border-mint-200">
+                  <CardHeader>
+                    <CardTitle className="text-lg">Staff of the Week</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="font-bold text-lg">🎉 Ava!</p>
+                    <p className="text-sm text-body-text-muted">For amazing customer feedback.</p>
+                  </CardContent>
+                </Card>
+              </div>
+            </Card>
           </div>
         </div>
       </div>

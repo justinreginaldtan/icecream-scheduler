@@ -25,6 +25,12 @@
   --mint-400: #7AF0D9;
   --mint-500: #52EDCF;
   --mint-600: #3BDBC0;
+
+  /* Green Family - For success states */
+  --green-100: #F0FDF4;
+  --green-500: #22C55E;
+  --success: var(--green-500);
+  
   
   /* Berry Family - Rich, energetic (Vibrant) */
   --berry-50: #FFF5F2;
@@ -352,6 +358,22 @@
   .font-body { font-family: var(--font-body); }
   .display-heading { font-family: var(--font-display); font-weight: 700; }
   .section-title { font-family: var(--font-display); font-weight: 600; }
+  .dashboard-section-title {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 1.25rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border-subtle);
+    margin-bottom: 1rem;
+  }
+
+  .border-accent {
+    border-color: var(--accent);
+  }
+
+  .text-success {
+    color: var(--success);
+  }
   
   /* Spacing Rhythm - 4/8/16/24 system */
   .space-4 { margin-bottom: 0.25rem; }  /* 4px */
