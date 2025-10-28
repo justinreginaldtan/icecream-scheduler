@@ -8,10 +8,11 @@ import { Badge } from "@/components/ui/badge"
 import { Mail, Phone, Clock } from "lucide-react"
 import apiClient from "@/lib/api/client"
 import { useAuth } from "@/lib/auth/auth-context"
+import type { Employee } from "@/lib/data/mock-data"
 
 export default function EmployeesPage() {
   const { user } = useAuth()
-  const [employees, setEmployees] = useState([])
+  const [employees, setEmployees] = useState<Employee[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -22,7 +23,13 @@ export default function EmployeesPage() {
         setLoading(true)
         const response = await apiClient.getEmployees()
         if (response.success) {
-          setEmployees(response.data || [])
+          setEmployees(
+            (response.data || []).map((emp: any) => ({
+              ...emp,
+              id: emp.id?.toString?.() ?? "",
+              hoursPerWeek: emp.hoursPerWeek ?? emp.hours ?? 0,
+            })),
+          )
         }
       } catch (error) {
         console.error('Error fetching employees:', error)
@@ -80,7 +87,11 @@ export default function EmployeesPage() {
             </CardHeader>
             <CardContent>
               <div className="text-3xl font-bold text-[var(--text)]">
-                {Math.round(employees.reduce((sum, emp) => sum + (emp.hoursPerWeek || 0), 0) / employees.length)}
+                {employees.length
+                  ? Math.round(
+                      employees.reduce((sum, emp) => sum + (emp.hoursPerWeek || 0), 0) / employees.length,
+                    )
+                  : 0}
               </div>
             </CardContent>
           </Card>

@@ -1,11 +1,10 @@
-'''"use client"
+"use client"
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { LayoutDashboard, Calendar, Users, DollarSign, FileText, Settings, LogOut } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useAuth } from "@/lib/auth/auth-context"
-import { useNav } from "@/lib/utils/navigation"
 import { useSidebar } from "@/lib/sidebar-context"
 import { useState, useEffect, useRef } from "react"
 
@@ -21,8 +20,7 @@ const navigation = [
 export function Sidebar() {
   const pathname = usePathname()
   const { user, logout } = useAuth()
-  const nav = useNav()
-  const { isCollapsed, toggleSidebar } = useSidebar()
+  const { isCollapsed, toggleSidebar, setIsCollapsed } = useSidebar()
   const [isMobile, setIsMobile] = useState(false)
   const sidebarRef = useRef<HTMLElement>(null)
 
@@ -205,7 +203,12 @@ export function Sidebar() {
             {/* Logout Button */}
             <div className="mt-auto">
               <button
-                onClick={logout}
+                onClick={() => {
+                  if (isMobile) {
+                    setIsCollapsed(true)
+                  }
+                  logout()
+                }}
                 className={cn(
                   "relative flex items-center rounded-lg px-3 py-2.5 text-sm font-medium focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:outline-none group/item cursor-pointer w-full",
                   "transition-all duration-200 ease-out",
@@ -238,4 +241,3 @@ export function Sidebar() {
     </>
   )
 }
-'''

@@ -1,22 +1,19 @@
 "use client"
 
 import { motion } from "framer-motion"
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { AppLayout } from "@/components/layout/app-layout"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Clock, Users, FileText, TrendingUp, ChevronDown, ArrowRight, Calendar, AlertCircle, Plus } from "lucide-react"
 import { useAuth } from "@/lib/auth/auth-context"
 import { ShiftModal } from "@/components/features/shifts/shift-modal"
-import { useNav } from "@/lib/utils/navigation"
-import apiClient from "@/lib/api/client"
 import { useToast } from "@/hooks/use-toast"
 
 export default function DashboardPage() {
   const { user } = useAuth()
-  const nav = useNav()
   const { toast } = useToast()
-  const [dateRange, setDateRange] = useState("This week")
+  const [dateRange, setDateRange] = useState("Today")
   const [isShiftModalOpen, setIsShiftModalOpen] = useState(false)
 
   const containerVariants = {
@@ -41,6 +38,18 @@ export default function DashboardPage() {
     },
   };
 
+  const cycleDateRange = () => {
+    const options = ["Today", "This Week", "This Month"] as const
+    const currentIndex = options.indexOf(dateRange as (typeof options)[number])
+    const nextValue = options[(currentIndex + 1) % options.length]
+    setDateRange(nextValue)
+    toast({
+      title: "Date range updated",
+      description: `Dashboard metrics now reflect ${nextValue.toLowerCase()}.`,
+      className: "bg-[var(--brandBlue)] text-white border-[var(--brandBlue)]",
+    })
+  }
+
   return (
     <AppLayout>
       <div className="space-y-8">
@@ -56,8 +65,9 @@ export default function DashboardPage() {
             variant="outline"
             className="animate-slide-up"
             data-testid="date-range-selector"
+            onClick={cycleDateRange}
           >
-            Today <ChevronDown className="ml-2 h-4 w-4" />
+            {dateRange} <ChevronDown className="ml-2 h-4 w-4" />
           </Button>
         </div>
 
@@ -171,4 +181,3 @@ export default function DashboardPage() {
     </AppLayout>
   )
 }
-

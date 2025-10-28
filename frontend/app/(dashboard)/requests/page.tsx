@@ -9,11 +9,12 @@ import { Check, X, Calendar, Loader2 } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import apiClient from "@/lib/api/client"
 import { useAuth } from "@/lib/auth/auth-context"
+import type { TimeOffRequest } from "@/lib/data/mock-data"
 
 export default function RequestsPage() {
   const { user } = useAuth()
   const { toast } = useToast()
-  const [requests, setRequests] = useState([])
+  const [requests, setRequests] = useState<TimeOffRequest[]>([])
   const [loading, setLoading] = useState(true)
   const [loadingRequests, setLoadingRequests] = useState<Record<string, "approve" | "deny" | null>>({})
 
@@ -25,7 +26,13 @@ export default function RequestsPage() {
         setLoading(true)
         const response = await apiClient.getTimeOffRequests()
         if (response.success) {
-          setRequests(response.data || [])
+          setRequests(
+            (response.data || []).map((request: any) => ({
+              ...request,
+              id: request.id?.toString?.() ?? "",
+              employeeId: request.employeeId?.toString?.() ?? "",
+            })),
+          )
         }
       } catch (error) {
         console.error('Error fetching requests:', error)
@@ -43,7 +50,9 @@ export default function RequestsPage() {
     try {
       await apiClient.approveRequest(requestId)
 
-      setRequests(requests.map((req) => (req._id === requestId ? { ...req, status: "approved" as const } : req)))
+      setRequests((current) =>
+        current.map((req) => (req.id === requestId ? { ...req, status: "approved" as const } : req)),
+      )
 
       toast({
         title: "Request approved",
@@ -68,7 +77,9 @@ export default function RequestsPage() {
     try {
       await apiClient.denyRequest(requestId)
 
-      setRequests(requests.map((req) => (req._id === requestId ? { ...req, status: "denied" as const } : req)))
+      setRequests((current) =>
+        current.map((req) => (req.id === requestId ? { ...req, status: "denied" as const } : req)),
+      )
 
       toast({
         title: "Request denied",
@@ -160,10 +171,10 @@ export default function RequestsPage() {
           <CardContent>
             <div className="space-y-4">
               {requests.map((request) => {
-                const isLoading = loadingRequests[request._id]
+                const isLoading = loadingRequests[request.id]
                 return (
                   <div
-                    key={request._id}
+                    key={request.id}
                     className="flex items-center justify-between rounded-lg border border-[var(--border)] bg-[var(--surface)] p-4 transition-colors duration-200 hover:bg-[var(--muted)]/30"
                   >
                     <div className="flex-1">
@@ -206,11 +217,11 @@ export default function RequestsPage() {
                         <Button
                           type="button"
                           size="sm"
-                          onClick={() => handleApprove(request._id)}
+                          onClick={() => handleApprove(request.id)}
                           disabled={!!isLoading}
                           aria-busy={isLoading === "approve"}
                           className="bg-green-600 text-white hover:bg-green-700 focus-visible:ring-2 focus-visible:ring-[var(--brandBlue)] focus-visible:outline-none"
-                          data-testid={`approve-request-${request._id}`}
+                          data-testid={`approve-request-${request.id}`}
                         >
                           {isLoading === "approve" ? (
                             <>
@@ -228,11 +239,11 @@ export default function RequestsPage() {
                           type="button"
                           size="sm"
                           variant="destructive"
-                          onClick={() => handleDeny(request._id)}
+                          onClick={() => handleDeny(request.id)}
                           disabled={!!isLoading}
                           aria-busy={isLoading === "deny"}
                           className="bg-red-600 text-white hover:bg-red-700 focus-visible:ring-2 focus-visible:ring-[var(--brandBlue)] focus-visible:outline-none"
-                          data-testid={`deny-request-${request._id}`}
+                          data-testid={`deny-request-${request.id}`}
                         >
                           {isLoading === "deny" ? (
                             <>

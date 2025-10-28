@@ -1,4 +1,4 @@
-import { employees, shifts, timeOffRequests, users } from '../data/mock-data';
+import { employees, shifts, timeOffRequests, users, payrollData, type Shift, type TimeOffRequest, type PayrollEntry } from "../data/mock-data"
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'
 
@@ -13,6 +13,10 @@ interface ApiResponse<T = any> {
 class ApiClient {
   private baseURL: string
   private token: string | null = null
+  private mockEmployees = [...employees]
+  private mockShifts: Shift[] = [...shifts]
+  private mockTimeOffRequests: TimeOffRequest[] = [...timeOffRequests]
+  private mockPayroll: PayrollEntry[] = [...payrollData]
 
   constructor(baseURL: string) {
     this.baseURL = baseURL
@@ -60,23 +64,27 @@ class ApiClient {
     if (endpoint === '/api/employees' && method === 'GET') {
       return {
         success: true,
-        data: employees,
-        count: employees.length
+        data: this.mockEmployees.map((employee) => ({ ...employee })),
+        count: this.mockEmployees.length
       }
     }
 
     if (endpoint === '/api/shifts' && method === 'GET') {
       return {
         success: true,
-        data: shifts,
-        count: shifts.length
+        data: this.mockShifts.map((shift) => ({ ...shift })),
+        count: this.mockShifts.length
       }
     }
 
     if (endpoint.startsWith('/api/shifts') && method === 'POST') {
-      const newShift = JSON.parse(options.body as string);
-      newShift.id = shifts.length + 1;
-      shifts.push(newShift);
+      const partialShift = JSON.parse(options.body as string);
+      const newShift: Shift = {
+        ...partialShift,
+        id: `shift-${Date.now()}`,
+        status: partialShift.status ?? "scheduled",
+      }
+      this.mockShifts.push(newShift);
       return {
         success: true,
         data: newShift
@@ -86,21 +94,25 @@ class ApiClient {
     if (endpoint.startsWith('/api/shifts/') && method === 'PUT') {
       const updatedShift = JSON.parse(options.body as string);
       const id = endpoint.split('/').pop();
-      const index = shifts.findIndex(s => s.id.toString() === id);
+      const index = this.mockShifts.findIndex((s) => s.id === id);
       if (index !== -1) {
-        shifts[index] = { ...shifts[index], ...updatedShift };
+        this.mockShifts[index] = {
+          ...this.mockShifts[index],
+          ...updatedShift,
+          id: this.mockShifts[index].id,
+        };
         return {
           success: true,
-          data: shifts[index]
+          data: this.mockShifts[index]
         }
       }
     }
 
     if (endpoint.startsWith('/api/shifts/') && method === 'DELETE') {
       const id = endpoint.split('/').pop();
-      const index = shifts.findIndex(s => s.id.toString() === id);
+      const index = this.mockShifts.findIndex((s) => s.id === id);
       if (index !== -1) {
-        shifts.splice(index, 1);
+        this.mockShifts.splice(index, 1);
         return {
           success: true
         }
@@ -110,32 +122,46 @@ class ApiClient {
     if (endpoint.startsWith('/api/requests') && method === 'GET') {
       return {
         success: true,
-        data: timeOffRequests,
-        count: timeOffRequests.length
+        data: this.mockTimeOffRequests.map((request) => ({ ...request })),
+        count: this.mockTimeOffRequests.length
       }
     }
 
     if (endpoint.startsWith('/api/requests/') && endpoint.endsWith('/approve') && method === 'PUT') {
       const id = endpoint.split('/')[3];
-      const index = timeOffRequests.findIndex(r => r.id.toString() === id);
+      const index = this.mockTimeOffRequests.findIndex((r) => r.id === id);
       if (index !== -1) {
-        timeOffRequests[index].status = 'approved';
+        this.mockTimeOffRequests[index] = {
+          ...this.mockTimeOffRequests[index],
+          status: "approved",
+        }
         return {
           success: true,
-          data: timeOffRequests[index]
+          data: this.mockTimeOffRequests[index]
         }
       }
     }
 
     if (endpoint.startsWith('/api/requests/') && endpoint.endsWith('/deny') && method === 'PUT') {
       const id = endpoint.split('/')[3];
-      const index = timeOffRequests.findIndex(r => r.id.toString() === id);
+      const index = this.mockTimeOffRequests.findIndex((r) => r.id === id);
       if (index !== -1) {
-        timeOffRequests[index].status = 'denied';
+        this.mockTimeOffRequests[index] = {
+          ...this.mockTimeOffRequests[index],
+          status: "denied",
+        }
         return {
           success: true,
-          data: timeOffRequests[index]
+          data: this.mockTimeOffRequests[index]
         }
+      }
+    }
+
+    if (endpoint === "/api/payroll" && method === "GET") {
+      return {
+        success: true,
+        data: this.mockPayroll.map((entry) => ({ ...entry })),
+        count: this.mockPayroll.length,
       }
     }
 
@@ -305,28 +331,32 @@ class ApiClient {
   }
 
   async exportPayroll(period?: string) {
-    const queryParams = new URLSearchParams()
-    if (period) queryParams.append('period', period)
-    
-    const endpoint = `/api/payroll/export${queryParams.toString() ? `?${queryParams.toString()}` : ''}`
-    
-    const response = await fetch(`${this.baseURL}${endpoint}`, {
-      headers: {
-        ...(this.token && { Authorization: `Bearer ${this.token}` }),
-      },
-    })
+    const target = period
+      ? this.mockPayroll.filter((entry) => entry.period === period)
+      : this.mockPayroll
 
-    if (!response.ok) {
-      throw new Error('Failed to export payroll')
-    }
+    const csvHeader = "Employee,Role,Hours Worked,Hourly Rate,Total Pay,Period"
+    const csvRows = target.map((entry) =>
+      [
+        entry.employeeName,
+        entry.role,
+        entry.hoursWorked,
+        entry.hourlyRate,
+        entry.totalPay,
+        entry.period,
+      ].join(","),
+    )
 
-    const blob = await response.blob()
+    const csvContent = [csvHeader, ...csvRows].join("\n")
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" })
     const url = window.URL.createObjectURL(blob)
-    const a = document.createElement('a')
+    const a = document.createElement("a")
     a.href = url
-    a.download = `payroll-${period || 'all'}.csv`
+    a.download = `payroll-${period || 'mock'}.csv`
     a.click()
     window.URL.revokeObjectURL(url)
+
+    return { success: true }
   }
 
   async updatePayrollStatus(id: string, status: string) {

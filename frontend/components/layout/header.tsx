@@ -14,11 +14,14 @@ import { Button } from "@/components/ui/button"
 import { useAuth } from "@/lib/auth/auth-context"
 import { useSidebar } from "@/lib/sidebar-context"
 import { useState, useEffect } from "react"
+import { useToast } from "@/hooks/use-toast"
 
 export function Header() {
   const { user, logout } = useAuth()
   const { toggleSidebar, isCollapsed } = useSidebar()
   const [showToggle, setShowToggle] = useState(false)
+  const [selectedRange, setSelectedRange] = useState("This Week")
+  const { toast } = useToast()
 
   const initials =
     user?.name
@@ -73,15 +76,26 @@ export function Header() {
               variant="ghost"
               className="flex items-center gap-2 text-sm font-medium text-[color:rgba(44,42,41,.7)] hover:text-[var(--text)] focus-visible:ring-2 focus-visible:ring-[var(--brandBlue)] focus-visible:outline-none"
             >
-              This Week
+              {selectedRange}
               <ChevronDown className="h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-48">
-            <DropdownMenuItem>This Week</DropdownMenuItem>
-            <DropdownMenuItem>Last Week</DropdownMenuItem>
-            <DropdownMenuItem>This Month</DropdownMenuItem>
-            <DropdownMenuItem>Last Month</DropdownMenuItem>
+            {["This Week", "Last Week", "This Month", "Last Month"].map((label) => (
+              <DropdownMenuItem
+                key={label}
+                onSelect={() => {
+                  setSelectedRange(label)
+                  toast({
+                    title: "Date range updated",
+                    description: `Now showing ${label.toLowerCase()}.`,
+                    className: "bg-[var(--brandBlue)] text-white border-[var(--brandBlue)]",
+                  })
+                }}
+              >
+                {label}
+              </DropdownMenuItem>
+            ))}
           </DropdownMenuContent>
         </DropdownMenu>
 
@@ -90,6 +104,13 @@ export function Header() {
           variant="ghost"
           size="icon"
           className="relative h-10 w-10 focus-visible:ring-2 focus-visible:ring-[var(--brandBlue)] focus-visible:outline-none"
+          onClick={() =>
+            toast({
+              title: "Notifications",
+              description: "You're all caught up! 🎉",
+              className: "bg-[var(--brandBlue)] text-white border-[var(--brandBlue)]",
+            })
+          }
         >
           <Bell className="h-5 w-5 text-[color:rgba(44,42,41,.7)]" />
           <span className="absolute right-2 top-2 h-2 w-2 rounded-full bg-[var(--brandPink)]" />
@@ -116,7 +137,16 @@ export function Header() {
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem className="cursor-pointer">
+            <DropdownMenuItem
+              className="cursor-pointer"
+              onSelect={() =>
+                toast({
+                  title: "Profile coming soon",
+                  description: "Profile editing will be available in the next release.",
+                  className: "bg-[var(--brandBlue)] text-white border-[var(--brandBlue)]",
+                })
+              }
+            >
               <User className="mr-2 h-4 w-4" />
               Profile
             </DropdownMenuItem>

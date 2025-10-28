@@ -10,13 +10,14 @@ import { Button } from "@/components/ui/button"
 import { Download, DollarSign, Loader2 } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import apiClient from "@/lib/api/client"
+import type { PayrollEntry } from "@/lib/data/mock-data"
 
 export default function PayrollPage() {
   const { toast } = useToast()
   const { user } = useAuth()
   const router = useRouter()
   const [isExporting, setIsExporting] = useState(false)
-  const [payrollData, setPayrollData] = useState([])
+  const [payrollData, setPayrollData] = useState<PayrollEntry[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -33,7 +34,13 @@ export default function PayrollPage() {
         setLoading(true)
         const response = await apiClient.getPayroll()
         if (response.success) {
-          setPayrollData(response.data || [])
+          setPayrollData(
+            (response.data || []).map((entry: any) => ({
+              ...entry,
+              id: entry.id?.toString?.() ?? "",
+              employeeId: entry.employeeId?.toString?.() ?? "",
+            })),
+          )
         }
       } catch (error) {
         console.error('Error fetching payroll:', error)
@@ -65,19 +72,23 @@ export default function PayrollPage() {
   }
 
   const totalHours = payrollData.reduce((sum, entry) => sum + (entry.hoursWorked || 0), 0)
-  const totalPayroll = payrollData.reduce((sum, entry) => sum + (entry.netPay || 0), 0)
+  const totalPayroll = payrollData.reduce((sum, entry) => sum + (entry.totalPay || 0), 0)
 
   const handleExportCSV = async () => {
     setIsExporting(true)
 
     try {
-      await apiClient.exportPayroll()
+      const response = await apiClient.exportPayroll()
 
-      toast({
-        title: "Export complete",
-        description: "payroll.csv downloaded successfully.",
-        className: "bg-[var(--brandBlue)] text-white border-[var(--brandBlue)]",
-      })
+      if (response?.success) {
+        toast({
+          title: "Export complete",
+          description: "payroll.csv downloaded successfully.",
+          className: "bg-[var(--brandBlue)] text-white border-[var(--brandBlue)]",
+        })
+      } else {
+        throw new Error("Failed to export payroll")
+      }
     } catch (error) {
       toast({
         title: "Export failed",
