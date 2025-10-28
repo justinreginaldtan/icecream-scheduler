@@ -10,10 +10,12 @@ import { useAuth } from "@/lib/auth/auth-context"
 import { ShiftModal } from "@/components/features/shifts/shift-modal"
 import { useNav } from "@/lib/utils/navigation"
 import apiClient from "@/lib/api/client"
+import { useToast } from "@/hooks/use-toast"
 
 export default function DashboardPage() {
   const { user } = useAuth()
   const nav = useNav()
+  const { toast } = useToast()
   const [dateRange, setDateRange] = useState("This week")
   const [isShiftModalOpen, setIsShiftModalOpen] = useState(false)
 
@@ -106,8 +108,8 @@ export default function DashboardPage() {
               <h2 className="dashboard-section-title">Pending Actions</h2>
               <Card>
                 <CardContent className="divide-y divide-border-subtle">
-                  <div className="p-4 flex items-center justify-between"><span>Time Off: Justin Tan (Oct 28-30)</span><Button variant="outline" size="sm" className="border-blue-500 text-blue-500 hover:bg-blue-50">Review</Button></div>
-                  <div className="p-4 flex items-center justify-between"><span>Shift Swap: Ava for Leo (Oct 29)</span><Button variant="outline" size="sm" className="border-blue-500 text-blue-500 hover:bg-blue-50">Review</Button></div>
+                  <div className="p-4 flex items-center justify-between"><span>Time Off: Justin Tan (Oct 28-30)</span><Button variant="outline" size="sm" className="border-blue-500 text-blue-500 hover:bg-blue-50" onClick={() => toast({ title: "Review Clicked" })}>Review</Button></div>
+                  <div className="p-4 flex items-center justify-between"><span>Shift Swap: Ava for Leo (Oct 29)</span><Button variant="outline" size="sm" className="border-blue-500 text-blue-500 hover:bg-blue-50" onClick={() => toast({ title: "Review Clicked" })}>Review</Button></div>
                 </CardContent>
               </Card>
             </div>
@@ -139,9 +141,9 @@ export default function DashboardPage() {
               <div className="mt-4">
                 <h2 className="dashboard-section-title">Quick Actions</h2>
                 <div className="flex flex-col space-y-2">
-                  <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}><Button className="btn-primary w-full">Create Shift</Button></motion.div>
-                  <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}><Button variant="outline" className="w-full">Approve All</Button></motion.div>
-                  <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}><Button variant="outline" className="w-full">Run Payroll</Button></motion.div>
+                  <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}><Button className="btn-primary w-full" onClick={() => setIsShiftModalOpen(true)}>Create Shift</Button></motion.div>
+                  <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}><Button variant="outline" className="w-full" onClick={() => toast({ title: "Approve All Clicked" })}>Approve All</Button></motion.div>
+                  <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}><Button variant="outline" className="w-full" onClick={() => toast({ title: "Run Payroll Clicked" })}>Run Payroll</Button></motion.div>
                 </div>
               </div>
 

@@ -1,8 +1,8 @@
-"use client"
+'''"use client"
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { LayoutDashboard, Calendar, Users, DollarSign, FileText, Settings } from "lucide-react"
+import { LayoutDashboard, Calendar, Users, DollarSign, FileText, Settings, LogOut } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useAuth } from "@/lib/auth/auth-context"
 import { useNav } from "@/lib/utils/navigation"
@@ -20,7 +20,7 @@ const navigation = [
 
 export function Sidebar() {
   const pathname = usePathname()
-  const { user } = useAuth()
+  const { user, logout } = useAuth()
   const nav = useNav()
   const { isCollapsed, toggleSidebar } = useSidebar()
   const [isMobile, setIsMobile] = useState(false)
@@ -201,6 +201,36 @@ export function Sidebar() {
                 )
               })}
             </div>
+
+            {/* Logout Button */}
+            <div className="mt-auto">
+              <button
+                onClick={logout}
+                className={cn(
+                  "relative flex items-center rounded-lg px-3 py-2.5 text-sm font-medium focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:outline-none group/item cursor-pointer w-full",
+                  "transition-all duration-200 ease-out",
+                  "text-[var(--sidebar-text)] hover:bg-mint-50",
+                  isCollapsed ? "justify-center px-2" : "gap-3"
+                )}
+                data-testid="logout-button"
+              >
+                <LogOut className={cn(
+                  "h-5 w-5 flex-shrink-0 transition-all duration-200 ease-out",
+                  "group-hover/item:translate-y-[-2px] group-hover/item:rotate-3",
+                  "text-[var(--sidebar-icon)]"
+                )} />
+                {!isCollapsed && (
+                  <span className="truncate whitespace-nowrap transition-opacity duration-300">
+                    Logout
+                  </span>
+                )}
+                {isCollapsed && (
+                  <div className="absolute left-full ml-2 px-3 py-1.5 bg-[#2C2A29] text-white text-xs rounded-lg opacity-0 pointer-events-none group-hover/item:opacity-100 transition-all duration-150 ease whitespace-nowrap z-50 shadow-lg">
+                    Logout
+                  </div>
+                )}
+              </button>
+            </div>
           </nav>
 
         </div>
@@ -208,3 +238,4 @@ export function Sidebar() {
     </>
   )
 }
+'''
