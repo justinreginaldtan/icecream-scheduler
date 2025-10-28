@@ -22,7 +22,7 @@ export default function DashboardPage() {
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.1,
+        staggerChildren: 0.15,
       },
     },
   };
@@ -123,7 +123,7 @@ export default function DashboardPage() {
                       <p className="text-sm text-body-text-muted">Chatcha's time-off request for Jan 25-27 was approved.</p>
                     </div>
                     <div className="group/item flex items-start gap-3">
-                      <div className="h-2 w-2 rounded-full mt-1.5 bg-mint-500 flex-shrink-0" />
+                      <div className="h-2 w-2 rounded-full mt-1.5 bg-accent-secondary flex-shrink-0" />
                       <p className="text-sm text-body-text-muted">5 new shifts were added for next week.</p>
                     </div>
                   </div>
@@ -139,9 +139,9 @@ export default function DashboardPage() {
               <div>
                 <h2 className="dashboard-section-title">Quick Actions</h2>
                 <div className="flex flex-col space-y-2">
-                  <Button className="btn-primary">Create Shift</Button>
-                  <Button variant="outline">Approve All</Button>
-                  <Button variant="outline">Run Payroll</Button>
+                  <motion.div whileHover={{ scale: 1.05 }}><Button className="btn-primary w-full">Create Shift</Button></motion.div>
+                  <motion.div whileHover={{ scale: 1.05 }}><Button variant="outline" className="w-full">Approve All</Button></motion.div>
+                  <motion.div whileHover={{ scale: 1.05 }}><Button variant="outline" className="w-full">Run Payroll</Button></motion.div>
                 </div>
               </div>
 
@@ -150,7 +150,7 @@ export default function DashboardPage() {
               {/* 6. Sweet Moment */}
               <div>
                 <h2 className="dashboard-section-title">Sweet Moment</h2>
-                <Card className="bg-mint-100 border-mint-200">
+                <Card className="bg-accent-secondary border-mint-200">
                   <CardHeader>
                     <CardTitle className="text-lg">Staff of the Week</CardTitle>
                   </CardHeader>
