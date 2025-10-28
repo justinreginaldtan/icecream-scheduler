@@ -72,8 +72,8 @@ export function Sidebar() {
         )}
         style={{ 
           background: 'var(--sidebar-bg)', 
-          boxShadow: 'inset -2px 0 6px rgba(0, 0, 0, 0.05)',
-          borderRight: '0.5px solid rgba(0,0,0,0.05)',
+          boxShadow: 'var(--shadow-sidebar)',
+          borderRight: '1px solid var(--sidebar-border)',
           transition: 'all 0.3s cubic-bezier(0.22, 1, 0.36, 1)'
         }}
       >
@@ -102,9 +102,8 @@ export function Sidebar() {
                 }}
               />
               {!isCollapsed && (
-                <div>
-                  <h1 className="text-lg font-semibold text-[var(--brandBlue)] leading-tight">Howdy Homemade</h1>
-                  <p className="text-xs font-medium text-[var(--brandPink)] leading-tight">Sweet Solutions</p>
+                <div className="flex items-center gap-1">
+                  <h1 className="text-lg font-semibold text-[var(--sidebar-text-active)] leading-tight">Howdy Homemade</h1>
                 </div>
               )}
             </div>
@@ -121,11 +120,11 @@ export function Sidebar() {
                 key={item.name}
                 href={item.href}
                 className={cn(
-                  "relative flex items-center rounded-lg px-3 py-2.5 text-sm font-medium focus-visible:ring-2 focus-visible:ring-[var(--brandBlue)] focus-visible:outline-none group/item cursor-pointer",
+                  "relative flex items-center rounded-lg px-3 py-2.5 text-sm font-medium focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:outline-none group/item cursor-pointer",
                   "transition-all duration-200 ease-out",
                   isActive
-                    ? "bg-[#B7E7DF] text-[#1A5F5B]"
-                    : "text-[#2A2A2A] hover:bg-[color:rgba(183,231,223,.3)]",
+                    ? "bg-mint-100 text-[var(--sidebar-icon-active)]"
+                    : "text-[var(--sidebar-text)] hover:bg-mint-50",
                   isCollapsed ? "justify-center px-2" : "gap-3"
                 )}
                 style={{
@@ -138,7 +137,7 @@ export function Sidebar() {
                 <item.icon className={cn(
                   "h-5 w-5 flex-shrink-0 transition-all duration-200 ease-out",
                   "group-hover/item:translate-y-[-2px] group-hover/item:rotate-3",
-                  isActive ? "text-[#1A5F5B]" : "text-[color:rgba(42,42,42,.6)]"
+                  isActive ? "text-[var(--sidebar-icon-active)]" : "text-[var(--sidebar-icon)]"
                 )} />
                 {/* Show label if expanded */}
                 {!isCollapsed && (
@@ -169,11 +168,11 @@ export function Sidebar() {
                 key={item.name}
                 href={item.href}
                 className={cn(
-                  "relative flex items-center rounded-lg px-3 py-2.5 text-sm font-medium focus-visible:ring-2 focus-visible:ring-[var(--brandBlue)] focus-visible:outline-none group/item cursor-pointer",
+                  "relative flex items-center rounded-lg px-3 py-2.5 text-sm font-medium focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:outline-none group/item cursor-pointer",
                   "transition-all duration-200 ease-out",
                   isActive
-                    ? "bg-[#B7E7DF] text-[#1A5F5B]"
-                    : "text-[#2A2A2A] hover:bg-[color:rgba(183,231,223,.3)]",
+                    ? "bg-mint-100 text-[var(--sidebar-icon-active)]"
+                    : "text-[var(--sidebar-text)] hover:bg-mint-50",
                   isCollapsed ? "justify-center px-2" : "gap-3"
                 )}
                 style={{
@@ -184,7 +183,7 @@ export function Sidebar() {
                 <item.icon className={cn(
                   "h-5 w-5 flex-shrink-0 transition-all duration-200 ease-out",
                   "group-hover/item:translate-y-[-2px] group-hover/item:rotate-3",
-                  isActive ? "text-[#1A5F5B]" : "text-[color:rgba(42,42,42,.6)]"
+                  isActive ? "text-[var(--sidebar-icon-active)]" : "text-[var(--sidebar-icon)]"
                 )} />
                 {/* Show label if expanded */}
                 {!isCollapsed && (

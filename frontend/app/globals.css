@@ -21,6 +21,18 @@
   --mint-500: #48EAD0;
   --mint-600: #32D8B8;
   --success: var(--mint-600);
+
+  /* Blue Family - For info states */
+  --blue-50: #F0F8FF;
+  --blue-100: #E0F2FF;
+  --blue-500: #60A5FA;
+  --info: var(--blue-500);
+
+  /* Orange Family - For alert states */
+  --orange-50: #FFF7ED;
+  --orange-100: #FFEDD5;
+  --orange-500: #F97316;
+  --alert: var(--orange-500);
   
   /* Berry Family - Rich, energetic (Showcase) */
   --berry-500: #FF7050; /* Primary Accent */
@@ -40,14 +52,14 @@
     --charcoal-900: #171717;
     
     /* Semantic Color Applications */
-    --background: linear-gradient(180deg, var(--cream-50) 0%, var(--cream-200) 100%);
+    --background: linear-gradient(180deg, var(--cream-200) 0%, var(--cream-300) 100%);
     --foreground: var(--charcoal-800);
     --body-text: var(--charcoal-700);
     --body-text-muted: var(--charcoal-600);
   
     /* Surfaces & Hierarchy */
     --surface-1: white;
-    --surface-2: var(--cream-50);
+    --surface-2: white;
     --surface-3: var(--cream-100);
     
     /* Accent & Actions */
@@ -62,19 +74,49 @@
     --border-medium: var(--charcoal-200);
     --border-strong: var(--charcoal-300);
     
-    /* Shadows (Showcase) */
-    --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.07), 0 1px 2px 0 rgba(0, 0, 0, 0.03);
-    --shadow-md: 0 12px 24px -6px rgba(0, 0, 0, 0.2), 0 6px 12px -6px rgba(0, 0, 0, 0.15), inset 0 1px 1px rgba(255, 255, 255, 0.75);
-    --shadow-lg: 0 20px 40px -8px rgba(0, 0, 0, 0.2), 0 8px 16px -8px rgba(0, 0, 0, 0.15);
-    --shadow-xl: 0 32px 64px -14px rgba(0, 0, 0, 0.25), 0 14px 28px -14px rgba(0, 0, 0, 0.2);
+    /* Semantic Color Applications */
+    --background: linear-gradient(180deg, var(--cream-100) 0%, var(--cream-200) 100%);
+    --foreground: var(--charcoal-800);
+    --body-text: var(--charcoal-700);
+    --body-text-muted: var(--charcoal-600);
+  
+    /* Surfaces & Hierarchy */
+    --surface-1: white;
+    --surface-2: white;
+    --surface-3: var(--cream-100);
+    
+    /* Accent & Actions */
+    --accent: var(--berry-500);
+    --accent-foreground: white;
+    --accent-hover: var(--berry-600);
+    --accent-secondary: var(--mint-500);
+    --accent-secondary-foreground: var(--charcoal-800);
+    
+    /* Borders & Dividers */
+    --border-subtle: var(--charcoal-100);
+    --border-medium: var(--charcoal-200);
+    --border-strong: var(--charcoal-300);
+    
+    /* Shadows (Airy, Notion-like) */
+    --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.08), 0 1px 2px 0 rgba(0, 0, 0, 0.04);
+    --shadow-md: 0 1px 3px 0 rgba(0, 0, 0, 0.08), 0 1px 2px 0 rgba(0, 0, 0, 0.04);
+    --shadow-lg: 0 4px 8px -2px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.06);
+    --shadow-xl: 0 8px 16px -4px rgba(0, 0, 0, 0.1), 0 4px 8px -4px rgba(0, 0, 0, 0.06);
   
     /* Sidebar */
-    --sidebar-bg: var(--cream-100);
-    --sidebar-border: var(--border-subtle);
+    --sidebar-bg: linear-gradient(180deg, var(--cream-50) 0%, var(--mint-50) 100%);
+    --sidebar-border: var(--charcoal-50);
     --sidebar-icon: var(--charcoal-600);
     --sidebar-icon-active: var(--accent);
     --sidebar-text: var(--charcoal-700);
     --sidebar-text-active: var(--charcoal-900);
+    --shadow-sidebar: 0 4px 8px rgba(0, 0, 0, 0.05);
+  
+    /* Legacy / To Be Deprecated */
+    --primary: var(--accent);
+    --primary-foreground: var(--accent-foreground);
+    --secondary: var(--accent-secondary);
+    --secondary-foreground: var(--accent-secondary-foreground);
   
     /* Legacy / To Be Deprecated */
     --primary: var(--accent);
@@ -150,7 +192,7 @@
     /* Display/Headlines - Handcrafted Serif */
     h1, h2, h3, h4, h5, h6, .display-heading {
       font-family: var(--font-display);
-      color: var(--charcoal-800);
+      color: var(--charcoal-900);
       font-feature-settings: "kern" 1, "liga" 1;
       -webkit-font-smoothing: antialiased;
     }
@@ -229,13 +271,13 @@
       border-radius: var(--radius-lg);
       box-shadow: var(--shadow-md);
       padding: 1.5rem;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
     }
     
     .card:hover, [class*="Card"]:hover, [class*="card"]:hover {
       background: var(--surface-2);
       box-shadow: var(--shadow-xl);
-      transform: translateY(-2px) scale(1.01);
+      transform: translateY(-3px) scale(1.01);
     }
     
       /* Primary Button - Solid Accent */
@@ -347,11 +389,11 @@
   .section-title { font-family: var(--font-display); font-weight: 600; }
   .dashboard-section-title {
     font-family: var(--font-display);
-    font-weight: 600;
-    font-size: 1.5rem;
+    font-weight: 700;
+    font-size: 1.75rem;
     padding-bottom: 0.5rem;
     border-bottom: 1px solid var(--border-subtle);
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
   }
 
   .border-accent {

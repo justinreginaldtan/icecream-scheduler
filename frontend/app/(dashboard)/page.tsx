@@ -61,7 +61,7 @@ export default function DashboardPage() {
 
         {/* 1. Today's Summary */}
         <motion.div variants={cardVariants}>
-          <Card className="group border-accent">
+          <Card className="group border-accent bg-gradient-to-br from-berry-100 to-berry-50">
             <CardHeader>
               <CardTitle className="flex items-center justify-between">
                 <span>Today's Summary</span>
@@ -88,7 +88,7 @@ export default function DashboardPage() {
         </motion.div>
 
         {/* 2. Current Shifts */}
-        <div>
+        <div className="mt-4">
           <h2 className="dashboard-section-title">Current Shifts</h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <Card className="p-3"><CardContent>Ava – Scooper, 3h 17m</CardContent></Card>
@@ -102,18 +102,18 @@ export default function DashboardPage() {
           {/* Main Content Column */}
           <div className="lg:col-span-2 space-y-8">
             {/* 3. Pending Actions */}
-            <div>
+            <div className="mt-4">
               <h2 className="dashboard-section-title">Pending Actions</h2>
               <Card>
                 <CardContent className="divide-y divide-border-subtle">
-                  <div className="p-4 flex items-center justify-between"><span>Time Off: Justin Tan (Oct 28-30)</span><Button variant="outline" size="sm">Review</Button></div>
-                  <div className="p-4 flex items-center justify-between"><span>Shift Swap: Ava for Leo (Oct 29)</span><Button variant="outline" size="sm">Review</Button></div>
+                  <div className="p-4 flex items-center justify-between"><span>Time Off: Justin Tan (Oct 28-30)</span><Button variant="outline" size="sm" className="border-blue-500 text-blue-500 hover:bg-blue-50">Review</Button></div>
+                  <div className="p-4 flex items-center justify-between"><span>Shift Swap: Ava for Leo (Oct 29)</span><Button variant="outline" size="sm" className="border-blue-500 text-blue-500 hover:bg-blue-50">Review</Button></div>
                 </CardContent>
               </Card>
             </div>
 
             {/* 5. Recent Activity Feed */}
-            <div>
+            <div className="mt-4">
               <h2 className="dashboard-section-title">Recent Activity</h2>
               <Card>
                 <CardContent>
@@ -136,21 +136,21 @@ export default function DashboardPage() {
           <div className="space-y-8">
             <Card className="p-4">
               {/* 4. Quick Actions */}
-              <div>
+              <div className="mt-4">
                 <h2 className="dashboard-section-title">Quick Actions</h2>
                 <div className="flex flex-col space-y-2">
-                  <motion.div whileHover={{ scale: 1.05 }}><Button className="btn-primary w-full">Create Shift</Button></motion.div>
-                  <motion.div whileHover={{ scale: 1.05 }}><Button variant="outline" className="w-full">Approve All</Button></motion.div>
-                  <motion.div whileHover={{ scale: 1.05 }}><Button variant="outline" className="w-full">Run Payroll</Button></motion.div>
+                  <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}><Button className="btn-primary w-full">Create Shift</Button></motion.div>
+                  <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}><Button variant="outline" className="w-full">Approve All</Button></motion.div>
+                  <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}><Button variant="outline" className="w-full">Run Payroll</Button></motion.div>
                 </div>
               </div>
 
               <hr className="my-6 border-border-subtle" />
 
               {/* 6. Sweet Moment */}
-              <div>
+              <div className="mt-4">
                 <h2 className="dashboard-section-title">Sweet Moment</h2>
-                <Card className="bg-accent-secondary border-mint-200">
+                <Card className="bg-gradient-to-br from-mint-100 to-mint-50">
                   <CardHeader>
                     <CardTitle className="text-lg">Staff of the Week</CardTitle>
                   </CardHeader>
