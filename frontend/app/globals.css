@@ -48,60 +48,44 @@
   --charcoal-900: #171717;
   
   /* Semantic Color Applications */
-  --background: linear-gradient(180deg, #FFFDF0 0%, #FFF8E8 50%, #FFF0D8 100%);
-  --background-overlay: linear-gradient(to bottom, rgba(255,255,255,0.6), rgba(255,255,255,0));
+  --background: var(--cream-100);
   --foreground: var(--charcoal-800);
   --body-text: var(--charcoal-700);
   --body-text-muted: var(--charcoal-600);
+
+  /* Surfaces & Hierarchy */
+  --surface-1: var(--cream-50); /* For primary cards and panels */
+  --surface-2: var(--cream-200); /* For elevated surfaces, modals, or hover states */
+  --surface-3: white; /* For elements needing to be visually separate */
   
-  /* Glass Cards - Frosted glass effect */
-  --card-bg: rgba(255, 255, 255, 0.85);
-  --card-bg-glass: rgba(255, 255, 255, 0.7);
-  --card-bg-hover: rgba(255, 255, 255, 0.95);
-  --card-border: rgba(255, 255, 255, 0.3);
-  --card-shadow: 0 8px 32px rgba(0, 0, 0, 0.06), 0 2px 8px rgba(0, 0, 0, 0.04);
-  --card-shadow-hover: 0 16px 48px rgba(0, 0, 0, 0.08), 0 4px 16px rgba(0, 0, 0, 0.06);
-  --card-glass-blur: blur(20px);
-  --card-gradient: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 254, 248, 0.85) 100%);
-  
-  /* Sidebar - Fresh mint with glass effect */
-  --sidebar-bg: linear-gradient(180deg, rgba(159, 238, 221, 0.95) 0%, rgba(124, 229, 207, 0.9) 100%);
-  --sidebar-bg-glass: rgba(159, 238, 221, 0.15);
-  --sidebar-border: rgba(255, 255, 255, 0.4);
-  --sidebar-icon: var(--charcoal-700);
-  --sidebar-icon-active: var(--berry-600);
-  --sidebar-text: var(--charcoal-800);
-  --sidebar-text-active: var(--charcoal-900);
-  
-  /* Primary Actions - Berry gradient */
-  --primary: var(--berry-600);
-  --primary-light: var(--berry-500);
-  --primary-gradient: linear-gradient(135deg, #FF6B4A 0%, #E85A3A 100%);
-  --primary-foreground: #FFFFFF;
-  --primary-shadow: 0 4px 16px rgba(255, 107, 74, 0.25);
-  --primary-shadow-hover: 0 8px 24px rgba(255, 107, 74, 0.35);
-  
-  /* Secondary Actions - Mint */
-  --secondary: var(--mint-500);
-  --secondary-light: var(--mint-400);
-  --secondary-gradient: linear-gradient(135deg, #4DD4BE 0%, #2EC4AA 100%);
-  --secondary-foreground: var(--charcoal-800);
-  --secondary-shadow: 0 4px 16px rgba(77, 212, 190, 0.2);
-  
-  /* Accents */
-  --accent-berry: var(--berry-500);
-  --accent-mint: var(--mint-500);
-  --accent-cream: var(--cream-400);
+  /* Accent & Actions */
+  --accent: var(--berry-600);
+  --accent-foreground: white;
+  --accent-hover: var(--berry-500);
   
   /* Borders & Dividers */
-  --border-subtle: rgba(115, 115, 115, 0.1);
-  --border-medium: rgba(115, 115, 115, 0.15);
-  --border-strong: rgba(115, 115, 115, 0.2);
+  --border-subtle: var(--charcoal-200);
+  --border-medium: var(--charcoal-300);
+  --border-strong: var(--charcoal-400);
   
-  /* Surface Elevations */
-  --surface-1: rgba(255, 255, 255, 0.95);
-  --surface-2: rgba(255, 255, 255, 0.98);
-  --surface-3: rgba(250, 250, 250, 1);
+  /* Shadows (Standardized) */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  
+  /* Sidebar */
+  --sidebar-bg: var(--cream-200);
+  --sidebar-border: var(--border-subtle);
+  --sidebar-icon: var(--charcoal-600);
+  --sidebar-icon-active: var(--accent);
+  --sidebar-text: var(--charcoal-700);
+  --sidebar-text-active: var(--charcoal-900);
+  
+  /* Legacy / To Be Deprecated */
+  --primary: var(--accent);
+  --primary-foreground: var(--accent-foreground);
+  --secondary: var(--mint-500); /* Keeping mint for now, can be a secondary accent */
+  --secondary-foreground: var(--charcoal-800);
   
   /* Typography - Two-Font System */
   --font-display: "Playfair Display", Georgia, serif;  /* Headlines - Handcrafted */
@@ -161,39 +145,9 @@
   
   body {
     background: var(--background);
-    background-attachment: fixed;
     min-height: 100vh;
     color: var(--body-text);
     line-height: 1.6;
-    position: relative;
-  }
-  
-  /* Glass overlay gradient */
-  body::before {
-    content: '';
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: var(--background-overlay);
-    pointer-events: none;
-    z-index: 1;
-  }
-  
-  /* Subtle texture */
-  body::after {
-    content: '';
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-image: 
-      radial-gradient(circle at 1px 1px, rgba(0,0,0,0.015) 1px, transparent 0);
-    background-size: 24px 24px;
-    pointer-events: none;
-    z-index: 2;
   }
   
   /* Typography System - Two-Font Hierarchy */
@@ -209,7 +163,7 @@
   /* Hero Heading - Dominant (2× subheading) */
   h1, .hero-heading {
     font-size: 4rem;  /* 64px */
-    font-weight: 700;
+    font-weight: 800;
     line-height: 1.1;
     letter-spacing: -0.02em;
     margin-bottom: 1rem;
@@ -235,7 +189,7 @@
   
   h4 {
     font-size: 1.125rem;  /* 18px */
-    font-weight: 600;
+    font-weight: 500;
     line-height: 1.35;
     margin-top: 1.25rem;
     margin-bottom: 0.625rem;
@@ -273,36 +227,31 @@
     vertical-align: middle;
   }
   
-  /* Glass Card Styling */
+  /* Card Styling - Opaque, Layered */
   .card, [class*="Card"], [class*="card"] {
-    background: var(--card-gradient);
-    backdrop-filter: var(--card-glass-blur);
-    -webkit-backdrop-filter: var(--card-glass-blur);
-    border: 1px solid var(--card-border);
+    background: var(--surface-1);
+    border: 1px solid var(--border-subtle);
     border-radius: var(--radius-lg);
-    box-shadow: var(--card-shadow);
+    box-shadow: var(--shadow-md);
     padding: 1.5rem;
     transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-    position: relative;
-    overflow: hidden;
   }
   
-  /* Glass card hover elevation */
   .card:hover, [class*="Card"]:hover, [class*="card"]:hover {
-    background: var(--card-bg-hover);
-    box-shadow: var(--card-shadow-hover);
+    background: var(--surface-2);
+    box-shadow: var(--shadow-lg);
     transform: translateY(-2px);
   }
   
-  /* Primary Button - Berry Gradient */
+  /* Primary Button - Solid Accent */
   button[type="submit"],
   button[class*="primary"],
   .btn-primary,
   [class*="btn-primary"] {
-    background: var(--primary-gradient);
-    color: var(--primary-foreground);
+    background: var(--accent);
+    color: var(--accent-foreground);
     border: none;
-    box-shadow: var(--primary-shadow);
+    box-shadow: var(--shadow-sm);
     font-weight: 500;
     transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   }
@@ -311,7 +260,8 @@
   button[class*="primary"]:hover,
   .btn-primary:hover,
   [class*="btn-primary"]:hover {
-    box-shadow: var(--primary-shadow-hover);
+    background: var(--accent-hover);
+    box-shadow: var(--shadow-md);
     transform: translateY(-1px);
   }
   
@@ -319,24 +269,7 @@
   button[class*="primary"]:active,
   .btn-primary:active {
     transform: translateY(0);
-    box-shadow: var(--primary-shadow);
-  }
-  
-  /* Secondary Button - Mint */
-  button[class*="secondary"],
-  .btn-secondary {
-    background: var(--secondary-gradient);
-    color: var(--secondary-foreground);
-    border: none;
-    box-shadow: var(--secondary-shadow);
-    font-weight: 500;
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-  
-  button[class*="secondary"]:hover,
-  .btn-secondary:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 6px 20px rgba(77, 212, 190, 0.25);
+    box-shadow: var(--shadow-sm);
   }
   
   /* Input & Form Elements */
@@ -354,11 +287,9 @@
     box-shadow: 0 0 0 3px rgba(255, 107, 74, 0.1);
   }
   
-  /* Sidebar Glass Effect */
+  /* Sidebar */
   .sidebar, [class*="sidebar"], [class*="Sidebar"] {
     background: var(--sidebar-bg);
-    backdrop-filter: var(--card-glass-blur);
-    -webkit-backdrop-filter: var(--card-glass-blur);
     border-right: 1px solid var(--sidebar-border);
   }
   
