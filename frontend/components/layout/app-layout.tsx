@@ -4,12 +4,14 @@ import type React from "react"
 import { useAuth } from "@/lib/auth/auth-context"
 import { Sidebar } from "./sidebar"
 import { useSidebar } from "@/lib/sidebar-context"
+import { usePathname } from "next/navigation"
 import { useState, useEffect } from "react"
 
 export function AppLayout({ children }: { children: React.ReactNode }) {
   const { isLoading } = useAuth()
   const { isCollapsed } = useSidebar()
   const [isMobile, setIsMobile] = useState(false)
+  const pathname = usePathname()
 
   useEffect(() => {
     // Flavor theme system
@@ -18,6 +20,13 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
     const initialTheme = storedTheme || "classic-cream"
     document.documentElement.dataset.theme = initialTheme
   }, [])
+
+  useEffect(() => {
+    if (typeof document === "undefined") return
+    const path = pathname === "/" ? "Dashboard" : pathname?.split("/").filter(Boolean).slice(-1)[0]
+    const pageName = path ? path.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase()) : "Dashboard"
+    document.title = `Sweet Solutions — ${pageName}`
+  }, [pathname])
 
   useEffect(() => {
     const checkMobile = () => {
@@ -37,7 +46,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <div className="flex min-h-screen bg-[var(--bg)]">
+    <div className="flex min-h-screen overflow-x-hidden bg-[var(--bg)]">
       <Sidebar />
       <main
         className="flex flex-1 flex-col"

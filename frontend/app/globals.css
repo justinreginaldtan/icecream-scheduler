@@ -64,6 +64,7 @@
 
   /* Accent & Actions */
   --accent-primary: #f0634a; /* Flavor theme system */
+  --accent-primary-soft: rgba(240, 99, 74, 0.55); /* Flavor theme system */
   --accent: var(--accent-primary); /* Flavor theme system */
   --accent-foreground: white;
   --accent-hover: var(--accent-primary); /* Flavor theme system */
@@ -133,6 +134,7 @@
   --sidebar-bg: linear-gradient(180deg, #f5eede 0%, #f5e6cf 100%);
   --background: linear-gradient(180deg, #fffdfc 0%, #faf4ec 100%);
   --accent-primary: #f0634a;
+  --accent-primary-soft: rgba(240, 99, 74, 0.55);
   --foreground: var(--charcoal-800);
   --body-text: var(--charcoal-700);
   --body-text-muted: var(--charcoal-600);
@@ -142,6 +144,7 @@
   --sidebar-bg: linear-gradient(180deg, #ddf2e4 0%, #cfead7 100%);
   --background: linear-gradient(180deg, #fff9f2 0%, #fcefd9 100%);
   --accent-primary: #5cbf92;
+  --accent-primary-soft: rgba(92, 191, 146, 0.55);
   --foreground: #25362d;
   --body-text: #36483f;
   --body-text-muted: #56675f;
@@ -151,6 +154,7 @@
   --sidebar-bg: linear-gradient(180deg, #f9d7cf 0%, #f8c6b8 100%);
   --background: linear-gradient(180deg, #fff7f2 0%, #fcebe4 100%);
   --accent-primary: #f46b63;
+  --accent-primary-soft: rgba(244, 107, 99, 0.55);
   --foreground: #362623;
   --body-text: #4b3430;
   --body-text-muted: #6f5a56;
@@ -160,6 +164,7 @@
   --sidebar-bg: linear-gradient(180deg, #f4e1c3 0%, #ecd4a8 100%);
   --background: linear-gradient(180deg, #fff8f0 0%, #f8eedd 100%);
   --accent-primary: #c46a2f;
+  --accent-primary-soft: rgba(196, 106, 47, 0.55);
   --foreground: #3a2d1f;
   --body-text: #4c3a28;
   --body-text-muted: #715e49;
@@ -169,6 +174,7 @@
   --sidebar-bg: linear-gradient(180deg, #e8e4f9 0%, #d9d3f2 100%);
   --background: linear-gradient(180deg, #fcfaff 0%, #f7f5fd 100%);
   --accent-primary: #a18bff;
+  --accent-primary-soft: rgba(161, 139, 255, 0.55);
   --foreground: #2e2742;
   --body-text: #3e3357;
   --body-text-muted: #655b7c;
@@ -397,7 +403,6 @@
   [class*="sidebar"],
   [class*="Sidebar"] {
     background: var(--sidebar-bg);
-    border-right: 1px solid var(--sidebar-border);
   }
 
   /* Transitions */

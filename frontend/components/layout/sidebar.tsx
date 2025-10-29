@@ -99,27 +99,25 @@ export function Sidebar() {
       <aside
         ref={sidebarRef}
         className={cn(
-          "fixed left-0 top-0 z-40 h-screen shadow-lg",
+          "fixed left-0 top-0 z-40 h-screen",
           isCollapsed ? "w-[72px]" : "w-[200px]",
           isMobile && isCollapsed ? "-translate-x-full" : "translate-x-0"
         )}
         style={{
           background: "var(--sidebar-bg)",
-          boxShadow: "var(--shadow-sidebar)",
-          borderRight: "1px solid var(--sidebar-border)",
           transition: "all 0.3s cubic-bezier(0.22, 1, 0.36, 1)",
         }}
       >
         <div className="flex h-full flex-col">
           {/* Logo and Branding - Clickable Toggle */}
-          <div className="px-4 pt-6 pb-6 border-b border-[var(--border)]">
+          <div className="px-4 pt-5 pb-5 border-b border-[var(--border)]">
             <div
               onClick={toggleSidebar}
               aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
               role="button"
               className={cn(
                 "cursor-pointer transition-transform duration-300 hover:scale-105 active:scale-95",
-                "flex items-center gap-3 mb-2",
+                "flex items-center gap-3 mb-1",
                 isCollapsed ? "justify-center" : "justify-start"
               )}
             >
@@ -160,14 +158,13 @@ export function Sidebar() {
                         "relative flex items-center rounded-lg px-3 py-2.5 text-sm font-medium focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:outline-none group/item cursor-pointer",
                         "transition-all duration-200 ease-out",
                         isActive
-                          ? "bg-mint-100 text-[var(--sidebar-icon-active)]"
-                          : "text-[var(--sidebar-text)] hover:bg-mint-50",
+                          ? "text-[var(--sidebar-icon-active)]"
+                          : "text-[var(--sidebar-text)] hover:text-[var(--sidebar-icon-active)]",
                         isCollapsed ? "justify-center px-2" : "gap-3"
                       )}
                       style={{
                         animation: `fadeInUp 0.4s ease forwards`,
                         animationDelay: `${index * 0.06}s`,
-                        ...(isActive && { boxShadow: "0 1px 2px rgba(0, 0, 0, 0.05)" }),
                       }}
                       data-testid={`nav-${item.name.toLowerCase().replace(" ", "-")}`}
                     >
@@ -177,25 +174,25 @@ export function Sidebar() {
                           "group-hover/item:translate-y-[-2px] group-hover/item:rotate-3",
                           isActive
                             ? "text-[var(--sidebar-icon-active)]"
-                            : "text-[var(--sidebar-icon)]"
+                            : "text-[var(--sidebar-icon)] group-hover/item:text-[var(--sidebar-icon-active)]"
                         )}
                       />
-                      {/* Show label if expanded */}
                       {!isCollapsed && (
                         <span className="truncate whitespace-nowrap transition-opacity duration-300">
                           {item.name}
                         </span>
                       )}
-                      {/* Tooltip when collapsed */}
                       {isCollapsed && (
                         <div className="absolute left-full ml-2 px-3 py-1.5 bg-[#2C2A29] text-white text-xs rounded-lg opacity-0 pointer-events-none group-hover/item:opacity-100 transition-all duration-150 ease whitespace-nowrap z-50 shadow-lg">
                           {item.name}
                         </div>
                       )}
                     </Link>
-              )
-            })}
+                  )
+                })}
+            </div>
 
+          <div className="mt-auto border-t border-[var(--border)] pt-4 pb-6 space-y-2">
             {/* Flavor theme system */}
             <button
               type="button"
@@ -204,8 +201,8 @@ export function Sidebar() {
                 "relative flex items-center rounded-lg px-3 py-2.5 text-sm font-medium focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:outline-none group/item cursor-pointer w-full",
                 "transition-all duration-200 ease-out",
                 isThemeSwitcherOpen
-                  ? "bg-mint-100 text-[var(--sidebar-icon-active)]"
-                  : "text-[var(--sidebar-text)] hover:bg-mint-50",
+                  ? "text-[var(--sidebar-icon-active)]"
+                  : "text-[var(--sidebar-text)] hover:text-[var(--sidebar-icon-active)]",
                 isCollapsed ? "justify-center px-2" : "gap-3"
               )}
               data-testid="nav-flavors"
@@ -216,7 +213,7 @@ export function Sidebar() {
                   "group-hover/item:translate-y-[-2px] group-hover/item:rotate-3",
                   isThemeSwitcherOpen
                     ? "text-[var(--sidebar-icon-active)]"
-                    : "text-[var(--sidebar-icon)]"
+                    : "text-[var(--sidebar-icon)] group-hover/item:text-[var(--sidebar-icon-active)]"
                 )}
               />
               {!isCollapsed && (
@@ -230,97 +227,83 @@ export function Sidebar() {
                 </div>
               )}
             </button>
-          </div>
 
-          {/* Separator */}
-            <div className="my-3 border-t border-[var(--border)]" />
-
-            {/* Settings at bottom */}
-            <div className="space-y-2 pb-8">
-              {visibleNavigation
-                .filter((item) => item.name === "Settings")
-                .map((item) => {
-                  const isActive = pathname === item.href
-                  return (
-                    <Link
-                      key={item.name}
-                      href={item.href}
+            {visibleNavigation
+              .filter((item) => item.name === "Settings")
+              .map((item) => {
+                const isActive = pathname === item.href
+                return (
+                  <Link
+                    key={item.name}
+                    href={item.href}
+                    className={cn(
+                      "relative flex items-center rounded-lg px-3 py-2.5 text-sm font-medium focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:outline-none group/item cursor-pointer",
+                      "transition-all duration-200 ease-out",
+                      isActive
+                        ? "text-[var(--sidebar-icon-active)]"
+                        : "text-[var(--sidebar-text)] hover:text-[var(--sidebar-icon-active)]",
+                      isCollapsed ? "justify-center px-2" : "gap-3"
+                    )}
+                    data-testid={`nav-${item.name.toLowerCase().replace(" ", "-")}`}
+                  >
+                    <item.icon
                       className={cn(
-                        "relative flex items-center rounded-lg px-3 py-2.5 text-sm font-medium focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:outline-none group/item cursor-pointer",
-                        "transition-all duration-200 ease-out",
+                        "h-5 w-5 flex-shrink-0 transition-all duration-200 ease-out",
+                        "group-hover/item:translate-y-[-2px] group-hover/item:rotate-3",
                         isActive
-                          ? "bg-mint-100 text-[var(--sidebar-icon-active)]"
-                          : "text-[var(--sidebar-text)] hover:bg-mint-50",
-                        isCollapsed ? "justify-center px-2" : "gap-3"
+                          ? "text-[var(--sidebar-icon-active)]"
+                          : "text-[var(--sidebar-icon)] group-hover/item:text-[var(--sidebar-icon-active)]"
                       )}
-                      style={{
-                        ...(isActive && { boxShadow: "0 1px 2px rgba(0, 0, 0, 0.05)" }),
-                      }}
-                      data-testid={`nav-${item.name.toLowerCase().replace(" ", "-")}`}
-                    >
-                      <item.icon
-                        className={cn(
-                          "h-5 w-5 flex-shrink-0 transition-all duration-200 ease-out",
-                          "group-hover/item:translate-y-[-2px] group-hover/item:rotate-3",
-                          isActive
-                            ? "text-[var(--sidebar-icon-active)]"
-                            : "text-[var(--sidebar-icon)]"
-                        )}
-                      />
-                      {/* Show label if expanded */}
-                      {!isCollapsed && (
-                        <span className="truncate whitespace-nowrap transition-opacity duration-300">
-                          {item.name}
-                        </span>
-                      )}
-                      {/* Tooltip when collapsed */}
-                      {isCollapsed && (
-                        <div className="absolute left-full ml-2 px-3 py-1.5 bg-[#2C2A29] text-white text-xs rounded-lg opacity-0 pointer-events-none group-hover/item:opacity-100 transition-all duration-150 ease whitespace-nowrap z-50 shadow-lg">
-                          {item.name}
-                        </div>
-                      )}
-                    </Link>
-                  )
-                })}
-            </div>
+                    />
+                    {!isCollapsed && (
+                      <span className="truncate whitespace-nowrap transition-opacity duration-300">
+                        {item.name}
+                      </span>
+                    )}
+                    {isCollapsed && (
+                      <div className="absolute left-full ml-2 px-3 py-1.5 bg-[#2C2A29] text-white text-xs rounded-lg opacity-0 pointer-events-none group-hover/item:opacity-100 transition-all duration-150 ease whitespace-nowrap z-50 shadow-lg">
+                        {item.name}
+                      </div>
+                    )}
+                  </Link>
+                )
+              })}
 
-            {/* Logout Button */}
-            <div className="mt-auto">
-              <button
-                onClick={() => {
-                  if (isMobile) {
-                    setIsCollapsed(true)
-                  }
-                  logout()
-                }}
+            <button
+              onClick={() => {
+                if (isMobile) {
+                  setIsCollapsed(true)
+                }
+                logout()
+              }}
+              className={cn(
+                "relative flex items-center rounded-lg px-3 py-2.5 text-sm font-medium focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:outline-none group/item cursor-pointer w-full",
+                "transition-all duration-200 ease-out",
+                "text-[var(--sidebar-text)] hover:text-[var(--sidebar-icon-active)]",
+                isCollapsed ? "justify-center px-2" : "gap-3"
+              )}
+              data-testid="logout-button"
+            >
+              <LogOut
                 className={cn(
-                  "relative flex items-center rounded-lg px-3 py-2.5 text-sm font-medium focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:outline-none group/item cursor-pointer w-full",
-                  "transition-all duration-200 ease-out",
-                  "text-[var(--sidebar-text)] hover:bg-mint-50",
-                  isCollapsed ? "justify-center px-2" : "gap-3"
+                  "h-5 w-5 flex-shrink-0 transition-all duration-200 ease-out",
+                  "group-hover/item:translate-y-[-2px] group-hover/item:rotate-3",
+                  "text-[var(--sidebar-icon)] group-hover/item:text-[var(--sidebar-icon-active)]"
                 )}
-                data-testid="logout-button"
-              >
-                <LogOut
-                  className={cn(
-                    "h-5 w-5 flex-shrink-0 transition-all duration-200 ease-out",
-                    "group-hover/item:translate-y-[-2px] group-hover/item:rotate-3",
-                    "text-[var(--sidebar-icon)]"
-                  )}
-                />
-                {!isCollapsed && (
-                  <span className="truncate whitespace-nowrap transition-opacity duration-300">
-                    Logout
-                  </span>
-                )}
-                {isCollapsed && (
-                  <div className="absolute left-full ml-2 px-3 py-1.5 bg-[#2C2A29] text-white text-xs rounded-lg opacity-0 pointer-events-none group-hover/item:opacity-100 transition-all duration-150 ease whitespace-nowrap z-50 shadow-lg">
-                    Logout
-                  </div>
-                )}
-              </button>
-            </div>
-          </nav>
+              />
+              {!isCollapsed && (
+                <span className="truncate whitespace-nowrap transition-opacity duration-300">
+                  Logout
+                </span>
+              )}
+              {isCollapsed && (
+                <div className="absolute left-full ml-2 px-3 py-1.5 bg-[#2C2A29] text-white text-xs rounded-lg opacity-0 pointer-events-none group-hover/item:opacity-100 transition-all duration-150 ease whitespace-nowrap z-50 shadow-lg">
+                  Logout
+                </div>
+              )}
+            </button>
+          </div>
+        </nav>
         </div>
       </aside>
       {/* Flavor theme system */}

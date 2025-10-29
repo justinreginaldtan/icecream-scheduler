@@ -61,7 +61,7 @@ export default function DashboardPage() {
 
         {/* 1. Today's Summary */}
         <motion.div variants={cardVariants}>
-          <Card className="group border-accent bg-gradient-to-br from-berry-100 to-berry-50">
+          <Card className="group border-[var(--accent-primary-soft)] bg-gradient-to-br from-berry-100 to-berry-50">
             <CardHeader>
               <CardTitle className="flex items-center justify-between">
                 <span>Today's Summary</span>
