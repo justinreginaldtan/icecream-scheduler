@@ -10,11 +10,13 @@ import {
   FileText,
   Settings,
   LogOut,
+  IceCream,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useAuth } from "@/lib/auth/auth-context"
 import { useSidebar } from "@/lib/sidebar-context"
 import { useState, useEffect, useRef } from "react"
+import { ThemeSwitcher } from "@/components/ui/theme-switcher"
 
 const navigation = [
   {
@@ -54,6 +56,7 @@ export function Sidebar() {
   const { user, logout } = useAuth()
   const { isCollapsed, toggleSidebar, setIsCollapsed } = useSidebar()
   const [isMobile, setIsMobile] = useState(false)
+  const [isThemeSwitcherOpen, setIsThemeSwitcherOpen] = useState(false) // Flavor theme system
   const sidebarRef = useRef<HTMLElement>(null)
 
   const visibleNavigation = navigation.filter((item) => user && item.roles.includes(user.role))
@@ -190,11 +193,46 @@ export function Sidebar() {
                         </div>
                       )}
                     </Link>
-                  )
-                })}
-            </div>
+              )
+            })}
 
-            {/* Separator */}
+            {/* Flavor theme system */}
+            <button
+              type="button"
+              onClick={() => setIsThemeSwitcherOpen(true)}
+              className={cn(
+                "relative flex items-center rounded-lg px-3 py-2.5 text-sm font-medium focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:outline-none group/item cursor-pointer w-full",
+                "transition-all duration-200 ease-out",
+                isThemeSwitcherOpen
+                  ? "bg-mint-100 text-[var(--sidebar-icon-active)]"
+                  : "text-[var(--sidebar-text)] hover:bg-mint-50",
+                isCollapsed ? "justify-center px-2" : "gap-3"
+              )}
+              data-testid="nav-flavors"
+            >
+              <IceCream
+                className={cn(
+                  "h-5 w-5 flex-shrink-0 transition-all duration-200 ease-out",
+                  "group-hover/item:translate-y-[-2px] group-hover/item:rotate-3",
+                  isThemeSwitcherOpen
+                    ? "text-[var(--sidebar-icon-active)]"
+                    : "text-[var(--sidebar-icon)]"
+                )}
+              />
+              {!isCollapsed && (
+                <span className="truncate whitespace-nowrap transition-opacity duration-300">
+                  Flavors
+                </span>
+              )}
+              {isCollapsed && (
+                <div className="absolute left-full ml-2 px-3 py-1.5 bg-[#2C2A29] text-white text-xs rounded-lg opacity-0 pointer-events-none group-hover/item:opacity-100 transition-all duration-150 ease whitespace-nowrap z-50 shadow-lg">
+                  Flavors
+                </div>
+              )}
+            </button>
+          </div>
+
+          {/* Separator */}
             <div className="my-3 border-t border-[var(--border)]" />
 
             {/* Settings at bottom */}
@@ -285,6 +323,8 @@ export function Sidebar() {
           </nav>
         </div>
       </aside>
+      {/* Flavor theme system */}
+      <ThemeSwitcher open={isThemeSwitcherOpen} onOpenChange={setIsThemeSwitcherOpen} />
     </>
   )
 }

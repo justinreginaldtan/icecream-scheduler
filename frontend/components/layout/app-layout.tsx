@@ -12,6 +12,14 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
   const [isMobile, setIsMobile] = useState(false)
 
   useEffect(() => {
+    // Flavor theme system
+    if (typeof window === "undefined") return
+    const storedTheme = window.localStorage.getItem("sweetSolutionsTheme")
+    const initialTheme = storedTheme || "classic-cream"
+    document.documentElement.dataset.theme = initialTheme
+  }, [])
+
+  useEffect(() => {
     const checkMobile = () => {
       setIsMobile(window.innerWidth < 768)
     }

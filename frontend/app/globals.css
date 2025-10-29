@@ -52,7 +52,7 @@
   --charcoal-900: #171717;
 
   /* Semantic Color Applications */
-  --background: linear-gradient(180deg, var(--cream-200) 0%, var(--cream-300) 100%);
+  --background: linear-gradient(180deg, #fffdfc 0%, #faf4ec 100%); /* Flavor theme system */
   --foreground: var(--charcoal-800);
   --body-text: var(--charcoal-700);
   --body-text-muted: var(--charcoal-600);
@@ -63,9 +63,10 @@
   --surface-3: var(--cream-100);
 
   /* Accent & Actions */
-  --accent: var(--berry-500);
+  --accent-primary: #f0634a; /* Flavor theme system */
+  --accent: var(--accent-primary); /* Flavor theme system */
   --accent-foreground: white;
-  --accent-hover: var(--berry-600);
+  --accent-hover: var(--accent-primary); /* Flavor theme system */
   --accent-secondary: var(--mint-500);
   --accent-secondary-foreground: var(--charcoal-800);
 
@@ -90,7 +91,7 @@
   --card-shadow-hover: var(--shadow-xl);
 
   /* Sidebar */
-  --sidebar-bg: linear-gradient(180deg, var(--cream-50) 0%, var(--mint-50) 100%);
+  --sidebar-bg: linear-gradient(180deg, #f5eede 0%, #f5e6cf 100%);
   --sidebar-border: var(--charcoal-50);
   --sidebar-icon: var(--charcoal-600);
   --sidebar-icon-active: var(--accent);
@@ -127,6 +128,52 @@
   --brandPink: var(--berry-500);
 }
 
+/* Flavor theme system */
+:root[data-theme="classic-cream"] {
+  --sidebar-bg: linear-gradient(180deg, #f5eede 0%, #f5e6cf 100%);
+  --background: linear-gradient(180deg, #fffdfc 0%, #faf4ec 100%);
+  --accent-primary: #f0634a;
+  --foreground: var(--charcoal-800);
+  --body-text: var(--charcoal-700);
+  --body-text-muted: var(--charcoal-600);
+}
+
+:root[data-theme="vanilla-mint"] {
+  --sidebar-bg: linear-gradient(180deg, #ddf2e4 0%, #cfead7 100%);
+  --background: linear-gradient(180deg, #fff9f2 0%, #fcefd9 100%);
+  --accent-primary: #5cbf92;
+  --foreground: #25362d;
+  --body-text: #36483f;
+  --body-text-muted: #56675f;
+}
+
+:root[data-theme="strawberry-cream"] {
+  --sidebar-bg: linear-gradient(180deg, #f9d7cf 0%, #f8c6b8 100%);
+  --background: linear-gradient(180deg, #fff7f2 0%, #fcebe4 100%);
+  --accent-primary: #f46b63;
+  --foreground: #362623;
+  --body-text: #4b3430;
+  --body-text-muted: #6f5a56;
+}
+
+:root[data-theme="honey-latte"] {
+  --sidebar-bg: linear-gradient(180deg, #f4e1c3 0%, #ecd4a8 100%);
+  --background: linear-gradient(180deg, #fff8f0 0%, #f8eedd 100%);
+  --accent-primary: #c46a2f;
+  --foreground: #3a2d1f;
+  --body-text: #4c3a28;
+  --body-text-muted: #715e49;
+}
+
+:root[data-theme="lavender-milk"] {
+  --sidebar-bg: linear-gradient(180deg, #e8e4f9 0%, #d9d3f2 100%);
+  --background: linear-gradient(180deg, #fcfaff 0%, #f7f5fd 100%);
+  --accent-primary: #a18bff;
+  --foreground: #2e2742;
+  --body-text: #3e3357;
+  --body-text-muted: #655b7c;
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -150,7 +197,7 @@
   }
 
   *:focus-visible {
-    outline: 2px solid var(--berry-500);
+    outline: 2px solid var(--accent-primary); /* Flavor theme system */
     outline-offset: 2px;
   }
 
