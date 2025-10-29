@@ -1,13 +1,13 @@
-const express = require('express')
-const jwt = require('jsonwebtoken')
-const User = require('../models/User')
-const { auth, requireRole } = require('../middleware/auth')
-const { validateLogin } = require('../middleware/validation')
+const express = require("express")
+const jwt = require("jsonwebtoken")
+const User = require("../models/User")
+const { auth } = require("../middleware/auth")
+const { validateLogin } = require("../middleware/validation")
 
 const router = express.Router()
 
 // Login
-router.post('/login', validateLogin, async (req, res) => {
+router.post("/login", validateLogin, async (req, res) => {
   try {
     const { email, password } = req.body
 
@@ -16,7 +16,7 @@ router.post('/login', validateLogin, async (req, res) => {
     if (!user) {
       return res.status(401).json({
         success: false,
-        error: 'Invalid email or password'
+        error: "Invalid email or password",
       })
     }
 
@@ -25,7 +25,7 @@ router.post('/login', validateLogin, async (req, res) => {
     if (!isMatch) {
       return res.status(401).json({
         success: false,
-        error: 'Invalid email or password'
+        error: "Invalid email or password",
       })
     }
 
@@ -37,7 +37,7 @@ router.post('/login', validateLogin, async (req, res) => {
     const token = jwt.sign(
       { userId: user._id, email: user.email, role: user.role },
       process.env.JWT_SECRET,
-      { expiresIn: process.env.JWT_EXPIRES_IN || '7d' }
+      { expiresIn: process.env.JWT_EXPIRES_IN || "7d" }
     )
 
     res.json({
@@ -47,23 +47,23 @@ router.post('/login', validateLogin, async (req, res) => {
           id: user._id,
           name: user.name,
           email: user.email,
-          role: user.role
+          role: user.role,
         },
-        token
+        token,
       },
-      message: 'Login successful'
+      message: "Login successful",
     })
   } catch (error) {
-    console.error('Login error:', error)
+    console.error("Login error:", error)
     res.status(500).json({
       success: false,
-      error: 'Internal server error'
+      error: "Internal server error",
     })
   }
 })
 
 // Get current user
-router.get('/me', auth, async (req, res) => {
+router.get("/me", auth, async (req, res) => {
   try {
     res.json({
       success: true,
@@ -73,24 +73,24 @@ router.get('/me', auth, async (req, res) => {
           name: req.user.name,
           email: req.user.email,
           role: req.user.role,
-          lastLogin: req.user.lastLogin
-        }
-      }
+          lastLogin: req.user.lastLogin,
+        },
+      },
     })
   } catch (error) {
-    console.error('Get user error:', error)
+    console.error("Get user error:", error)
     res.status(500).json({
       success: false,
-      error: 'Internal server error'
+      error: "Internal server error",
     })
   }
 })
 
 // Logout (client-side token removal)
-router.post('/logout', auth, (req, res) => {
+router.post("/logout", auth, (req, res) => {
   res.json({
     success: true,
-    message: 'Logout successful'
+    message: "Logout successful",
   })
 })
 

@@ -29,24 +29,28 @@ export default function SchedulePage() {
         setLoading(true)
         const [employeesRes, shiftsRes] = await Promise.all([
           apiClient.getEmployees(),
-          apiClient.getShifts()
+          apiClient.getShifts(),
         ])
-        
+
         if (employeesRes.success) {
-          setEmployees((employeesRes.data || []).map((emp: any) => ({
-            ...emp,
-            id: emp.id?.toString?.() ?? "",
-          })))
+          setEmployees(
+            (employeesRes.data || []).map((emp: any) => ({
+              ...emp,
+              id: emp.id?.toString?.() ?? "",
+            }))
+          )
         }
         if (shiftsRes.success) {
-          setShifts((shiftsRes.data || []).map((shift: any) => ({
-            ...shift,
-            id: shift.id?.toString?.() ?? "",
-            employeeId: shift.employeeId?.toString?.() ?? "",
-          })))
+          setShifts(
+            (shiftsRes.data || []).map((shift: any) => ({
+              ...shift,
+              id: shift.id?.toString?.() ?? "",
+              employeeId: shift.employeeId?.toString?.() ?? "",
+            }))
+          )
         }
       } catch (error) {
-        console.error('Error fetching schedule data:', error)
+        console.error("Error fetching schedule data:", error)
       } finally {
         setLoading(false)
       }
@@ -91,7 +95,7 @@ export default function SchedulePage() {
 
   const handleDateRangeClick = () => {
     const options = ["This week", "Next week", "Last week"] as const
-    const currentIndex = options.indexOf(dateRange as typeof options[number])
+    const currentIndex = options.indexOf(dateRange as (typeof options)[number])
     const nextValue = options[(currentIndex + 1) % options.length]
     setDateRange(nextValue)
     toast({
@@ -139,7 +143,9 @@ export default function SchedulePage() {
         <div className="mb-8 flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold text-[var(--text)]">Weekly Schedule</h1>
-            <p className="text-[color:rgba(44,42,41,.6)] mt-1">Manage shifts and team availability</p>
+            <p className="text-[color:rgba(44,42,41,.6)] mt-1">
+              Manage shifts and team availability
+            </p>
           </div>
           <div className="flex items-center gap-3">
             <Button
@@ -173,7 +179,9 @@ export default function SchedulePage() {
             <div className="overflow-x-auto">
               <div className="min-w-[800px]">
                 <div className="grid grid-cols-8 gap-2 mb-4">
-                  <div className="font-semibold text-sm text-[color:rgba(44,42,41,.7)]">Employee</div>
+                  <div className="font-semibold text-sm text-[color:rgba(44,42,41,.7)]">
+                    Employee
+                  </div>
                   {weekDates.map((date, idx) => (
                     <div key={idx} className="text-center">
                       <div className="font-semibold text-sm text-[var(--text)]">
@@ -188,8 +196,12 @@ export default function SchedulePage() {
                   <div key={employee.id} className="grid grid-cols-8 gap-2 mb-3">
                     <div className="flex items-center">
                       <div>
-                        <div className="font-medium text-sm text-[var(--text)]">{employee.name}</div>
-                        <div className="text-xs text-[color:rgba(44,42,41,.6)]">{employee.role}</div>
+                        <div className="font-medium text-sm text-[var(--text)]">
+                          {employee.name}
+                        </div>
+                        <div className="text-xs text-[color:rgba(44,42,41,.6)]">
+                          {employee.role}
+                        </div>
                       </div>
                     </div>
 
@@ -208,7 +220,9 @@ export default function SchedulePage() {
                               <div className="text-xs font-medium text-[var(--text)]">
                                 {shift.startTime} - {shift.endTime}
                               </div>
-                              <div className="text-xs text-[color:rgba(44,42,41,.6)] mt-0.5">{shift.role}</div>
+                              <div className="text-xs text-[color:rgba(44,42,41,.6)] mt-0.5">
+                                {shift.role}
+                              </div>
                             </button>
                           ) : (
                             <div className="w-full h-full rounded-lg border border-dashed border-[var(--border)] bg-[var(--muted)]/30" />
@@ -224,7 +238,9 @@ export default function SchedulePage() {
             {/* Empty State */}
             {shifts.length === 0 && (
               <div className="text-center py-12">
-                <p className="text-[color:rgba(44,42,41,.7)]">No shifts scheduled yet — add one above!</p>
+                <p className="text-[color:rgba(44,42,41,.7)]">
+                  No shifts scheduled yet — add one above!
+                </p>
               </div>
             )}
           </CardContent>

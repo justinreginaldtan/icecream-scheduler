@@ -47,7 +47,9 @@ export default function LoginPage() {
     <div className="flex min-h-screen items-center justify-center bg-[var(--bg)] p-4">
       <Card className="w-full max-w-md border-[var(--border)] bg-[var(--surface)] shadow-sm rounded-xl">
         <CardHeader className="space-y-1 text-center">
-          <CardTitle className="text-2xl font-semibold text-[var(--text)]">Sweet Solutions</CardTitle>
+          <CardTitle className="text-2xl font-semibold text-[var(--text)]">
+            Sweet Solutions
+          </CardTitle>
           <div className="h-0.5 w-16 mx-auto rounded-full bg-[var(--brandBlue)]" />
           <CardDescription>Sign in to access scheduling and payroll</CardDescription>
         </CardHeader>

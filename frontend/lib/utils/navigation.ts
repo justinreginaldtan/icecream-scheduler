@@ -3,7 +3,7 @@ import { useRouter } from "next/navigation"
 
 export function useNav() {
   const router = useRouter()
-  
+
   return {
     toDashboard: () => router.push("/"),
     toSchedule: () => router.push("/schedule"),

@@ -3,9 +3,9 @@
 import { motion } from "framer-motion"
 import { useState } from "react"
 import { AppLayout } from "@/components/layout/app-layout"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Clock, Users, FileText, TrendingUp, ChevronDown, ArrowRight, Calendar, AlertCircle, Plus } from "lucide-react"
+import { AlertCircle, ChevronDown } from "lucide-react"
 import { useAuth } from "@/lib/auth/auth-context"
 import { ShiftModal } from "@/components/features/shifts/shift-modal"
 import { useToast } from "@/hooks/use-toast"
@@ -15,16 +15,6 @@ export default function DashboardPage() {
   const { toast } = useToast()
   const [dateRange, setDateRange] = useState("Today")
   const [isShiftModalOpen, setIsShiftModalOpen] = useState(false)
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.15,
-      },
-    },
-  };
 
   const cardVariants = {
     hidden: { y: 20, opacity: 0 },
@@ -36,7 +26,7 @@ export default function DashboardPage() {
         ease: "easeOut",
       },
     },
-  };
+  }
 
   const cycleDateRange = () => {
     const options = ["Today", "This Week", "This Month"] as const
@@ -57,9 +47,7 @@ export default function DashboardPage() {
         <div className="mb-10 flex items-center justify-between">
           <div className="animate-slide-up">
             <h1 className="section-title mb-1">Welcome back, {user?.name.split(" ")[0]}</h1>
-            <p className="text-body-text-muted">
-              An at-a-glance overview of your shop today.
-            </p>
+            <p className="text-body-text-muted">An at-a-glance overview of your shop today.</p>
           </div>
           <Button
             variant="outline"
@@ -103,10 +91,18 @@ export default function DashboardPage() {
         <div className="mt-4">
           <h2 className="dashboard-section-title">Current Shifts</h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <Card className="p-3"><CardContent>Ava – Scooper, 3h 17m</CardContent></Card>
-            <Card className="p-3"><CardContent>Leo – Cashier, 2h 45m</CardContent></Card>
-            <Card className="p-3"><CardContent>Mia – Toppings, 1h 5m</CardContent></Card>
-            <Card className="p-3 border-dashed"><CardContent className="text-body-text-muted">+2 more</CardContent></Card>
+            <Card className="p-3">
+              <CardContent>Ava – Scooper, 3h 17m</CardContent>
+            </Card>
+            <Card className="p-3">
+              <CardContent>Leo – Cashier, 2h 45m</CardContent>
+            </Card>
+            <Card className="p-3">
+              <CardContent>Mia – Toppings, 1h 5m</CardContent>
+            </Card>
+            <Card className="p-3 border-dashed">
+              <CardContent className="text-body-text-muted">+2 more</CardContent>
+            </Card>
           </div>
         </div>
 
@@ -118,8 +114,28 @@ export default function DashboardPage() {
               <h2 className="dashboard-section-title">Pending Actions</h2>
               <Card>
                 <CardContent className="divide-y divide-border-subtle">
-                  <div className="p-4 flex items-center justify-between"><span>Time Off: Justin Tan (Oct 28-30)</span><Button variant="outline" size="sm" className="border-blue-500 text-blue-500 hover:bg-blue-50" onClick={() => toast({ title: "Review Clicked" })}>Review</Button></div>
-                  <div className="p-4 flex items-center justify-between"><span>Shift Swap: Ava for Leo (Oct 29)</span><Button variant="outline" size="sm" className="border-blue-500 text-blue-500 hover:bg-blue-50" onClick={() => toast({ title: "Review Clicked" })}>Review</Button></div>
+                  <div className="p-4 flex items-center justify-between">
+                    <span>Time Off: Justin Tan (Oct 28-30)</span>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="border-blue-500 text-blue-500 hover:bg-blue-50"
+                      onClick={() => toast({ title: "Review Clicked" })}
+                    >
+                      Review
+                    </Button>
+                  </div>
+                  <div className="p-4 flex items-center justify-between">
+                    <span>Shift Swap: Ava for Leo (Oct 29)</span>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="border-blue-500 text-blue-500 hover:bg-blue-50"
+                      onClick={() => toast({ title: "Review Clicked" })}
+                    >
+                      Review
+                    </Button>
+                  </div>
                 </CardContent>
               </Card>
             </div>
@@ -132,11 +148,15 @@ export default function DashboardPage() {
                   <div className="space-y-2.5 pt-6">
                     <div className="group/item flex items-start gap-3">
                       <div className="h-2 w-2 rounded-full mt-1.5 bg-accent flex-shrink-0" />
-                      <p className="text-sm text-body-text-muted">Chatcha's time-off request for Jan 25-27 was approved.</p>
+                      <p className="text-sm text-body-text-muted">
+                        Chatcha's time-off request for Jan 25-27 was approved.
+                      </p>
                     </div>
                     <div className="group/item flex items-start gap-3">
                       <div className="h-2 w-2 rounded-full mt-1.5 bg-accent-secondary flex-shrink-0" />
-                      <p className="text-sm text-body-text-muted">5 new shifts were added for next week.</p>
+                      <p className="text-sm text-body-text-muted">
+                        5 new shifts were added for next week.
+                      </p>
                     </div>
                   </div>
                 </CardContent>
@@ -151,9 +171,32 @@ export default function DashboardPage() {
               <div className="mt-4">
                 <h2 className="dashboard-section-title">Quick Actions</h2>
                 <div className="flex flex-col space-y-2">
-                  <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}><Button className="btn-primary w-full" onClick={() => setIsShiftModalOpen(true)}>Create Shift</Button></motion.div>
-                  <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}><Button variant="outline" className="w-full" onClick={() => toast({ title: "Approve All Clicked" })}>Approve All</Button></motion.div>
-                  <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}><Button variant="outline" className="w-full" onClick={() => toast({ title: "Run Payroll Clicked" })}>Run Payroll</Button></motion.div>
+                  <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                    <Button
+                      className="btn-primary w-full"
+                      onClick={() => setIsShiftModalOpen(true)}
+                    >
+                      Create Shift
+                    </Button>
+                  </motion.div>
+                  <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                    <Button
+                      variant="outline"
+                      className="w-full"
+                      onClick={() => toast({ title: "Approve All Clicked" })}
+                    >
+                      Approve All
+                    </Button>
+                  </motion.div>
+                  <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                    <Button
+                      variant="outline"
+                      className="w-full"
+                      onClick={() => toast({ title: "Run Payroll Clicked" })}
+                    >
+                      Run Payroll
+                    </Button>
+                  </motion.div>
                 </div>
               </div>
 

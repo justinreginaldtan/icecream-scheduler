@@ -16,7 +16,9 @@ export default function RequestsPage() {
   const { toast } = useToast()
   const [requests, setRequests] = useState<TimeOffRequest[]>([])
   const [loading, setLoading] = useState(true)
-  const [loadingRequests, setLoadingRequests] = useState<Record<string, "approve" | "deny" | null>>({})
+  const [loadingRequests, setLoadingRequests] = useState<Record<string, "approve" | "deny" | null>>(
+    {}
+  )
 
   useEffect(() => {
     if (!user) return
@@ -31,11 +33,11 @@ export default function RequestsPage() {
               ...request,
               id: request.id?.toString?.() ?? "",
               employeeId: request.employeeId?.toString?.() ?? "",
-            })),
+            }))
           )
         }
       } catch (error) {
-        console.error('Error fetching requests:', error)
+        console.error("Error fetching requests:", error)
       } finally {
         setLoading(false)
       }
@@ -51,7 +53,7 @@ export default function RequestsPage() {
       await apiClient.approveRequest(requestId)
 
       setRequests((current) =>
-        current.map((req) => (req.id === requestId ? { ...req, status: "approved" as const } : req)),
+        current.map((req) => (req.id === requestId ? { ...req, status: "approved" as const } : req))
       )
 
       toast({
@@ -78,7 +80,7 @@ export default function RequestsPage() {
       await apiClient.denyRequest(requestId)
 
       setRequests((current) =>
-        current.map((req) => (req.id === requestId ? { ...req, status: "denied" as const } : req)),
+        current.map((req) => (req.id === requestId ? { ...req, status: "denied" as const } : req))
       )
 
       toast({
@@ -100,11 +102,21 @@ export default function RequestsPage() {
   const getStatusBadge = (status: string) => {
     switch (status) {
       case "approved":
-        return <Badge className="bg-green-100 text-green-800 border-green-200 hover:bg-green-100">Approved</Badge>
+        return (
+          <Badge className="bg-green-100 text-green-800 border-green-200 hover:bg-green-100">
+            Approved
+          </Badge>
+        )
       case "denied":
-        return <Badge className="bg-red-100 text-red-800 border-red-200 hover:bg-red-100">Denied</Badge>
+        return (
+          <Badge className="bg-red-100 text-red-800 border-red-200 hover:bg-red-100">Denied</Badge>
+        )
       default:
-        return <Badge className="bg-amber-100 text-amber-800 border-amber-200 hover:bg-amber-100">Pending</Badge>
+        return (
+          <Badge className="bg-amber-100 text-amber-800 border-amber-200 hover:bg-amber-100">
+            Pending
+          </Badge>
+        )
     }
   }
 
@@ -131,13 +143,17 @@ export default function RequestsPage() {
       <div className="px-6 md:px-8 py-8">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-[var(--text)]">Time-Off Requests</h1>
-          <p className="text-[color:rgba(44,42,41,.6)] mt-1">Review and manage employee time-off requests</p>
+          <p className="text-[color:rgba(44,42,41,.6)] mt-1">
+            Review and manage employee time-off requests
+          </p>
         </div>
 
         <div className="grid gap-6 md:grid-cols-3 mb-8">
           <Card className="border-[var(--border)] bg-[var(--surface)] shadow-sm rounded-xl">
             <CardHeader className="pb-3">
-              <CardTitle className="text-sm text-[color:rgba(44,42,41,.7)]">Pending Requests</CardTitle>
+              <CardTitle className="text-sm text-[color:rgba(44,42,41,.7)]">
+                Pending Requests
+              </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="text-3xl font-bold text-[var(--text)]">{pendingCount}</div>
@@ -146,7 +162,9 @@ export default function RequestsPage() {
 
           <Card className="border-[var(--border)] bg-[var(--surface)] shadow-sm rounded-xl">
             <CardHeader className="pb-3">
-              <CardTitle className="text-sm text-[color:rgba(44,42,41,.7)]">Approved This Month</CardTitle>
+              <CardTitle className="text-sm text-[color:rgba(44,42,41,.7)]">
+                Approved This Month
+              </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="text-3xl font-bold text-[var(--text)]">{approvedCount}</div>
@@ -155,7 +173,9 @@ export default function RequestsPage() {
 
           <Card className="border-[var(--border)] bg-[var(--surface)] shadow-sm rounded-xl">
             <CardHeader className="pb-3">
-              <CardTitle className="text-sm text-[color:rgba(44,42,41,.7)]">Total Requests</CardTitle>
+              <CardTitle className="text-sm text-[color:rgba(44,42,41,.7)]">
+                Total Requests
+              </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="text-3xl font-bold text-[var(--text)]">{requests.length}</div>
@@ -199,7 +219,8 @@ export default function RequestsPage() {
                       </div>
 
                       <p className="text-sm text-[color:rgba(44,42,41,.6)]">
-                        <span className="font-medium text-[var(--text)]">Reason:</span> {request.reason}
+                        <span className="font-medium text-[var(--text)]">Reason:</span>{" "}
+                        {request.reason}
                       </p>
 
                       <p className="text-xs text-[color:rgba(44,42,41,.6)] mt-1">
@@ -265,7 +286,9 @@ export default function RequestsPage() {
 
               {requests.length === 0 && (
                 <div className="text-center py-12">
-                  <p className="text-[color:rgba(44,42,41,.6)]">No time-off requests at this time</p>
+                  <p className="text-[color:rgba(44,42,41,.6)]">
+                    No time-off requests at this time
+                  </p>
                 </div>
               )}
             </div>

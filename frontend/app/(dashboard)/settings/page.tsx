@@ -42,7 +42,6 @@ export default function SettingsPage() {
 
   const handleSaveAccount = (e: React.FormEvent) => {
     e.preventDefault()
-    console.log("Saving account settings:", accountSettings)
 
     toast({
       title: "Settings saved",
@@ -52,8 +51,6 @@ export default function SettingsPage() {
   }
 
   const handleSaveNotifications = () => {
-    console.log("Saving notification settings:", notifications)
-
     toast({
       title: "Preferences updated",
       description: "Your notification preferences have been saved.",
@@ -73,7 +70,9 @@ export default function SettingsPage() {
           <Card className="border-[var(--border)] bg-[var(--surface)] shadow-sm rounded-xl">
             <CardHeader>
               <CardTitle className="text-[var(--text)]">Account Information</CardTitle>
-              <CardDescription>Update your personal details and contact information</CardDescription>
+              <CardDescription>
+                Update your personal details and contact information
+              </CardDescription>
             </CardHeader>
             <CardContent>
               <form onSubmit={handleSaveAccount} className="space-y-4">
@@ -83,7 +82,9 @@ export default function SettingsPage() {
                     id="name"
                     type="text"
                     value={accountSettings.name}
-                    onChange={(e) => setAccountSettings({ ...accountSettings, name: e.target.value })}
+                    onChange={(e) =>
+                      setAccountSettings({ ...accountSettings, name: e.target.value })
+                    }
                     className="focus-visible:ring-2 focus-visible:ring-[var(--brandBlue)] focus-visible:outline-none"
                   />
                 </div>
@@ -94,7 +95,9 @@ export default function SettingsPage() {
                     id="email"
                     type="email"
                     value={accountSettings.email}
-                    onChange={(e) => setAccountSettings({ ...accountSettings, email: e.target.value })}
+                    onChange={(e) =>
+                      setAccountSettings({ ...accountSettings, email: e.target.value })
+                    }
                     className="focus-visible:ring-2 focus-visible:ring-[var(--brandBlue)] focus-visible:outline-none"
                   />
                 </div>
@@ -105,13 +108,15 @@ export default function SettingsPage() {
                     id="phone"
                     type="tel"
                     value={accountSettings.phone}
-                    onChange={(e) => setAccountSettings({ ...accountSettings, phone: e.target.value })}
+                    onChange={(e) =>
+                      setAccountSettings({ ...accountSettings, phone: e.target.value })
+                    }
                     className="focus-visible:ring-2 focus-visible:ring-[var(--brandBlue)] focus-visible:outline-none"
                   />
                 </div>
 
-                <Button 
-                  type="submit" 
+                <Button
+                  type="submit"
                   className="bg-[var(--primary)] text-white hover:bg-[color:rgba(244,108,91,.9)] focus-visible:ring-2 focus-visible:ring-[var(--brandBlue)] focus-visible:outline-none"
                 >
                   Save Changes
@@ -131,12 +136,16 @@ export default function SettingsPage() {
                   <Label htmlFor="email-notifications" className="text-base">
                     Email Notifications
                   </Label>
-                  <p className="text-sm text-[color:rgba(44,42,41,.6)]">Receive updates via email</p>
+                  <p className="text-sm text-[color:rgba(44,42,41,.6)]">
+                    Receive updates via email
+                  </p>
                 </div>
                 <Switch
                   id="email-notifications"
                   checked={notifications.emailNotifications}
-                  onCheckedChange={(checked) => setNotifications({ ...notifications, emailNotifications: checked })}
+                  onCheckedChange={(checked) =>
+                    setNotifications({ ...notifications, emailNotifications: checked })
+                  }
                 />
               </div>
 
@@ -145,12 +154,16 @@ export default function SettingsPage() {
                   <Label htmlFor="shift-reminders" className="text-base">
                     Shift Reminders
                   </Label>
-                  <p className="text-sm text-[color:rgba(44,42,41,.6)]">Get notified before your shifts</p>
+                  <p className="text-sm text-[color:rgba(44,42,41,.6)]">
+                    Get notified before your shifts
+                  </p>
                 </div>
                 <Switch
                   id="shift-reminders"
                   checked={notifications.shiftReminders}
-                  onCheckedChange={(checked) => setNotifications({ ...notifications, shiftReminders: checked })}
+                  onCheckedChange={(checked) =>
+                    setNotifications({ ...notifications, shiftReminders: checked })
+                  }
                 />
               </div>
 
@@ -159,12 +172,16 @@ export default function SettingsPage() {
                   <Label htmlFor="request-alerts" className="text-base">
                     Request Alerts
                   </Label>
-                  <p className="text-sm text-[color:rgba(44,42,41,.6)]">Alerts for new time-off requests</p>
+                  <p className="text-sm text-[color:rgba(44,42,41,.6)]">
+                    Alerts for new time-off requests
+                  </p>
                 </div>
                 <Switch
                   id="request-alerts"
                   checked={notifications.requestAlerts}
-                  onCheckedChange={(checked) => setNotifications({ ...notifications, requestAlerts: checked })}
+                  onCheckedChange={(checked) =>
+                    setNotifications({ ...notifications, requestAlerts: checked })
+                  }
                 />
               </div>
 
@@ -173,12 +190,16 @@ export default function SettingsPage() {
                   <Label htmlFor="payroll-updates" className="text-base">
                     Payroll Updates
                   </Label>
-                  <p className="text-sm text-[color:rgba(44,42,41,.6)]">Notifications about payroll processing</p>
+                  <p className="text-sm text-[color:rgba(44,42,41,.6)]">
+                    Notifications about payroll processing
+                  </p>
                 </div>
                 <Switch
                   id="payroll-updates"
                   checked={notifications.payrollUpdates}
-                  onCheckedChange={(checked) => setNotifications({ ...notifications, payrollUpdates: checked })}
+                  onCheckedChange={(checked) =>
+                    setNotifications({ ...notifications, payrollUpdates: checked })
+                  }
                 />
               </div>
 

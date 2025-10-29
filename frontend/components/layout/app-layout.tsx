@@ -31,12 +31,12 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex min-h-screen bg-[var(--bg)]">
       <Sidebar />
-      <main 
+      <main
         className="flex flex-1 flex-col"
         style={{
-          marginLeft: isMobile ? '0' : isCollapsed ? '72px' : '200px',
-          transition: 'margin-left 0.3s cubic-bezier(0.22, 1, 0.36, 1)',
-          padding: '2.75rem'
+          marginLeft: isMobile ? "0" : isCollapsed ? "72px" : "200px",
+          transition: "margin-left 0.3s cubic-bezier(0.22, 1, 0.36, 1)",
+          padding: "2.75rem",
         }}
       >
         {children}

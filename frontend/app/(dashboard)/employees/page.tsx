@@ -3,7 +3,14 @@
 import { useState, useEffect } from "react"
 import { AppLayout } from "@/components/layout/app-layout"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table"
 import { Badge } from "@/components/ui/badge"
 import { Mail, Phone, Clock } from "lucide-react"
 import apiClient from "@/lib/api/client"
@@ -28,11 +35,11 @@ export default function EmployeesPage() {
               ...emp,
               id: emp.id?.toString?.() ?? "",
               hoursPerWeek: emp.hoursPerWeek ?? emp.hours ?? 0,
-            })),
+            }))
           )
         }
       } catch (error) {
-        console.error('Error fetching employees:', error)
+        console.error("Error fetching employees:", error)
       } finally {
         setLoading(false)
       }
@@ -67,14 +74,18 @@ export default function EmployeesPage() {
         {/* Page Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-[var(--text)]">Team Members</h1>
-          <p className="text-[color:rgba(44,42,41,.6)] mt-1">Manage your staff and their information</p>
+          <p className="text-[color:rgba(44,42,41,.6)] mt-1">
+            Manage your staff and their information
+          </p>
         </div>
 
         {/* Stats Overview */}
         <div className="grid gap-6 md:grid-cols-3 mb-8">
           <Card className="border-[var(--border)] bg-[var(--surface)] shadow-sm rounded-xl">
             <CardHeader className="pb-3">
-              <CardTitle className="text-sm text-[color:rgba(44,42,41,.7)]">Total Employees</CardTitle>
+              <CardTitle className="text-sm text-[color:rgba(44,42,41,.7)]">
+                Total Employees
+              </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="text-3xl font-bold text-[var(--text)]">{employees.length}</div>
@@ -83,13 +94,16 @@ export default function EmployeesPage() {
 
           <Card className="border-[var(--border)] bg-[var(--surface)] shadow-sm rounded-xl">
             <CardHeader className="pb-3">
-              <CardTitle className="text-sm text-[color:rgba(44,42,41,.7)]">Average Hours/Week</CardTitle>
+              <CardTitle className="text-sm text-[color:rgba(44,42,41,.7)]">
+                Average Hours/Week
+              </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="text-3xl font-bold text-[var(--text)]">
                 {employees.length
                   ? Math.round(
-                      employees.reduce((sum, emp) => sum + (emp.hoursPerWeek || 0), 0) / employees.length,
+                      employees.reduce((sum, emp) => sum + (emp.hoursPerWeek || 0), 0) /
+                        employees.length
                     )
                   : 0}
               </div>
@@ -98,7 +112,9 @@ export default function EmployeesPage() {
 
           <Card className="border-[var(--border)] bg-[var(--surface)] shadow-sm rounded-xl">
             <CardHeader className="pb-3">
-              <CardTitle className="text-sm text-[color:rgba(44,42,41,.7)]">Management Staff</CardTitle>
+              <CardTitle className="text-sm text-[color:rgba(44,42,41,.7)]">
+                Management Staff
+              </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="text-3xl font-bold text-[var(--text)]">
@@ -112,7 +128,9 @@ export default function EmployeesPage() {
         <Card className="border-[var(--border)] bg-[var(--surface)] shadow-sm rounded-xl">
           <CardHeader>
             <CardTitle className="text-[var(--text)]">Staff Directory</CardTitle>
-            <CardDescription>Contact information and weekly hours for all team members</CardDescription>
+            <CardDescription>
+              Contact information and weekly hours for all team members
+            </CardDescription>
           </CardHeader>
           <CardContent>
             <Table>
@@ -126,7 +144,10 @@ export default function EmployeesPage() {
               </TableHeader>
               <TableBody>
                 {employees.map((employee) => (
-                  <TableRow key={employee.id} className="transition-colors duration-200 hover:bg-[var(--muted)]/50">
+                  <TableRow
+                    key={employee.id}
+                    className="transition-colors duration-200 hover:bg-[var(--muted)]/50"
+                  >
                     <TableCell>
                       <div className="font-medium text-[var(--text)]">{employee.name}</div>
                     </TableCell>
@@ -154,7 +175,9 @@ export default function EmployeesPage() {
                     <TableCell className="text-right">
                       <div className="flex items-center justify-end gap-2">
                         <Clock className="h-4 w-4 text-[color:rgba(44,42,41,.6)]" />
-                        <span className="font-medium text-[var(--text)]">{employee.hoursPerWeek}h</span>
+                        <span className="font-medium text-[var(--text)]">
+                          {employee.hoursPerWeek}h
+                        </span>
                       </div>
                     </TableCell>
                   </TableRow>

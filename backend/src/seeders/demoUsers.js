@@ -1,41 +1,41 @@
-const User = require('../models/User')
+const User = require("../models/User")
 
 const demoUsers = [
   {
-    name: 'Mari Lisa',
-    email: 'mari.lisa@example.com',
-    password: 'demo123',
-    role: 'manager',
-    isActive: true
+    name: "Mari Lisa",
+    email: "mari.lisa@example.com",
+    password: "demo123",
+    role: "manager",
+    isActive: true,
   },
   {
-    name: 'Justin Tan',
-    email: 'justin.tan@example.com',
-    password: 'demo123',
-    role: 'employee',
-    isActive: true
-  }
+    name: "Justin Tan",
+    email: "justin.tan@example.com",
+    password: "demo123",
+    role: "employee",
+    isActive: true,
+  },
 ]
 
 const seedDemoUsers = async () => {
   try {
-    console.log('🌱 Seeding demo users...')
-    
+    console.log("🌱 Seeding demo users...")
+
     // Clear existing demo users
-    await User.deleteMany({ 
-      email: { $in: demoUsers.map(user => user.email) } 
+    await User.deleteMany({
+      email: { $in: demoUsers.map((user) => user.email) },
     })
-    
+
     // Create demo users
     for (const userData of demoUsers) {
       const user = new User(userData)
       await user.save()
       console.log(`✅ Created user: ${userData.name} (${userData.email})`)
     }
-    
-    console.log('🎉 Demo users seeded successfully!')
+
+    console.log("🎉 Demo users seeded successfully!")
   } catch (error) {
-    console.error('❌ Error seeding demo users:', error)
+    console.error("❌ Error seeding demo users:", error)
   }
 }
 

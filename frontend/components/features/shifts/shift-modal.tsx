@@ -13,7 +13,13 @@ import {
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 import { useToast } from "@/hooks/use-toast"
 import apiClient from "@/lib/api/client"
 import { Loader2 } from "lucide-react"
@@ -29,7 +35,14 @@ interface ShiftModalProps {
   onDelete?: (shiftId: string) => void
 }
 
-export function ShiftModal({ isOpen, onClose, shift, onCreate, onUpdate, onDelete }: ShiftModalProps) {
+export function ShiftModal({
+  isOpen,
+  onClose,
+  shift,
+  onCreate,
+  onUpdate,
+  onDelete,
+}: ShiftModalProps) {
   const { user } = useAuth()
   const { toast } = useToast()
   const [isLoading, setIsLoading] = useState(false)
@@ -50,14 +63,16 @@ export function ShiftModal({ isOpen, onClose, shift, onCreate, onUpdate, onDelet
         const response = await apiClient.getEmployees()
         if (response.success) {
           const items = Array.isArray(response.data) ? response.data : []
-          setEmployees(items.map((emp: any) => ({
-            id: emp.id?.toString?.() ?? "",
-            name: emp.name,
-            role: emp.role,
-          })))
+          setEmployees(
+            items.map((emp: any) => ({
+              id: emp.id?.toString?.() ?? "",
+              name: emp.name,
+              role: emp.role,
+            }))
+          )
         }
       } catch (error) {
-        console.error('Error fetching employees:', error)
+        console.error("Error fetching employees:", error)
       }
     }
 
@@ -98,7 +113,7 @@ export function ShiftModal({ isOpen, onClose, shift, onCreate, onUpdate, onDelet
         startTime: formData.startTime,
         endTime: formData.endTime,
         role: formData.role,
-        status: "scheduled"
+        status: "scheduled",
       }
 
       if (shift) {
@@ -138,7 +153,7 @@ export function ShiftModal({ isOpen, onClose, shift, onCreate, onUpdate, onDelet
 
   const handleDelete = async () => {
     if (!shift) return
-    
+
     setIsLoading(true)
 
     try {
@@ -162,15 +177,20 @@ export function ShiftModal({ isOpen, onClose, shift, onCreate, onUpdate, onDelet
     }
   }
 
-  const isFormValid = formData.employeeId && formData.date && formData.startTime && formData.endTime && formData.role
+  const isFormValid =
+    formData.employeeId && formData.date && formData.startTime && formData.endTime && formData.role
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
-          <DialogTitle className="text-foreground">{shift ? "Edit Shift" : "Add New Shift"}</DialogTitle>
+          <DialogTitle className="text-foreground">
+            {shift ? "Edit Shift" : "Add New Shift"}
+          </DialogTitle>
           <DialogDescription>
-            {shift ? "Update the shift details below." : "Fill in the details to create a new shift."}
+            {shift
+              ? "Update the shift details below."
+              : "Fill in the details to create a new shift."}
           </DialogDescription>
         </DialogHeader>
 

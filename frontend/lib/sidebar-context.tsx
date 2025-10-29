@@ -1,6 +1,13 @@
 "use client"
 
-import React, { createContext, useContext, useState, useEffect, ReactNode } from "react"
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  ReactNode,
+  useCallback,
+} from "react"
 
 interface SidebarContextType {
   isCollapsed: boolean
@@ -23,24 +30,25 @@ export function SidebarProvider({ children }: { children: ReactNode }) {
     setMounted(true)
   }, [])
 
-  const setIsCollapsed = (collapsed: boolean) => {
+  const setIsCollapsed = useCallback((collapsed: boolean) => {
     setIsCollapsedState(collapsed)
     localStorage.setItem("sidebarCollapsed", String(collapsed))
-  }
+  }, [])
 
-  const toggleSidebar = () => {
-    setIsCollapsed(!isCollapsed)
-  }
+  const toggleSidebar = useCallback(() => {
+    setIsCollapsedState((prev) => {
+      const next = !prev
+      localStorage.setItem("sidebarCollapsed", String(next))
+      return next
+    })
+  }, [])
 
   // Keyboard shortcut (M key)
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "m" || e.key === "M") {
         // Don't toggle if user is typing in an input
-        if (
-          e.target instanceof HTMLInputElement ||
-          e.target instanceof HTMLTextAreaElement
-        ) {
+        if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) {
           return
         }
         e.preventDefault()
@@ -50,7 +58,7 @@ export function SidebarProvider({ children }: { children: ReactNode }) {
 
     window.addEventListener("keydown", handleKeyDown)
     return () => window.removeEventListener("keydown", handleKeyDown)
-  }, [isCollapsed])
+  }, [toggleSidebar])
 
   if (!mounted) {
     return null

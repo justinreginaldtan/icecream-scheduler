@@ -31,34 +31,34 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   // Load user from localStorage on mount
   useEffect(() => {
-        const loadUser = async () => {
-          try {
-            const storedUser = localStorage.getItem('sweet-solutions-user');
-            if (storedUser) {
-              setUser(JSON.parse(storedUser));
-            }
-          } catch (error) {
-            console.error('Failed to load user:', error)
-            localStorage.removeItem('sweet-solutions-user');
-          } finally {
-            setIsLoading(false)
-          }
+    const loadUser = async () => {
+      try {
+        const storedUser = localStorage.getItem("sweet-solutions-user")
+        if (storedUser) {
+          setUser(JSON.parse(storedUser))
         }
+      } catch (error) {
+        console.error("Failed to load user:", error)
+        localStorage.removeItem("sweet-solutions-user")
+      } finally {
+        setIsLoading(false)
+      }
+    }
     loadUser()
   }, [])
 
   useEffect(() => {
     if (isLoading) return
 
-    const publicPaths = ['/login', '/unauthorized']
+    const publicPaths = ["/login", "/unauthorized"]
     const pathIsPublic = publicPaths.includes(pathname)
 
     if (!user && !pathIsPublic) {
-      router.push('/login')
+      router.push("/login")
     }
 
     if (user && pathIsPublic) {
-      router.push('/')
+      router.push("/")
     }
   }, [user, pathname, router, isLoading])
 
@@ -67,32 +67,36 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const response = await apiClient.login(email, password)
       if (response.success && response.data?.user) {
         setUser(response.data.user)
-        localStorage.setItem('sweet-solutions-user', JSON.stringify(response.data.user));
-        localStorage.setItem('auth-token', response.data.token || '')
+        localStorage.setItem("sweet-solutions-user", JSON.stringify(response.data.user))
+        localStorage.setItem("auth-token", response.data.token || "")
         return true
       }
       return false
     } catch (error) {
-      console.error('Login failed:', error)
+      console.error("Login failed:", error)
       return false
     }
   }
 
   const logout = () => {
     setUser(null)
-    localStorage.removeItem('auth-token')
-    localStorage.removeItem('sweet-solutions-user')
+    localStorage.removeItem("auth-token")
+    localStorage.removeItem("sweet-solutions-user")
     apiClient.logout().catch(console.error)
-    router.push('/login')
+    router.push("/login")
   }
 
-  return <AuthContext.Provider value={{ user, login, logout, isLoading }}>{children}</AuthContext.Provider>
+  return (
+    <AuthContext.Provider value={{ user, login, logout, isLoading }}>
+      {children}
+    </AuthContext.Provider>
+  )
 }
 
 export function useAuth() {
   const context = useContext(AuthContext)
   if (context === undefined) {
-    throw new Error('useAuth must be used within an AuthProvider')
+    throw new Error("useAuth must be used within an AuthProvider")
   }
   return context
 }

@@ -40,7 +40,12 @@ export function Header() {
   }, [])
 
   return (
-    <header role="banner" data-testid="global-header" className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-[var(--border)] bg-[var(--surface)] shadow-sm" style={{ borderTop: '3px solid #F46C5B', paddingLeft: '24px', paddingRight: '24px' }}>
+    <header
+      role="banner"
+      data-testid="global-header"
+      className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-[var(--border)] bg-[var(--surface)] shadow-sm"
+      style={{ borderTop: "3px solid #F46C5B", paddingLeft: "24px", paddingRight: "24px" }}
+    >
       {/* Left: Toggle + Logo/Brand */}
       <div className="flex items-center gap-4">
         {showToggle && (
@@ -55,11 +60,7 @@ export function Header() {
           </Button>
         )}
         <div className="flex items-center gap-3">
-          <img 
-            src="/howdyslogo.png" 
-            alt="Howdy Homemade Logo" 
-            className="h-8 w-8 object-contain"
-          />
+          <img src="/howdyslogo.png" alt="Howdy Homemade Logo" className="h-8 w-8 object-contain" />
           <div>
             <h1 className="text-lg font-semibold text-[var(--brandBlue)]">Howdy Homemade</h1>
             <p className="text-xs font-medium text-[var(--brandPink)]">Sweet Solutions</p>
@@ -125,7 +126,9 @@ export function Header() {
             >
               <Avatar className="h-8 w-8">
                 <AvatarImage src="/placeholder.svg?height=32&width=32" alt="User" />
-                <AvatarFallback className="bg-[var(--brandBlue)] text-white text-sm">{initials}</AvatarFallback>
+                <AvatarFallback className="bg-[var(--brandBlue)] text-white text-sm">
+                  {initials}
+                </AvatarFallback>
               </Avatar>
             </Button>
           </DropdownMenuTrigger>

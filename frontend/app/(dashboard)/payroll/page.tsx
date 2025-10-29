@@ -5,7 +5,14 @@ import { useRouter } from "next/navigation"
 import { useAuth } from "@/lib/auth/auth-context"
 import { AppLayout } from "@/components/layout/app-layout"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table"
 import { Button } from "@/components/ui/button"
 import { Download, DollarSign, Loader2 } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
@@ -39,11 +46,11 @@ export default function PayrollPage() {
               ...entry,
               id: entry.id?.toString?.() ?? "",
               employeeId: entry.employeeId?.toString?.() ?? "",
-            })),
+            }))
           )
         }
       } catch (error) {
-        console.error('Error fetching payroll:', error)
+        console.error("Error fetching payroll:", error)
       } finally {
         setLoading(false)
       }
@@ -107,7 +114,9 @@ export default function PayrollPage() {
         <div className="mb-8 flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold text-[var(--text)]">Payroll</h1>
-            <p className="text-[color:rgba(44,42,41,.6)] mt-1">Track hours and compensation for your team</p>
+            <p className="text-[color:rgba(44,42,41,.6)] mt-1">
+              Track hours and compensation for your team
+            </p>
           </div>
           <Button
             type="button"
@@ -137,17 +146,23 @@ export default function PayrollPage() {
               <CardTitle className="text-sm text-[color:rgba(44,42,41,.7)]">Total Hours</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-bold text-[var(--text)]">{totalHours.toLocaleString()}</div>
+              <div className="text-3xl font-bold text-[var(--text)]">
+                {totalHours.toLocaleString()}
+              </div>
               <p className="text-xs text-[color:rgba(44,42,41,.6)] mt-1">This period</p>
             </CardContent>
           </Card>
 
           <Card className="border-[var(--border)] bg-[var(--surface)] shadow-sm rounded-xl">
             <CardHeader className="pb-3">
-              <CardTitle className="text-sm text-[color:rgba(44,42,41,.7)]">Total Payroll</CardTitle>
+              <CardTitle className="text-sm text-[color:rgba(44,42,41,.7)]">
+                Total Payroll
+              </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-bold text-[var(--text)]">${totalPayroll.toLocaleString()}</div>
+              <div className="text-3xl font-bold text-[var(--text)]">
+                ${totalPayroll.toLocaleString()}
+              </div>
               <p className="text-xs text-[color:rgba(44,42,41,.6)] mt-1">January 2025</p>
             </CardContent>
           </Card>
@@ -183,7 +198,10 @@ export default function PayrollPage() {
               </TableHeader>
               <TableBody>
                 {payrollData.map((entry) => (
-                  <TableRow key={entry.id} className="transition-colors duration-200 hover:bg-[var(--muted)]/50">
+                  <TableRow
+                    key={entry.id}
+                    className="transition-colors duration-200 hover:bg-[var(--muted)]/50"
+                  >
                     <TableCell>
                       <div className="font-medium text-[var(--text)]">{entry.employeeName}</div>
                     </TableCell>
@@ -199,7 +217,9 @@ export default function PayrollPage() {
                     <TableCell className="text-right">
                       <div className="flex items-center justify-end gap-2">
                         <DollarSign className="h-4 w-4 text-[var(--primary)]" />
-                        <span className="font-semibold text-[var(--text)]">${entry.totalPay.toLocaleString()}</span>
+                        <span className="font-semibold text-[var(--text)]">
+                          ${entry.totalPay.toLocaleString()}
+                        </span>
                       </div>
                     </TableCell>
                   </TableRow>
@@ -213,7 +233,9 @@ export default function PayrollPage() {
                   <TableCell className="text-right">
                     <div className="flex items-center justify-end gap-2">
                       <DollarSign className="h-4 w-4 text-[var(--primary)]" />
-                      <span className="font-bold text-[var(--text)]">${totalPayroll.toLocaleString()}</span>
+                      <span className="font-bold text-[var(--text)]">
+                        ${totalPayroll.toLocaleString()}
+                      </span>
                     </div>
                   </TableCell>
                 </TableRow>

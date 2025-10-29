@@ -1,13 +1,13 @@
-const express = require('express')
-const Payroll = require('../models/Payroll')
-const Employee = require('../models/Employee')
-const Shift = require('../models/Shift')
-const { auth, requireRole } = require('../middleware/auth')
+const express = require("express")
+const Payroll = require("../models/Payroll")
+const Employee = require("../models/Employee")
+const Shift = require("../models/Shift")
+const { auth, requireRole } = require("../middleware/auth")
 
 const router = express.Router()
 
 // Get payroll data (Manager only)
-router.get('/', auth, requireRole(['manager']), async (req, res) => {
+router.get("/", auth, requireRole(["manager"]), async (req, res) => {
   try {
     const { period } = req.query
     let query = {}
@@ -17,33 +17,33 @@ router.get('/', auth, requireRole(['manager']), async (req, res) => {
     }
 
     const payrollData = await Payroll.find(query)
-      .populate('employee', 'name email role')
-      .populate('processedBy', 'name email')
+      .populate("employee", "name email role")
+      .populate("processedBy", "name email")
       .sort({ period: -1, employeeName: 1 })
 
     res.json({
       success: true,
       data: payrollData,
-      count: payrollData.length
+      count: payrollData.length,
     })
   } catch (error) {
-    console.error('Get payroll error:', error)
+    console.error("Get payroll error:", error)
     res.status(500).json({
       success: false,
-      error: 'Failed to fetch payroll data'
+      error: "Failed to fetch payroll data",
     })
   }
 })
 
 // Generate payroll for period (Manager only)
-router.post('/generate', auth, requireRole(['manager']), async (req, res) => {
+router.post("/generate", auth, requireRole(["manager"]), async (req, res) => {
   try {
     const { period } = req.body // e.g., "2025-01"
 
     if (!period) {
       return res.status(400).json({
         success: false,
-        error: 'Period is required (format: YYYY-MM)'
+        error: "Period is required (format: YYYY-MM)",
       })
     }
 
@@ -52,7 +52,7 @@ router.post('/generate', auth, requireRole(['manager']), async (req, res) => {
     if (existingPayroll) {
       return res.status(400).json({
         success: false,
-        error: 'Payroll already exists for this period'
+        error: "Payroll already exists for this period",
       })
     }
 
@@ -61,7 +61,7 @@ router.post('/generate', auth, requireRole(['manager']), async (req, res) => {
 
     // Calculate payroll for each employee
     const payrollEntries = []
-    const startDate = new Date(period + '-01')
+    const startDate = new Date(period + "-01")
     const endDate = new Date(startDate.getFullYear(), startDate.getMonth() + 1, 0)
 
     for (const employee of employees) {
@@ -70,9 +70,9 @@ router.post('/generate', auth, requireRole(['manager']), async (req, res) => {
         employee: employee._id,
         date: {
           $gte: startDate,
-          $lte: endDate
+          $lte: endDate,
         },
-        status: 'completed'
+        status: "completed",
       })
 
       // Calculate total hours
@@ -87,7 +87,7 @@ router.post('/generate', auth, requireRole(['manager']), async (req, res) => {
       // Calculate overtime (over 40 hours per week)
       const weeksInPeriod = Math.ceil((endDate - startDate) / (7 * 24 * 60 * 60 * 1000))
       const regularHours = Math.min(totalHours, weeksInPeriod * 40)
-      const overtimeHours = Math.max(0, totalHours - (weeksInPeriod * 40))
+      const overtimeHours = Math.max(0, totalHours - weeksInPeriod * 40)
 
       // Calculate pay
       const regularPay = regularHours * employee.hourlyRate
@@ -107,7 +107,7 @@ router.post('/generate', auth, requireRole(['manager']), async (req, res) => {
         netPay: totalPay,
         processedBy: req.user._id,
         processedDate: new Date(),
-        status: 'draft'
+        status: "draft",
       })
 
       await payrollEntry.save()
@@ -117,19 +117,19 @@ router.post('/generate', auth, requireRole(['manager']), async (req, res) => {
     res.status(201).json({
       success: true,
       data: payrollEntries,
-      message: `Payroll generated for ${period}`
+      message: `Payroll generated for ${period}`,
     })
   } catch (error) {
-    console.error('Generate payroll error:', error)
+    console.error("Generate payroll error:", error)
     res.status(500).json({
       success: false,
-      error: 'Failed to generate payroll'
+      error: "Failed to generate payroll",
     })
   }
 })
 
 // Export payroll as CSV (Manager only)
-router.get('/export', auth, requireRole(['manager']), async (req, res) => {
+router.get("/export", auth, requireRole(["manager"]), async (req, res) => {
   try {
     const { period } = req.query
 
@@ -139,54 +139,57 @@ router.get('/export', auth, requireRole(['manager']), async (req, res) => {
     }
 
     const payrollData = await Payroll.find(query)
-      .populate('employee', 'name email')
+      .populate("employee", "name email")
       .sort({ period: -1, employeeName: 1 })
 
     if (payrollData.length === 0) {
       return res.status(404).json({
         success: false,
-        error: 'No payroll data found for export'
+        error: "No payroll data found for export",
       })
     }
 
     // Convert to CSV
-    const csvHeader = 'Employee Name,Role,Period,Hours Worked,Hourly Rate,Total Pay,Overtime Hours,Overtime Pay,Net Pay,Status'
-    const csvRows = payrollData.map(entry => [
-      entry.employeeName,
-      entry.role,
-      entry.period,
-      entry.hoursWorked,
-      entry.hourlyRate,
-      entry.totalPay,
-      entry.overtimeHours,
-      entry.overtimePay,
-      entry.netPay,
-      entry.status
-    ].join(','))
+    const csvHeader =
+      "Employee Name,Role,Period,Hours Worked,Hourly Rate,Total Pay,Overtime Hours,Overtime Pay,Net Pay,Status"
+    const csvRows = payrollData.map((entry) =>
+      [
+        entry.employeeName,
+        entry.role,
+        entry.period,
+        entry.hoursWorked,
+        entry.hourlyRate,
+        entry.totalPay,
+        entry.overtimeHours,
+        entry.overtimePay,
+        entry.netPay,
+        entry.status,
+      ].join(",")
+    )
 
-    const csv = [csvHeader, ...csvRows].join('\n')
+    const csv = [csvHeader, ...csvRows].join("\n")
 
-    res.setHeader('Content-Type', 'text/csv')
-    res.setHeader('Content-Disposition', `attachment; filename=payroll-${period || 'all'}.csv`)
+    res.setHeader("Content-Type", "text/csv")
+    res.setHeader("Content-Disposition", `attachment; filename=payroll-${period || "all"}.csv`)
     res.send(csv)
   } catch (error) {
-    console.error('Export payroll error:', error)
+    console.error("Export payroll error:", error)
     res.status(500).json({
       success: false,
-      error: 'Failed to export payroll data'
+      error: "Failed to export payroll data",
     })
   }
 })
 
 // Update payroll status (Manager only)
-router.put('/:id/status', auth, requireRole(['manager']), async (req, res) => {
+router.put("/:id/status", auth, requireRole(["manager"]), async (req, res) => {
   try {
     const { status } = req.body
 
-    if (!['draft', 'approved', 'paid'].includes(status)) {
+    if (!["draft", "approved", "paid"].includes(status)) {
       return res.status(400).json({
         success: false,
-        error: 'Invalid status. Must be draft, approved, or paid'
+        error: "Invalid status. Must be draft, approved, or paid",
       })
     }
 
@@ -194,25 +197,25 @@ router.put('/:id/status', auth, requireRole(['manager']), async (req, res) => {
       req.params.id,
       { status },
       { new: true }
-    ).populate('employee', 'name email')
+    ).populate("employee", "name email")
 
     if (!payroll) {
       return res.status(404).json({
         success: false,
-        error: 'Payroll entry not found'
+        error: "Payroll entry not found",
       })
     }
 
     res.json({
       success: true,
       data: payroll,
-      message: 'Payroll status updated successfully'
+      message: "Payroll status updated successfully",
     })
   } catch (error) {
-    console.error('Update payroll status error:', error)
+    console.error("Update payroll status error:", error)
     res.status(500).json({
       success: false,
-      error: 'Failed to update payroll status'
+      error: "Failed to update payroll status",
     })
   }
 })

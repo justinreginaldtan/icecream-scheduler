@@ -15,11 +15,7 @@ export function ThemeToggle() {
       className="h-9 w-9 rounded-lg"
       aria-label="Toggle theme"
     >
-      {themeName === "playful" ? (
-        <Sun className="h-4 w-4" />
-      ) : (
-        <Moon className="h-4 w-4" />
-      )}
+      {themeName === "playful" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
     </Button>
   )
 }

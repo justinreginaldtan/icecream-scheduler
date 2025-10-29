@@ -18,7 +18,7 @@ export const metadata: Metadata = {
   description: "Internal scheduling and payroll management for Howdy Homemade",
   generator: "v0.app",
   icons: {
-    icon: '/howdyslogo.png',
+    icon: "/howdyslogo.png",
   },
 }
 
