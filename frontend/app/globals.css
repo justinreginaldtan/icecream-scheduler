@@ -170,6 +170,7 @@
   --body-text-muted: #715e49;
 }
 
+
 :root[data-theme="lavender-milk"] {
   --sidebar-bg: linear-gradient(180deg, #e8e4f9 0%, #d9d3f2 100%);
   --background: linear-gradient(180deg, #fcfaff 0%, #f7f5fd 100%);
