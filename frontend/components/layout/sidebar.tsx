@@ -142,7 +142,7 @@ export function Sidebar() {
               />
               {!isCollapsed && (
                 <div className="flex items-center gap-1 bg-transparent">
-                  <span className="text-lg font-semibold text-[var(--sidebar-text-active)] leading-tight">
+                  <span className="text-lg font-semibold text-[var(--sidebar-text-active)] leading-tight" style={{ background: "transparent" }}>
                     Howdy Homemade
                   </span>
                 </div>
@@ -151,7 +151,9 @@ export function Sidebar() {
           </div>
 
           {/* Navigation Content */}
-          <nav className="flex-1 flex flex-col px-3 py-4 overflow-y-auto">
+          <nav
+            className="flex-1 flex flex-col px-3 py-4 overflow-y-auto"
+          >
             {/* Main nav items */}
             <div className="space-y-2">
               {visibleNavigation
