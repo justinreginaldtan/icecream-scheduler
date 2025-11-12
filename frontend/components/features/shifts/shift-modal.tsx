@@ -54,6 +54,16 @@ export function ShiftModal({
     endTime: "",
     role: "",
   })
+  const [endTimeError, setEndTimeError] = useState<string>("")
+
+  // Build 15-minute time options (00:00 - 23:45)
+  const timeOptions = Array.from({ length: 24 * 4 }).map((_, i) => {
+    const hours = Math.floor(i / 4)
+    const minutes = (i % 4) * 15
+    const h = String(hours).padStart(2, "0")
+    const m = String(minutes).padStart(2, "0")
+    return `${h}:${m}`
+  })
 
   useEffect(() => {
     if (!user || !isOpen) return
@@ -98,6 +108,15 @@ export function ShiftModal({
       })
     }
   }, [shift, isOpen])
+
+  // Auto-fill role when selecting an employee (if empty)
+  useEffect(() => {
+    if (!formData.employeeId) return
+    const emp = employees.find((e) => e.id === formData.employeeId)
+    if (emp && !formData.role) {
+      setFormData((p) => ({ ...p, role: emp.role || p.role }))
+    }
+  }, [formData.employeeId, employees])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -177,8 +196,25 @@ export function ShiftModal({
     }
   }
 
+  // Basic validation
   const isFormValid =
-    formData.employeeId && formData.date && formData.startTime && formData.endTime && formData.role
+    !!(formData.employeeId && formData.date && formData.startTime && formData.endTime && formData.role) &&
+    !endTimeError
+
+  const validateTimes = (start: string, end: string) => {
+    if (!start || !end) {
+      setEndTimeError("")
+      return
+    }
+    // Compare HH:MM strings safely
+    const startNum = Number(start.replace(":", ""))
+    const endNum = Number(end.replace(":", ""))
+    if (endNum <= startNum) {
+      setEndTimeError("End time must be after start time")
+    } else {
+      setEndTimeError("")
+    }
+  }
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -235,43 +271,81 @@ export function ShiftModal({
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="startTime">Start Time</Label>
-                <Input
-                  id="startTime"
-                  type="time"
+                <Select
                   value={formData.startTime}
-                  onChange={(e) => setFormData({ ...formData, startTime: e.target.value })}
+                  onValueChange={(value) => {
+                    setFormData({ ...formData, startTime: value })
+                    validateTimes(value, formData.endTime)
+                  }}
                   disabled={isLoading}
-                  className="focus-visible:ring-2 focus-visible:ring-[var(--brandBlue)] focus-visible:outline-none"
-                  required
-                />
+                >
+                  <SelectTrigger id="startTime" className="focus-visible:ring-2 focus-visible:ring-[var(--brandBlue)] focus-visible:outline-none">
+                    <SelectValue placeholder="Select start time" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {timeOptions.map((t) => (
+                      <SelectItem key={`start-${t}`} value={t}>
+                        {t}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
               <div className="space-y-2">
                 <Label htmlFor="endTime">End Time</Label>
-                <Input
-                  id="endTime"
-                  type="time"
+                <Select
                   value={formData.endTime}
-                  onChange={(e) => setFormData({ ...formData, endTime: e.target.value })}
+                  onValueChange={(value) => {
+                    setFormData({ ...formData, endTime: value })
+                    validateTimes(formData.startTime, value)
+                  }}
                   disabled={isLoading}
-                  className="focus-visible:ring-2 focus-visible:ring-[var(--brandBlue)] focus-visible:outline-none"
-                  required
-                />
+                >
+                  <SelectTrigger id="endTime" className="focus-visible:ring-2 focus-visible:ring-[var(--brandBlue)] focus-visible:outline-none">
+                    <SelectValue placeholder="Select end time" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {timeOptions.map((t) => (
+                      <SelectItem key={`end-${t}`} value={t}>
+                        {t}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                {endTimeError && (
+                  <p className="text-xs text-[color:rgba(240,78,152,1)] mt-1">{endTimeError}</p>
+                )}
               </div>
             </div>
 
             {/* Role */}
             <div className="space-y-2">
               <Label htmlFor="role">Role</Label>
-              <Input
-                id="role"
-                type="text"
-                placeholder="e.g., Scooper, Barista"
+              <Select
                 value={formData.role}
-                onChange={(e) => setFormData({ ...formData, role: e.target.value })}
+                onValueChange={(value) => setFormData({ ...formData, role: value })}
                 disabled={isLoading}
-                className="focus-visible:ring-2 focus-visible:ring-[var(--brandBlue)] focus-visible:outline-none"
-                required
-              />
+              >
+                <SelectTrigger id="role" className="focus-visible:ring-2 focus-visible:ring-[var(--brandBlue)] focus-visible:outline-none">
+                  <SelectValue placeholder="Select role" />
+                </SelectTrigger>
+                <SelectContent>
+                  {/* Unique roles from employees, with sane defaults */}
+                  {Array.from(
+                    new Set([
+                      ...employees.map((e) => e.role).filter(Boolean),
+                      "Store Manager",
+                      "Shift Lead",
+                      "Cashier",
+                      "Scooper",
+                    ])
+                  ).map((role) => (
+                    <SelectItem key={role} value={role}>
+                      {role}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
           </div>
 

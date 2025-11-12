@@ -11,6 +11,7 @@ import {
   Settings,
   LogOut,
   IceCream,
+  BarChart3,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useAuth } from "@/lib/auth/auth-context"
@@ -46,6 +47,13 @@ const navigation = [
     icon: FileText,
     roles: ["manager", "employee"],
     section: "Team",
+  },
+  {
+    name: "Reports",
+    href: "/reports",
+    icon: BarChart3,
+    roles: ["manager"],
+    section: "Finance",
   },
   { name: "Payroll", href: "/payroll", icon: DollarSign, roles: ["manager"], section: "Finance" },
   { name: "Settings", href: "/settings", icon: Settings, roles: ["manager"], section: "System" },
@@ -114,12 +122,12 @@ export function Sidebar() {
             <div
               onClick={toggleSidebar}
               aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
-              role="button"
               className={cn(
-                "cursor-pointer transition-transform duration-300 hover:scale-105 active:scale-95",
+                "cursor-pointer transition-opacity duration-200 hover:opacity-70 !bg-transparent",
                 "flex items-center gap-3 mb-1",
                 isCollapsed ? "justify-center" : "justify-start"
               )}
+              style={{ background: 'transparent' }}
             >
               <img
                 src="/howdyslogo.png"
@@ -133,10 +141,10 @@ export function Sidebar() {
                 }}
               />
               {!isCollapsed && (
-                <div className="flex items-center gap-1">
-                  <h1 className="text-lg font-semibold text-[var(--sidebar-text-active)] leading-tight">
+                <div className="flex items-center gap-1 bg-transparent">
+                  <span className="text-lg font-semibold text-[var(--sidebar-text-active)] leading-tight">
                     Howdy Homemade
-                  </h1>
+                  </span>
                 </div>
               )}
             </div>

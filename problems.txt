@@ -1,0 +1,9 @@
+problem log
+- 3 reports
+- make a new tab for different reports
+- user has user permissions
+- fix add shift popout text
+- add user/employee functionality
+- next week button on schedule
+- combine james database
+

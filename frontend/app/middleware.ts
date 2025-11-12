@@ -6,10 +6,17 @@ export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
 
   // Protected routes that require authentication
-  const protectedRoutes = ["/schedule", "/employees", "/requests", "/payroll", "/settings"]
+  const protectedRoutes = [
+    "/schedule",
+    "/employees",
+    "/requests",
+    "/payroll",
+    "/reports",
+    "/settings",
+  ]
 
   // Manager-only routes
-  const managerRoutes = ["/payroll", "/settings"]
+  const managerRoutes = ["/payroll", "/reports", "/settings"]
 
   // Check if user is trying to access a protected route
   if (protectedRoutes.some((route) => pathname.startsWith(route))) {
