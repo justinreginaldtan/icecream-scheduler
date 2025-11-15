@@ -1,7 +1,20 @@
 const mongoose = require("mongoose")
 
+const SHIFT_OPTIONS = ["Opening", "Midday", "Afternoon", "Closing"]
+const WORKING_STATUSES = ["Working", "Terminated", "Seasonal"]
+
 const employeeSchema = new mongoose.Schema(
   {
+    firstName: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    lastName: {
+      type: String,
+      required: true,
+      trim: true,
+    },
     name: {
       type: String,
       required: true,
@@ -37,9 +50,30 @@ const employeeSchema = new mongoose.Schema(
       type: Boolean,
       default: true,
     },
+    dateOfBirth: {
+      type: Date,
+      required: true,
+    },
     hireDate: {
       type: Date,
-      default: Date.now,
+      required: true,
+    },
+    startDate: {
+      type: Date,
+    },
+    workingStatus: {
+      type: String,
+      enum: WORKING_STATUSES,
+      default: "Working",
+    },
+    preferredShift: {
+      type: String,
+      enum: SHIFT_OPTIONS,
+      default: "Opening",
+    },
+    availabilityNotes: {
+      type: String,
+      trim: true,
     },
     availability: [
       {
@@ -56,5 +90,20 @@ const employeeSchema = new mongoose.Schema(
     timestamps: true,
   }
 )
+
+employeeSchema.pre("validate", function handleDerivedFields(next) {
+  const first = this.firstName || ""
+  const last = this.lastName || ""
+
+  if (!this.name && (first || last)) {
+    this.name = `${first} ${last}`.trim()
+  }
+
+  if (!this.startDate && this.hireDate) {
+    this.startDate = this.hireDate
+  }
+
+  next()
+})
 
 module.exports = mongoose.model("Employee", employeeSchema)
