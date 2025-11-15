@@ -1,5 +1,6 @@
 const Shift = require("../models/Shift")
 const Employee = require("../models/Employee")
+const User = require("../models/User") // 👈 add this
 
 const seedShifts = async () => {
   try {
@@ -7,6 +8,13 @@ const seedShifts = async () => {
 
     // Clear existing shifts
     await Shift.deleteMany({})
+
+    // Get a manager user to use as createdBy
+    const manager = await User.findOne({ role: "manager" })
+    if (!manager) {
+      console.log("⚠️  No manager user found, skipping shifts seeding")
+      return []
+    }
 
     // Get employees to reference
     const employees = await Employee.find()
@@ -19,73 +27,81 @@ const seedShifts = async () => {
       {
         employee: employees[0]._id, // Mari Lisa
         employeeName: employees[0].name,
-        date: "2025-01-20",
+        date: new Date("2025-01-20"),
         startTime: "09:00",
         endTime: "17:00",
         role: "Store Manager",
         status: "scheduled",
+        createdBy: manager._id, // 👈 required
       },
       {
         employee: employees[1]._id, // Vidhi
         employeeName: employees[1].name,
-        date: "2025-01-20",
+        date: new Date("2025-01-20"),
         startTime: "10:00",
         endTime: "18:00",
         role: "Shift Lead",
         status: "scheduled",
+        createdBy: manager._id,
       },
       {
         employee: employees[2]._id, // Chatcha
         employeeName: employees[2].name,
-        date: "2025-01-20",
+        date: new Date("2025-01-20"),
         startTime: "14:00",
         endTime: "22:00",
         role: "Scooper",
         status: "scheduled",
+        createdBy: manager._id,
       },
       {
-        employee: employees[3]._id, // Alex
+        employee: employees[3]._id,
         employeeName: employees[3].name,
         date: new Date("2025-01-21"),
         startTime: "12:00",
         endTime: "20:00",
         role: "Scooper",
         status: "scheduled",
+        createdBy: manager._id,
       },
       {
-        employee: employees[4]._id, // Sarah
+        employee: employees[4]._id,
         employeeName: employees[4].name,
         date: new Date("2025-01-21"),
         startTime: "08:00",
         endTime: "16:00",
         role: "Cashier",
         status: "scheduled",
+        createdBy: manager._id,
       },
       {
-        employee: employees[5]._id, // Mike
+        employee: employees[5]._id,
         employeeName: employees[5].name,
         date: new Date("2025-01-22"),
         startTime: "11:00",
         endTime: "19:00",
         role: "Scooper",
         status: "scheduled",
+        createdBy: manager._id,
       },
       {
-        employee: employees[6]._id, // Emma
+        employee: employees[6]._id,
         employeeName: employees[6].name,
         date: new Date("2025-01-22"),
         startTime: "13:00",
         endTime: "21:00",
         role: "Cashier",
         status: "scheduled",
+        createdBy: manager._id,
       },
     ]
 
-    // Create shifts
     for (const shiftData of demoShifts) {
       const shift = new Shift(shiftData)
       await shift.save()
-      console.log(`✅ Created shift: ${shiftData.employeeName} - ${shiftData.date.toDateString()}`)
+      console.log(
+        `✅ Created shift: ${shiftData.employeeName} - ${shiftData.date.toDateString()}`
+      )
     }
 
     console.log("🎉 Shifts seeded successfully!")
