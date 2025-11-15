@@ -170,6 +170,7 @@
   --body-text-muted: #715e49;
 }
 
+
 :root[data-theme="lavender-milk"] {
   --sidebar-bg: linear-gradient(180deg, #e8e4f9 0%, #d9d3f2 100%);
   --background: linear-gradient(180deg, #fcfaff 0%, #f7f5fd 100%);
@@ -405,6 +406,7 @@
     background: var(--sidebar-bg);
   }
 
+  
   /* Transitions */
   a,
   button,
@@ -424,18 +426,20 @@
     border: 1px solid var(--card-border);
   }
 
-  /* Elevated Surface */
-  .elevated {
-    background: var(--surface-2);
-    box-shadow: var(--card-shadow);
-  }
-
   /* Elevated on Hover */
   .elevated-hover:hover {
     background: var(--card-bg-hover);
     box-shadow: var(--card-shadow-hover);
     transform: translateY(-2px);
   }
+
+  /* Elevated Surface */
+  .elevated {
+    background: var(--surface-2);
+    box-shadow: var(--card-shadow);
+  }
+
+ 
 }
 
 @layer utilities {
@@ -561,6 +565,158 @@
     to {
       opacity: 1;
       transform: translateY(0);
+    }
+  }
+
+  /* Print Styles for PDF Export */
+  @media print {
+    /* Hide elements that shouldn't be printed */
+    .no-print,
+    aside,
+    nav,
+    [class*="sidebar"],
+    [class*="Sidebar"] {
+      display: none !important;
+    }
+
+    /* Reset page layout for print */
+    body {
+      background: white !important;
+      color: black !important;
+      print-color-adjust: exact;
+      -webkit-print-color-adjust: exact;
+    }
+
+    /* Remove margins from layout */
+    main,
+    [class*="AppLayout"],
+    [class*="app-layout"] {
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+
+    /* Optimize page for print */
+    @page {
+      margin: 0.75in;
+      size: landscape;
+      orphans: 4;
+      widows: 4;
+    }
+
+    /* Ensure cards don't break across pages */
+    .card,
+    [class*="Card"] {
+      page-break-inside: avoid !important;
+      break-inside: avoid !important;
+      margin-bottom: 1rem;
+      box-shadow: none !important;
+      border: 1px solid #e5e5e5 !important;
+    }
+
+    /* Key metrics grid - keep together */
+    [class*="grid"][class*="md:grid-cols-4"],
+    [class*="grid"][class*="md:grid-cols-3"] {
+      page-break-inside: avoid !important;
+      break-inside: avoid !important;
+      page-break-after: auto;
+    }
+
+    /* Table container - avoid breaks */
+    [class*="Card"] > [class*="CardContent"]:has(table) {
+      page-break-inside: avoid !important;
+      break-inside: avoid !important;
+    }
+
+    /* Table improvements */
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      page-break-inside: auto !important;
+      break-inside: auto;
+    }
+
+    /* Table headers - repeat on each page and don't break after */
+    thead,
+    [class*="TableHeader"] {
+      display: table-header-group !important;
+      page-break-after: avoid !important;
+      break-after: avoid !important;
+      page-break-inside: avoid !important;
+      break-inside: avoid !important;
+    }
+
+    /* Table rows - avoid breaking inside rows */
+    tr,
+    [class*="TableRow"] {
+      page-break-inside: avoid !important;
+      break-inside: avoid !important;
+    }
+
+    /* Table cells */
+    th,
+    td,
+    [class*="TableHead"],
+    [class*="TableCell"] {
+      border: 1px solid #d4d4d4;
+      padding: 8px;
+      page-break-inside: avoid !important;
+      break-inside: avoid !important;
+    }
+
+    /* Table header styling */
+    th,
+    [class*="TableHead"] {
+      background-color: #f5f5f5 !important;
+      font-weight: 600;
+      color: black !important;
+    }
+
+    /* Ensure text is readable */
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      color: black !important;
+      page-break-after: avoid !important;
+      break-after: avoid !important;
+      page-break-inside: avoid !important;
+      break-inside: avoid !important;
+    }
+
+    /* Section headers should stay with content */
+    h1,
+    h2 {
+      orphans: 3;
+      widows: 3;
+    }
+
+    /* Remove background colors for better printing */
+    * {
+      background: white !important;
+      color: black !important;
+    }
+
+    /* Keep certain accent colors for emphasis */
+    [class*="text-"][class*="Blue"],
+    [class*="text-green"],
+    [class*="text-purple"],
+    [class*="font-medium"],
+    [class*="font-semibold"] {
+      color: #333 !important;
+      font-weight: 600;
+    }
+
+    /* Ensure proper spacing between sections */
+    [class*="mb-8"],
+    [class*="mb-6"] {
+      margin-bottom: 1.5rem !important;
+    }
+
+    /* Force certain large sections to start on new page if needed */
+    .print-page-break-before {
+      page-break-before: always;
     }
   }
 }

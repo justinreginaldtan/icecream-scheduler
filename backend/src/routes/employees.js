@@ -63,7 +63,27 @@ router.get("/:id", auth, async (req, res) => {
 // Create new employee (Manager only)
 router.post("/", auth, requireRole(["manager"]), validateEmployee, async (req, res) => {
   try {
-    const employee = new Employee(req.body)
+    const payload = {
+      ...req.body,
+      name: req.body.name || `${req.body.firstName} ${req.body.lastName}`.trim(),
+      startDate: req.body.startDate || req.body.hireDate,
+    }
+
+    if (Employee.db.readyState !== 1) {
+      const mockEntry = {
+        _id: (mockEmployees.length + 1).toString(),
+        ...payload,
+      }
+      mockEmployees.push(mockEntry)
+
+      return res.status(201).json({
+        success: true,
+        data: mockEntry,
+        message: "Employee created successfully (mock mode)",
+      })
+    }
+
+    const employee = new Employee(payload)
     await employee.save()
 
     res.status(201).json({

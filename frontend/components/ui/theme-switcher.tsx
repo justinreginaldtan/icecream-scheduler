@@ -28,7 +28,7 @@ const flavorOptions = [
     accent: "#5CBF92",
   },
   {
-    value: "strawberry-cream",
+    value: "strawberry-cream", // we'll make this our main theme
     label: "Strawberry Cream",
     accent: "#F46B63",
   },

@@ -78,6 +78,43 @@ class ApiClient {
       }
     }
 
+    if (endpoint === "/api/employees" && method === "POST") {
+      const payload = JSON.parse((options.body as string) || "{}")
+
+      if (!payload?.firstName || !payload?.lastName || !payload?.email || !payload?.role) {
+        return {
+          success: false,
+          error: "Missing required employee fields",
+        }
+      }
+
+      const newEmployee = {
+        id: `emp-${Date.now()}`,
+        firstName: payload.firstName,
+        lastName: payload.lastName,
+        name: payload.name || `${payload.firstName} ${payload.lastName}`.trim(),
+        email: payload.email,
+        phone: payload.phone,
+        role: payload.role,
+        hourlyRate: payload.hourlyRate ?? 0,
+        hoursPerWeek: payload.hoursPerWeek ?? 0,
+        dateOfBirth: payload.dateOfBirth,
+        hireDate: payload.hireDate,
+        availabilityNotes: payload.availabilityNotes,
+        workingStatus: payload.workingStatus ?? "Working",
+        preferredShift: payload.preferredShift ?? "Opening",
+        isActive: payload.isActive ?? true,
+      }
+
+      this.mockEmployees.push(newEmployee)
+
+      return {
+        success: true,
+        data: newEmployee,
+        message: "Employee created successfully",
+      }
+    }
+
     if (endpoint === "/api/shifts" && method === "GET") {
       return {
         success: true,

@@ -11,6 +11,7 @@ import {
   Settings,
   LogOut,
   IceCream,
+  BarChart3,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useAuth } from "@/lib/auth/auth-context"
@@ -48,6 +49,7 @@ const navigation = [
     section: "Team",
   },
   { name: "Payroll", href: "/payroll", icon: DollarSign, roles: ["manager"], section: "Finance" },
+  { name: "Reports", href: "/reports", icon: BarChart3, roles: ["manager"], section: "Analytics" },
   { name: "Settings", href: "/settings", icon: Settings, roles: ["manager"], section: "System" },
 ]
 

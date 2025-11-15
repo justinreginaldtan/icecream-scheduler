@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button"
 import { AlertCircle, ChevronDown } from "lucide-react"
 import { useAuth } from "@/lib/auth/auth-context"
 import { ShiftModal } from "@/components/features/shifts/shift-modal"
+import { AddEmployeeModal } from "@/components/features/employees/add-employee-modal"
 import { useToast } from "@/hooks/use-toast"
 
 export default function DashboardPage() {
@@ -15,6 +16,7 @@ export default function DashboardPage() {
   const { toast } = useToast()
   const [dateRange, setDateRange] = useState("Today")
   const [isShiftModalOpen, setIsShiftModalOpen] = useState(false)
+  const [isAddEmployeeModalOpen, setIsAddEmployeeModalOpen] = useState(false)
 
   const cardVariants = {
     hidden: { y: 20, opacity: 0 },
@@ -181,6 +183,14 @@ export default function DashboardPage() {
                   </motion.div>
                   <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                     <Button
+                      className="btn-primary w-full"
+                      onClick={() => setIsAddEmployeeModalOpen(true)}
+                    >
+                      Add Employee
+                    </Button>
+                  </motion.div>
+                  <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                    <Button
                       variant="outline"
                       className="w-full"
                       onClick={() => toast({ title: "Approve All Clicked" })}
@@ -221,6 +231,10 @@ export default function DashboardPage() {
       </div>
 
       <ShiftModal isOpen={isShiftModalOpen} onClose={() => setIsShiftModalOpen(false)} />
+      <AddEmployeeModal
+        isOpen={isAddEmployeeModalOpen}
+        onClose={() => setIsAddEmployeeModalOpen(false)}
+      />
     </AppLayout>
   )
 }
