@@ -426,18 +426,20 @@
     border: 1px solid var(--card-border);
   }
 
-  /* Elevated Surface */
-  .elevated {
-    background: var(--surface-2);
-    box-shadow: var(--card-shadow);
-  }
-
   /* Elevated on Hover */
   .elevated-hover:hover {
     background: var(--card-bg-hover);
     box-shadow: var(--card-shadow-hover);
     transform: translateY(-2px);
   }
+
+  /* Elevated Surface */
+  .elevated {
+    background: var(--surface-2);
+    box-shadow: var(--card-shadow);
+  }
+
+ 
 }
 
 @layer utilities {
