@@ -84,11 +84,13 @@ export default function SchedulePage() {
   }
 
   const handleAddShift = () => {
+    if (!user || user.role !== "manager") return
     setSelectedShift(null)
     setIsModalOpen(true)
   }
 
   const handleEditShift = (shift: Shift) => {
+    if (!user || user.role !== "manager") return
     setSelectedShift(shift)
     setIsModalOpen(true)
   }
@@ -121,6 +123,8 @@ export default function SchedulePage() {
     setIsModalOpen(false)
     setSelectedShift(null)
   }
+
+  const canManageShifts = user?.role === "manager"
 
   if (loading) {
     return (
@@ -156,15 +160,17 @@ export default function SchedulePage() {
             >
               {dateRange} <ChevronDown className="ml-2 h-4 w-4" />
             </Button>
-            <Button
-              onClick={handleAddShift}
-              className="bg-[var(--primary)] text-white hover:bg-[color:rgba(244,108,91,.9)] focus-visible:ring-2 focus-visible:ring-[var(--brandBlue)] focus-visible:outline-none"
-              data-testid="add-shift-button"
-              aria-label="Add new shift"
-            >
-              <Plus className="mr-2 h-4 w-4" />
-              Add Shift
-            </Button>
+            {canManageShifts && (
+              <Button
+                onClick={handleAddShift}
+                className="bg-[var(--primary)] text-white hover:bg-[color:rgba(244,108,91,.9)] focus-visible:ring-2 focus-visible:ring-[var(--brandBlue)] focus-visible:outline-none"
+                data-testid="add-shift-button"
+                aria-label="Add new shift"
+              >
+                <Plus className="mr-2 h-4 w-4" />
+                Add Shift
+              </Button>
+            )}
           </div>
         </div>
 
@@ -212,9 +218,15 @@ export default function SchedulePage() {
                           {shift ? (
                             <button
                               type="button"
-                              onClick={() => handleEditShift(shift)}
-                              className="w-full h-full rounded-lg bg-[color:rgba(73,182,194,.1)] border border-[color:rgba(73,182,194,.2)] p-2 text-left transition-colors duration-200 hover:bg-[color:rgba(73,182,194,.2)] focus-visible:ring-2 focus-visible:ring-[var(--brandBlue)] focus-visible:outline-none"
-                              aria-label={`Edit shift for ${employee.name} on ${date.toLocaleDateString()}`}
+                              onClick={canManageShifts ? () => handleEditShift(shift) : undefined}
+                              className={`w-full h-full rounded-lg border p-2 text-left transition-colors duration-200 ${
+                                canManageShifts
+                                  ? "bg-[color:rgba(73,182,194,.1)] border-[color:rgba(73,182,194,.2)] hover:bg-[color:rgba(73,182,194,.2)] focus-visible:ring-2 focus-visible:ring-[var(--brandBlue)] focus-visible:outline-none"
+                                  : "bg-[color:rgba(73,182,194,.08)] border-[color:rgba(73,182,194,.15)] cursor-default"
+                              }`}
+                              aria-label={`${
+                                canManageShifts ? "Edit" : "View"
+                              } shift for ${employee.name} on ${date.toLocaleDateString()}`}
                               data-testid={`shift-${employee.id}-${idx}`}
                             >
                               <div className="text-xs font-medium text-[var(--text)]">

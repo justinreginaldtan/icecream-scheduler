@@ -14,7 +14,7 @@ export default function LoginPage() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [error, setError] = useState("")
-  const { login, user } = useAuth()
+  const { login } = useAuth()
   const nav = useNav()
   const { toast } = useToast()
   const [isLoading, setIsLoading] = useState(false)
@@ -27,18 +27,23 @@ export default function LoginPage() {
     // Simulate async login
     await new Promise((resolve) => setTimeout(resolve, 600))
 
-    const success = await login(email, password)
-    if (success) {
+    const authenticatedUser = await login(email, password)
+    if (authenticatedUser) {
       toast({
         title: "Signed in successfully",
-        description: `Welcome back, ${user?.name || "User"}!`,
+        description: `Welcome back, ${authenticatedUser.name || "User"}!`,
         className: "bg-[var(--brandBlue)] text-white border-[var(--brandBlue)]",
       })
-      nav.toDashboard()
+      if (authenticatedUser.role === "manager") {
+        nav.toDashboard()
+      } else {
+        nav.toEmployeeDashboard()
+      }
     } else {
       setError("Invalid email or password")
-      setIsLoading(false)
     }
+
+    setIsLoading(false)
   }
 
   const isFormValid = email && password

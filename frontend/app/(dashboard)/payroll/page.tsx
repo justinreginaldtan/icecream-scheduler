@@ -1,7 +1,6 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { useRouter } from "next/navigation"
 import { useAuth } from "@/lib/auth/auth-context"
 import { AppLayout } from "@/components/layout/app-layout"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -22,19 +21,13 @@ import type { PayrollEntry } from "@/lib/data/mock-data"
 export default function PayrollPage() {
   const { toast } = useToast()
   const { user } = useAuth()
-  const router = useRouter()
   const [isExporting, setIsExporting] = useState(false)
   const [payrollData, setPayrollData] = useState<PayrollEntry[]>([])
   const [loading, setLoading] = useState(true)
+  const isManager = user?.role === "manager"
 
   useEffect(() => {
-    if (user && user.role !== "manager") {
-      router.push("/unauthorized")
-    }
-  }, [user, router])
-
-  useEffect(() => {
-    if (!user || user.role !== "manager") return
+    if (!user) return
 
     const fetchPayroll = async () => {
       try {
@@ -59,10 +52,6 @@ export default function PayrollPage() {
     fetchPayroll()
   }, [user])
 
-  if (user?.role !== "manager") {
-    return null
-  }
-
   if (loading) {
     return (
       <AppLayout>
@@ -78,8 +67,19 @@ export default function PayrollPage() {
     )
   }
 
-  const totalHours = payrollData.reduce((sum, entry) => sum + (entry.hoursWorked || 0), 0)
-  const totalPayroll = payrollData.reduce((sum, entry) => sum + (entry.totalPay || 0), 0)
+  const visiblePayroll =
+    isManager || !user
+      ? payrollData
+      : payrollData.filter(
+          (entry) => entry.employeeName === user.name || entry.employeeId === user.id
+        )
+
+  const payrollToDisplay = visiblePayroll.length ? visiblePayroll : payrollData
+  const totalHours = payrollToDisplay.reduce((sum, entry) => sum + (entry.hoursWorked || 0), 0)
+  const totalPayroll = payrollToDisplay.reduce((sum, entry) => sum + (entry.totalPay || 0), 0)
+  const averagePay = payrollToDisplay.length
+    ? Math.round(totalPayroll / payrollToDisplay.length)
+    : 0
 
   const handleExportCSV = async () => {
     setIsExporting(true)
@@ -115,29 +115,35 @@ export default function PayrollPage() {
           <div>
             <h1 className="text-3xl font-bold text-[var(--text)]">Payroll</h1>
             <p className="text-[color:rgba(44,42,41,.6)] mt-1">
-              Track hours and compensation for your team
+              {isManager
+                ? "Track hours and compensation for your team"
+                : "View your payroll summary"}
             </p>
           </div>
-          <Button
-            type="button"
-            onClick={handleExportCSV}
-            disabled={isExporting}
-            aria-busy={isExporting}
-            className="bg-[var(--primary)] text-white hover:bg-[color:rgba(244,108,91,.9)] focus-visible:ring-2 focus-visible:ring-[var(--brandBlue)] focus-visible:outline-none"
-            data-testid="export-csv-button"
-          >
-            {isExporting ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Exporting...
-              </>
-            ) : (
-              <>
-                <Download className="mr-2 h-4 w-4" />
-                Export to CSV
-              </>
-            )}
-          </Button>
+          {isManager ? (
+            <Button
+              type="button"
+              onClick={handleExportCSV}
+              disabled={isExporting}
+              aria-busy={isExporting}
+              className="bg-[var(--primary)] text-white hover:bg-[color:rgba(244,108,91,.9)] focus-visible:ring-2 focus-visible:ring-[var(--brandBlue)] focus-visible:outline-none"
+              data-testid="export-csv-button"
+            >
+              {isExporting ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Exporting...
+                </>
+              ) : (
+                <>
+                  <Download className="mr-2 h-4 w-4" />
+                  Export to CSV
+                </>
+              )}
+            </Button>
+          ) : (
+            <span className="text-sm text-[color:rgba(44,42,41,.5)]">Read-only view</span>
+          )}
         </div>
 
         <div className="grid gap-6 md:grid-cols-3 mb-8">
@@ -173,7 +179,7 @@ export default function PayrollPage() {
             </CardHeader>
             <CardContent>
               <div className="text-3xl font-bold text-[var(--text)]">
-                ${Math.round(totalPayroll / payrollData.length).toLocaleString()}
+                ${averagePay.toLocaleString()}
               </div>
               <p className="text-xs text-[color:rgba(44,42,41,.6)] mt-1">Per employee</p>
             </CardContent>
@@ -192,12 +198,12 @@ export default function PayrollPage() {
                   <TableHead className="text-[var(--text)]">Employee</TableHead>
                   <TableHead className="text-[var(--text)]">Role</TableHead>
                   <TableHead className="text-[var(--text)] text-right">Hours Worked</TableHead>
-                  <TableHead className="text-[var(--text)] text-right">Hourly Rate</TableHead>
-                  <TableHead className="text-[var(--text)] text-right">Total Pay</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {payrollData.map((entry) => (
+                <TableHead className="text-[var(--text)] text-right">Hourly Rate</TableHead>
+                <TableHead className="text-[var(--text)] text-right">Total Pay</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+                {payrollToDisplay.map((entry) => (
                   <TableRow
                     key={entry.id}
                     className="transition-colors duration-200 hover:bg-[var(--muted)]/50"

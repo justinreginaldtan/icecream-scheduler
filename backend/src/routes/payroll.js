@@ -6,11 +6,15 @@ const { auth, requireRole } = require("../middleware/auth")
 
 const router = express.Router()
 
-// Get payroll data (Manager only)
-router.get("/", auth, requireRole(["manager"]), async (req, res) => {
+// Get payroll data
+router.get("/", auth, requireRole(["manager", "employee"]), async (req, res) => {
   try {
     const { period } = req.query
-    let query = {}
+    const query = {}
+
+    if (req.user.role !== "manager") {
+      query.employee = req.user._id
+    }
 
     if (period) {
       query.period = period

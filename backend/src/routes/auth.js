@@ -6,6 +6,12 @@ const { validateLogin } = require("../middleware/validation")
 
 const router = express.Router()
 
+const determineRole = (email, existingRole) => {
+  if (email === "mari.lisa@example.com") return "manager"
+  if (email === "justin.tan@example.com") return "employee"
+  return existingRole || "employee"
+}
+
 // Login
 router.post("/login", validateLogin, async (req, res) => {
   try {
@@ -31,6 +37,7 @@ router.post("/login", validateLogin, async (req, res) => {
 
     // Update last login
     user.lastLogin = new Date()
+    user.role = determineRole(user.email, user.role)
     await user.save()
 
     // Generate JWT token
@@ -47,7 +54,7 @@ router.post("/login", validateLogin, async (req, res) => {
           id: user._id,
           name: user.name,
           email: user.email,
-          role: user.role,
+          role: determineRole(user.email, user.role),
         },
         token,
       },
@@ -65,6 +72,8 @@ router.post("/login", validateLogin, async (req, res) => {
 // Get current user
 router.get("/me", auth, async (req, res) => {
   try {
+    const role = determineRole(req.user.email, req.user.role)
+
     res.json({
       success: true,
       data: {
@@ -72,7 +81,7 @@ router.get("/me", auth, async (req, res) => {
           id: req.user._id,
           name: req.user.name,
           email: req.user.email,
-          role: req.user.role,
+          role,
           lastLogin: req.user.lastLogin,
         },
       },

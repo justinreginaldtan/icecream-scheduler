@@ -16,7 +16,7 @@ export interface User {
 
 interface AuthContextType {
   user: User | null
-  login: (email: string, password: string) => Promise<boolean>
+  login: (email: string, password: string) => Promise<User | null>
   logout: () => void
   isLoading: boolean
 }
@@ -29,13 +29,30 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const router = useRouter()
   const pathname = usePathname()
 
+  const normalizeUser = (rawUser: any): User | null => {
+    if (!rawUser) return null
+    const role: UserRole = rawUser.role === "manager" ? "manager" : "employee"
+
+    return {
+      id: rawUser.id?.toString?.() ?? "",
+      email: rawUser.email ?? "",
+      name: rawUser.name ?? rawUser.email ?? "User",
+      role,
+      lastLogin: rawUser.lastLogin,
+    }
+  }
+
+  const defaultPathForRole = (role: UserRole | undefined) =>
+    role === "manager" ? "/" : "/employee"
+
   // Load user from localStorage on mount
   useEffect(() => {
     const loadUser = async () => {
       try {
         const storedUser = localStorage.getItem("sweet-solutions-user")
         if (storedUser) {
-          setUser(JSON.parse(storedUser))
+          const parsed = JSON.parse(storedUser)
+          setUser(normalizeUser(parsed))
         }
       } catch (error) {
         console.error("Failed to load user:", error)
@@ -58,23 +75,26 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
 
     if (user && pathIsPublic) {
-      router.push("/")
+      router.push(defaultPathForRole(user.role))
     }
   }, [user, pathname, router, isLoading])
 
-  const login = async (email: string, password: string): Promise<boolean> => {
+  const login = async (email: string, password: string): Promise<User | null> => {
     try {
       const response = await apiClient.login(email, password)
       if (response.success && response.data?.user) {
-        setUser(response.data.user)
-        localStorage.setItem("sweet-solutions-user", JSON.stringify(response.data.user))
+        const normalizedUser = normalizeUser(response.data.user)
+        if (!normalizedUser) return null
+
+        setUser(normalizedUser)
+        localStorage.setItem("sweet-solutions-user", JSON.stringify(normalizedUser))
         localStorage.setItem("auth-token", response.data.token || "")
-        return true
+        return normalizedUser
       }
-      return false
+      return null
     } catch (error) {
       console.error("Login failed:", error)
-      return false
+      return null
     }
   }
 
