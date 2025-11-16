@@ -1,7 +1,8 @@
 "use client"
 
 import { motion } from "framer-motion"
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import { useRouter } from "next/navigation"
 import { AppLayout } from "@/components/layout/app-layout"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -13,10 +14,18 @@ import { useToast } from "@/hooks/use-toast"
 
 export default function DashboardPage() {
   const { user } = useAuth()
+  const router = useRouter()
   const { toast } = useToast()
   const [dateRange, setDateRange] = useState("Today")
   const [isShiftModalOpen, setIsShiftModalOpen] = useState(false)
   const [isAddEmployeeModalOpen, setIsAddEmployeeModalOpen] = useState(false)
+  const isManager = user?.role === "manager"
+
+  useEffect(() => {
+    if (user && user.role === "employee") {
+      router.replace("/employee")
+    }
+  }, [user, router])
 
   const cardVariants = {
     hidden: { y: 20, opacity: 0 },
@@ -170,47 +179,49 @@ export default function DashboardPage() {
           <div className="space-y-8">
             <Card className="p-4">
               {/* 4. Quick Actions */}
-              <div className="mt-4">
-                <h2 className="dashboard-section-title">Quick Actions</h2>
-                <div className="flex flex-col space-y-2">
-                  <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                    <Button
-                      className="btn-primary w-full"
-                      onClick={() => setIsShiftModalOpen(true)}
-                    >
-                      Create Shift
-                    </Button>
-                  </motion.div>
-                  <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                    <Button
-                      className="btn-primary w-full"
-                      onClick={() => setIsAddEmployeeModalOpen(true)}
-                    >
-                      Add Employee
-                    </Button>
-                  </motion.div>
-                  <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                    <Button
-                      variant="outline"
-                      className="w-full"
-                      onClick={() => toast({ title: "Approve All Clicked" })}
-                    >
-                      Approve All
-                    </Button>
-                  </motion.div>
-                  <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                    <Button
-                      variant="outline"
-                      className="w-full"
-                      onClick={() => toast({ title: "Run Payroll Clicked" })}
-                    >
-                      Run Payroll
-                    </Button>
-                  </motion.div>
+              {isManager && (
+                <div className="mt-4">
+                  <h2 className="dashboard-section-title">Quick Actions</h2>
+                  <div className="flex flex-col space-y-2">
+                    <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                      <Button
+                        className="btn-primary w-full"
+                        onClick={() => setIsShiftModalOpen(true)}
+                      >
+                        Create Shift
+                      </Button>
+                    </motion.div>
+                    <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                      <Button
+                        className="btn-primary w-full"
+                        onClick={() => setIsAddEmployeeModalOpen(true)}
+                      >
+                        Add Employee
+                      </Button>
+                    </motion.div>
+                    <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                      <Button
+                        variant="outline"
+                        className="w-full"
+                        onClick={() => toast({ title: "Approve All Clicked" })}
+                      >
+                        Approve All
+                      </Button>
+                    </motion.div>
+                    <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                      <Button
+                        variant="outline"
+                        className="w-full"
+                        onClick={() => toast({ title: "Run Payroll Clicked" })}
+                      >
+                        Run Payroll
+                      </Button>
+                    </motion.div>
+                  </div>
                 </div>
-              </div>
+              )}
 
-              <hr className="my-6 border-border-subtle" />
+              {isManager && <hr className="my-6 border-border-subtle" />}
 
               {/* 6. Sweet Moment */}
               <div className="mt-4">
@@ -230,11 +241,15 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      <ShiftModal isOpen={isShiftModalOpen} onClose={() => setIsShiftModalOpen(false)} />
-      <AddEmployeeModal
-        isOpen={isAddEmployeeModalOpen}
-        onClose={() => setIsAddEmployeeModalOpen(false)}
-      />
+      {isManager && (
+        <>
+          <ShiftModal isOpen={isShiftModalOpen} onClose={() => setIsShiftModalOpen(false)} />
+          <AddEmployeeModal
+            isOpen={isAddEmployeeModalOpen}
+            onClose={() => setIsAddEmployeeModalOpen(false)}
+          />
+        </>
+      )}
     </AppLayout>
   )
 }

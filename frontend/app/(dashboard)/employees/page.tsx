@@ -16,9 +16,11 @@ import { Mail, Phone, Clock } from "lucide-react"
 import apiClient from "@/lib/api/client"
 import { useAuth } from "@/lib/auth/auth-context"
 import type { Employee } from "@/lib/data/mock-data"
+import { useRouter } from "next/navigation"
 
 export default function EmployeesPage() {
   const { user } = useAuth()
+  const router = useRouter()
   const [employees, setEmployees] = useState<Employee[]>([])
   const [loading, setLoading] = useState(true)
 
@@ -51,6 +53,29 @@ export default function EmployeesPage() {
     if (role.includes("Manager")) return "default"
     if (role.includes("Lead")) return "secondary"
     return "outline"
+  }
+
+  useEffect(() => {
+    if (user?.role === "employee") {
+      router.replace("/employee")
+    }
+  }, [user, router])
+
+  if (user?.role === "employee") {
+    return (
+      <AppLayout>
+        <div className="px-6 md:px-8 py-8">
+          <Card className="border-[var(--border)] bg-[var(--surface)] shadow-sm rounded-xl">
+            <CardHeader>
+              <CardTitle className="text-[var(--text)]">Limited Access</CardTitle>
+              <CardDescription>
+                You don&apos;t have access to the team directory. Redirecting to your dashboard...
+              </CardDescription>
+            </CardHeader>
+          </Card>
+        </div>
+      </AppLayout>
+    )
   }
 
   if (loading) {

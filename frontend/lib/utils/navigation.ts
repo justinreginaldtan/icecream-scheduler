@@ -6,6 +6,7 @@ export function useNav() {
 
   return {
     toDashboard: () => router.push("/"),
+    toEmployeeDashboard: () => router.push("/employee"),
     toSchedule: () => router.push("/schedule"),
     toEmployees: () => router.push("/employees"),
     toRequests: () => router.push("/requests"),

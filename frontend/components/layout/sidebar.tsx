@@ -19,38 +19,37 @@ import { useSidebar } from "@/lib/sidebar-context"
 import { useState, useEffect, useRef } from "react"
 import { ThemeSwitcher } from "@/components/ui/theme-switcher"
 
-const navigation = [
+const managerNavigation = [
   {
     name: "Dashboard",
     href: "/",
     icon: LayoutDashboard,
-    roles: ["manager", "employee"],
-    section: "Overview",
   },
   {
     name: "Schedule",
     href: "/schedule",
     icon: Calendar,
-    roles: ["manager", "employee"],
-    section: "Team",
   },
   {
     name: "Employees",
     href: "/employees",
     icon: Users,
-    roles: ["manager", "employee"],
-    section: "Team",
   },
   {
     name: "Requests",
     href: "/requests",
     icon: FileText,
-    roles: ["manager", "employee"],
-    section: "Team",
   },
-  { name: "Payroll", href: "/payroll", icon: DollarSign, roles: ["manager"], section: "Finance" },
-  { name: "Reports", href: "/reports", icon: BarChart3, roles: ["manager"], section: "Analytics" },
-  { name: "Settings", href: "/settings", icon: Settings, roles: ["manager"], section: "System" },
+  { name: "Payroll", href: "/payroll", icon: DollarSign },
+  { name: "Reports", href: "/reports", icon: BarChart3 },
+  { name: "Settings", href: "/settings", icon: Settings },
+]
+
+const employeeNavigation = [
+  { name: "Dashboard", href: "/employee", icon: LayoutDashboard },
+  { name: "Schedule", href: "/schedule", icon: Calendar },
+  { name: "Requests", href: "/requests", icon: FileText },
+  { name: "Payroll", href: "/payroll", icon: DollarSign },
 ]
 
 export function Sidebar() {
@@ -61,7 +60,11 @@ export function Sidebar() {
   const [isThemeSwitcherOpen, setIsThemeSwitcherOpen] = useState(false) // Flavor theme system
   const sidebarRef = useRef<HTMLElement>(null)
 
-  const visibleNavigation = navigation.filter((item) => user && item.roles.includes(user.role))
+  const visibleNavigation = user
+    ? user.role === "manager"
+      ? managerNavigation
+      : employeeNavigation
+    : []
 
   // Check if mobile viewport and auto-collapse on screens < 1024px
   useEffect(() => {

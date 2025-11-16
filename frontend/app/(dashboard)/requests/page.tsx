@@ -5,6 +5,8 @@ import { AppLayout } from "@/components/layout/app-layout"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
 import { Check, X, Calendar, Loader2 } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import apiClient from "@/lib/api/client"
@@ -19,6 +21,9 @@ export default function RequestsPage() {
   const [loadingRequests, setLoadingRequests] = useState<Record<string, "approve" | "deny" | null>>(
     {}
   )
+  const [newRequest, setNewRequest] = useState({ startDate: "", endDate: "", reason: "" })
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const isManager = user?.role === "manager"
 
   useEffect(() => {
     if (!user) return
@@ -45,6 +50,44 @@ export default function RequestsPage() {
 
     fetchRequests()
   }, [user])
+
+  const handleCreateRequest = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!user) return
+
+    setIsSubmitting(true)
+
+    const payload: TimeOffRequest = {
+      id: `request-${Date.now()}`,
+      employeeId: user.id,
+      employeeName: user.name,
+      startDate: newRequest.startDate,
+      endDate: newRequest.endDate || newRequest.startDate,
+      reason: newRequest.reason,
+      status: "pending",
+      submittedDate: new Date().toISOString().split("T")[0],
+    }
+
+    try {
+      await apiClient.createRequest(payload)
+      setRequests((current) => [...current, payload])
+      setNewRequest({ startDate: "", endDate: "", reason: "" })
+      toast({
+        title: "Request submitted",
+        description: "Your time-off request has been sent for review.",
+        className: "bg-[var(--brandBlue)] text-white border-[var(--brandBlue)]",
+      })
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to submit your request. Please try again.",
+        variant: "destructive",
+        className: "bg-[var(--brandPink)] text-white border-[var(--brandPink)]",
+      })
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
 
   const handleApprove = async (requestId: string) => {
     setLoadingRequests((prev) => ({ ...prev, [requestId]: "approve" }))
@@ -120,8 +163,12 @@ export default function RequestsPage() {
     }
   }
 
-  const pendingCount = requests.filter((req) => req.status === "pending").length
-  const approvedCount = requests.filter((req) => req.status === "approved").length
+  const visibleRequests = isManager
+    ? requests
+    : requests.filter((req) => req.employeeId === user?.id || req.employeeName === user?.name)
+
+  const pendingCount = visibleRequests.filter((req) => req.status === "pending").length
+  const approvedCount = visibleRequests.filter((req) => req.status === "approved").length
 
   if (loading) {
     return (
@@ -144,9 +191,70 @@ export default function RequestsPage() {
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-[var(--text)]">Time-Off Requests</h1>
           <p className="text-[color:rgba(44,42,41,.6)] mt-1">
-            Review and manage employee time-off requests
+            {isManager ? "Review and manage employee time-off requests" : "Submit and track your requests"}
           </p>
         </div>
+
+        {!isManager && (
+          <Card className="border-[var(--border)] bg-[var(--surface)] shadow-sm rounded-xl mb-8">
+            <CardHeader>
+              <CardTitle className="text-[var(--text)]">Request Time Off</CardTitle>
+              <CardDescription>Submit a new request for your manager to review</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <form onSubmit={handleCreateRequest} className="space-y-4">
+                <div className="grid gap-4 md:grid-cols-2">
+                  <div className="space-y-2">
+                    <Label htmlFor="startDate">Start date</Label>
+                    <Input
+                      id="startDate"
+                      type="date"
+                      required
+                      value={newRequest.startDate}
+                      onChange={(e) => setNewRequest({ ...newRequest, startDate: e.target.value })}
+                      className="focus-visible:ring-2 focus-visible:ring-[var(--brandBlue)] focus-visible:outline-none"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="endDate">End date</Label>
+                    <Input
+                      id="endDate"
+                      type="date"
+                      value={newRequest.endDate}
+                      min={newRequest.startDate}
+                      onChange={(e) => setNewRequest({ ...newRequest, endDate: e.target.value })}
+                      className="focus-visible:ring-2 focus-visible:ring-[var(--brandBlue)] focus-visible:outline-none"
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="reason">Reason</Label>
+                  <textarea
+                    id="reason"
+                    required
+                    value={newRequest.reason}
+                    onChange={(e) => setNewRequest({ ...newRequest, reason: e.target.value })}
+                    className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brandBlue)]"
+                    rows={3}
+                    placeholder="Share a brief note about your request"
+                  />
+                </div>
+
+                <Button
+                  type="submit"
+                  disabled={
+                    isSubmitting || !newRequest.startDate || !newRequest.reason.trim().length
+                  }
+                  aria-busy={isSubmitting}
+                  className="bg-[var(--primary)] text-white hover:bg-[color:rgba(244,108,91,.9)] focus-visible:ring-2 focus-visible:ring-[var(--brandBlue)] focus-visible:outline-none"
+                >
+                  {isSubmitting ? "Submitting..." : "Submit Request"}
+                </Button>
+              </form>
+            </CardContent>
+          </Card>
+        )}
 
         <div className="grid gap-6 md:grid-cols-3 mb-8">
           <Card className="border-[var(--border)] bg-[var(--surface)] shadow-sm rounded-xl">
@@ -186,11 +294,15 @@ export default function RequestsPage() {
         <Card className="border-[var(--border)] bg-[var(--surface)] shadow-sm rounded-xl">
           <CardHeader>
             <CardTitle className="text-[var(--text)]">All Requests</CardTitle>
-            <CardDescription>Review and take action on time-off requests</CardDescription>
+            <CardDescription>
+              {isManager
+                ? "Review and take action on time-off requests"
+                : "See the status of your submissions"}
+            </CardDescription>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              {requests.map((request) => {
+              {visibleRequests.map((request) => {
                 const isLoading = loadingRequests[request.id]
                 return (
                   <div
@@ -233,7 +345,7 @@ export default function RequestsPage() {
                       </p>
                     </div>
 
-                    {request.status === "pending" && (
+                    {request.status === "pending" && isManager && (
                       <div className="flex gap-2 ml-4">
                         <Button
                           type="button"
@@ -284,7 +396,7 @@ export default function RequestsPage() {
                 )
               })}
 
-              {requests.length === 0 && (
+              {visibleRequests.length === 0 && (
                 <div className="text-center py-12">
                   <p className="text-[color:rgba(44,42,41,.6)]">
                     No time-off requests at this time
