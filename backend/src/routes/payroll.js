@@ -1,25 +1,41 @@
 const express = require("express")
-const Payroll = require("../models/Payroll")
-const Employee = require("../models/Employee")
-const Shift = require("../models/Shift")
 const { auth, requireRole } = require("../middleware/auth")
+const { getDatabase } = require("../database/db")
 
 const router = express.Router()
 
+/**
+ * Calculate hours between two times
+ * Assumes times are in HH:MM format
+ */
+function calculateHours(startTime, endTime) {
+  const [startHour, startMin] = startTime.split(":").map(Number)
+  const [endHour, endMin] = endTime.split(":").map(Number)
+
+  const startTotalMin = startHour * 60 + startMin
+  const endTotalMin = endHour * 60 + endMin
+
+  return (endTotalMin - startTotalMin) / 60
+}
+
 // Get payroll data (Manager only)
-router.get("/", auth, requireRole(["manager"]), async (req, res) => {
+router.get("/", auth, requireRole(["manager"]), (req, res) => {
   try {
+    const db = getDatabase()
     const { period } = req.query
-    let query = {}
+
+    let query = "SELECT * FROM Payroll WHERE 1=1"
+    const params = []
 
     if (period) {
-      query.period = period
+      query += " AND period = ?"
+      params.push(period)
     }
 
-    const payrollData = await Payroll.find(query)
-      .populate("employee", "name email role")
-      .populate("processedBy", "name email")
-      .sort({ period: -1, employeeName: 1 })
+    query += " ORDER BY period DESC, employee_name ASC"
+
+    const stmt = db.prepare(query)
+    const payrollData = stmt.all(...params)
 
     res.json({
       success: true,
@@ -36,8 +52,9 @@ router.get("/", auth, requireRole(["manager"]), async (req, res) => {
 })
 
 // Generate payroll for period (Manager only)
-router.post("/generate", auth, requireRole(["manager"]), async (req, res) => {
+router.post("/generate", auth, requireRole(["manager"]), (req, res) => {
   try {
+    const db = getDatabase()
     const { period } = req.body // e.g., "2025-01"
 
     if (!period) {
@@ -48,8 +65,8 @@ router.post("/generate", auth, requireRole(["manager"]), async (req, res) => {
     }
 
     // Check if payroll already exists for this period
-    const existingPayroll = await Payroll.findOne({ period })
-    if (existingPayroll) {
+    const checkStmt = db.prepare("SELECT id FROM Payroll WHERE period = ? LIMIT 1")
+    if (checkStmt.get(period)) {
       return res.status(400).json({
         success: false,
         error: "Payroll already exists for this period",
@@ -57,61 +74,71 @@ router.post("/generate", auth, requireRole(["manager"]), async (req, res) => {
     }
 
     // Get all active employees
-    const employees = await Employee.find({ isActive: true })
+    const empStmt = db.prepare("SELECT * FROM Employee WHERE is_active = 1")
+    const employees = empStmt.all()
 
-    // Calculate payroll for each employee
+    // Calculate dates for period
+    const [year, month] = period.split("-").map(Number)
+    const startDate = new Date(year, month - 1, 1)
+    const endDate = new Date(year, month, 0)
+
     const payrollEntries = []
-    const startDate = new Date(period + "-01")
-    const endDate = new Date(startDate.getFullYear(), startDate.getMonth() + 1, 0)
+
+    // Generate payroll for each employee
+    const insertStmt = db.prepare(`
+      INSERT INTO Payroll (employee_id, employee_name, role, period, hours_worked, hourly_rate, total_pay, overtime_hours, overtime_pay, net_pay, status, processed_by_user_id, processed_date)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
+    `)
 
     for (const employee of employees) {
       // Get shifts for this employee in this period
-      const shifts = await Shift.find({
-        employee: employee._id,
-        date: {
-          $gte: startDate,
-          $lte: endDate,
-        },
-        status: "completed",
-      })
+      const shiftStmt = db.prepare(`
+        SELECT * FROM Shift
+        WHERE employee_id = ? AND shift_date BETWEEN ? AND ? AND status = 'completed'
+      `)
+      const shifts = shiftStmt.all(
+        employee.id,
+        startDate.toISOString().split("T")[0],
+        endDate.toISOString().split("T")[0]
+      )
 
       // Calculate total hours
       let totalHours = 0
       for (const shift of shifts) {
-        const start = new Date(`2000-01-01T${shift.startTime}:00`)
-        const end = new Date(`2000-01-01T${shift.endTime}:00`)
-        const hours = (end - start) / (1000 * 60 * 60)
+        const hours = calculateHours(shift.start_time, shift.end_time)
         totalHours += hours
       }
 
       // Calculate overtime (over 40 hours per week)
-      const weeksInPeriod = Math.ceil((endDate - startDate) / (7 * 24 * 60 * 60 * 1000))
+      const daysDiff = Math.ceil((endDate - startDate) / (24 * 60 * 60 * 1000))
+      const weeksInPeriod = Math.ceil(daysDiff / 7)
       const regularHours = Math.min(totalHours, weeksInPeriod * 40)
       const overtimeHours = Math.max(0, totalHours - weeksInPeriod * 40)
 
       // Calculate pay
-      const regularPay = regularHours * employee.hourlyRate
-      const overtimePay = overtimeHours * employee.hourlyRate * 1.5
+      const regularPay = regularHours * employee.hourly_rate
+      const overtimePay = overtimeHours * employee.hourly_rate * 1.5
       const totalPay = regularPay + overtimePay
 
-      const payrollEntry = new Payroll({
-        employee: employee._id,
-        employeeName: employee.name,
-        role: employee.role,
+      const result = insertStmt.run(
+        employee.id,
+        employee.name,
+        employee.role,
         period,
-        hoursWorked: totalHours,
-        hourlyRate: employee.hourlyRate,
+        totalHours,
+        employee.hourly_rate,
         totalPay,
         overtimeHours,
         overtimePay,
-        netPay: totalPay,
-        processedBy: req.user._id,
-        processedDate: new Date(),
-        status: "draft",
-      })
+        totalPay, // netPay = totalPay for now
+        "draft",
+        req.user.id
+      )
 
-      await payrollEntry.save()
-      payrollEntries.push(payrollEntry)
+      // Fetch created entry
+      const getStmt = db.prepare("SELECT * FROM Payroll WHERE id = ?")
+      const entry = getStmt.get(result.lastInsertRowid)
+      payrollEntries.push(entry)
     }
 
     res.status(201).json({
@@ -129,18 +156,23 @@ router.post("/generate", auth, requireRole(["manager"]), async (req, res) => {
 })
 
 // Export payroll as CSV (Manager only)
-router.get("/export", auth, requireRole(["manager"]), async (req, res) => {
+router.get("/export", auth, requireRole(["manager"]), (req, res) => {
   try {
+    const db = getDatabase()
     const { period } = req.query
 
-    let query = {}
+    let query = "SELECT * FROM Payroll WHERE 1=1"
+    const params = []
+
     if (period) {
-      query.period = period
+      query += " AND period = ?"
+      params.push(period)
     }
 
-    const payrollData = await Payroll.find(query)
-      .populate("employee", "name email")
-      .sort({ period: -1, employeeName: 1 })
+    query += " ORDER BY period DESC, employee_name ASC"
+
+    const stmt = db.prepare(query)
+    const payrollData = stmt.all(...params)
 
     if (payrollData.length === 0) {
       return res.status(404).json({
@@ -154,15 +186,15 @@ router.get("/export", auth, requireRole(["manager"]), async (req, res) => {
       "Employee Name,Role,Period,Hours Worked,Hourly Rate,Total Pay,Overtime Hours,Overtime Pay,Net Pay,Status"
     const csvRows = payrollData.map((entry) =>
       [
-        entry.employeeName,
+        entry.employee_name,
         entry.role,
         entry.period,
-        entry.hoursWorked,
-        entry.hourlyRate,
-        entry.totalPay,
-        entry.overtimeHours,
-        entry.overtimePay,
-        entry.netPay,
+        entry.hours_worked,
+        entry.hourly_rate,
+        entry.total_pay,
+        entry.overtime_hours,
+        entry.overtime_pay,
+        entry.net_pay,
         entry.status,
       ].join(",")
     )
@@ -182,8 +214,9 @@ router.get("/export", auth, requireRole(["manager"]), async (req, res) => {
 })
 
 // Update payroll status (Manager only)
-router.put("/:id/status", auth, requireRole(["manager"]), async (req, res) => {
+router.put("/:id/status", auth, requireRole(["manager"]), (req, res) => {
   try {
+    const db = getDatabase()
     const { status } = req.body
 
     if (!["draft", "approved", "paid"].includes(status)) {
@@ -193,18 +226,27 @@ router.put("/:id/status", auth, requireRole(["manager"]), async (req, res) => {
       })
     }
 
-    const payroll = await Payroll.findByIdAndUpdate(
-      req.params.id,
-      { status },
-      { new: true }
-    ).populate("employee", "name email")
-
-    if (!payroll) {
+    // Check if payroll exists
+    const checkStmt = db.prepare("SELECT id FROM Payroll WHERE id = ?")
+    if (!checkStmt.get(req.params.id)) {
       return res.status(404).json({
         success: false,
         error: "Payroll entry not found",
       })
     }
+
+    // Update status
+    const updateStmt = db.prepare(`
+      UPDATE Payroll
+      SET status = ?, updated_at = CURRENT_TIMESTAMP
+      WHERE id = ?
+    `)
+
+    updateStmt.run(status, req.params.id)
+
+    // Fetch and return updated payroll
+    const getStmt = db.prepare("SELECT * FROM Payroll WHERE id = ?")
+    const payroll = getStmt.get(req.params.id)
 
     res.json({
       success: true,

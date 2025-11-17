@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken")
-const User = require("../models/User")
+const { getDatabase } = require("../database/db")
 
-const auth = async (req, res, next) => {
+const auth = (req, res, next) => {
   try {
     const token = req.header("Authorization")?.replace("Bearer ", "")
 
@@ -13,9 +13,13 @@ const auth = async (req, res, next) => {
     }
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET)
-    const user = await User.findById(decoded.userId).select("-password")
+    const db = getDatabase()
 
-    if (!user || !user.isActive) {
+    // Get user from SQLite
+    const stmt = db.prepare("SELECT * FROM User WHERE id = ? AND is_active = 1")
+    const user = stmt.get(decoded.userId)
+
+    if (!user) {
       return res.status(401).json({
         success: false,
         error: "Invalid token or user not found.",

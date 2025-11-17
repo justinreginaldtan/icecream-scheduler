@@ -1,18 +1,23 @@
 const express = require("express")
 const jwt = require("jsonwebtoken")
-const User = require("../models/User")
+const bcrypt = require("bcryptjs")
 const { auth } = require("../middleware/auth")
 const { validateLogin } = require("../middleware/validation")
+const { getDatabase } = require("../database/db")
+const dbUtils = require("../utils/db-utils")
 
 const router = express.Router()
 
 // Login
-router.post("/login", validateLogin, async (req, res) => {
+router.post("/login", validateLogin, (req, res) => {
   try {
     const { email, password } = req.body
+    const db = getDatabase()
 
     // Find user by email
-    const user = await User.findOne({ email, isActive: true })
+    const stmt = db.prepare("SELECT * FROM User WHERE email = ? AND is_active = 1")
+    const user = stmt.get(email.toLowerCase())
+
     if (!user) {
       return res.status(401).json({
         success: false,
@@ -21,7 +26,7 @@ router.post("/login", validateLogin, async (req, res) => {
     }
 
     // Check password
-    const isMatch = await user.comparePassword(password)
+    const isMatch = bcrypt.compareSync(password, user.password_hash)
     if (!isMatch) {
       return res.status(401).json({
         success: false,
@@ -30,12 +35,12 @@ router.post("/login", validateLogin, async (req, res) => {
     }
 
     // Update last login
-    user.lastLogin = new Date()
-    await user.save()
+    const updateStmt = db.prepare("UPDATE User SET last_login = CURRENT_TIMESTAMP WHERE id = ?")
+    updateStmt.run(user.id)
 
     // Generate JWT token
     const token = jwt.sign(
-      { userId: user._id, email: user.email, role: user.role },
+      { userId: user.id, email: user.email, role: user.role },
       process.env.JWT_SECRET,
       { expiresIn: process.env.JWT_EXPIRES_IN || "7d" }
     )
@@ -44,7 +49,7 @@ router.post("/login", validateLogin, async (req, res) => {
       success: true,
       data: {
         user: {
-          id: user._id,
+          id: user.id,
           name: user.name,
           email: user.email,
           role: user.role,
@@ -63,17 +68,17 @@ router.post("/login", validateLogin, async (req, res) => {
 })
 
 // Get current user
-router.get("/me", auth, async (req, res) => {
+router.get("/me", auth, (req, res) => {
   try {
     res.json({
       success: true,
       data: {
         user: {
-          id: req.user._id,
+          id: req.user.id,
           name: req.user.name,
           email: req.user.email,
           role: req.user.role,
-          lastLogin: req.user.lastLogin,
+          lastLogin: req.user.last_login,
         },
       },
     })

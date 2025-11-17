@@ -9,15 +9,15 @@ require("dotenv").config()
 // Set default environment variables for development
 process.env.PORT = process.env.PORT || "3001"
 process.env.NODE_ENV = process.env.NODE_ENV || "development"
-process.env.DATABASE_URL = process.env.DATABASE_URL || "mongodb://localhost:27017/sweet-solutions"
+process.env.DATABASE_PATH = process.env.DATABASE_PATH || undefined // Uses ~/.sweet-solutions by default
 process.env.JWT_SECRET = process.env.JWT_SECRET || "dev-secret-key-change-in-production"
 process.env.JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || "7d"
 process.env.FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:3000"
 process.env.RATE_LIMIT_WINDOW_MS = process.env.RATE_LIMIT_WINDOW_MS || "900000"
 process.env.RATE_LIMIT_MAX_REQUESTS = process.env.RATE_LIMIT_MAX_REQUESTS || "100"
 
-const connectDB = require("./config/database")
-const { seedAllData } = require("./seeders")
+// Initialize SQLite database
+const { initializeDatabase } = require("./database/db")
 const authRoutes = require("./routes/auth")
 const employeeRoutes = require("./routes/employees")
 const shiftRoutes = require("./routes/shifts")
@@ -27,13 +27,14 @@ const payrollRoutes = require("./routes/payroll")
 const app = express()
 const PORT = process.env.PORT || 3001
 
-// Connect to database
-connectDB()
-
-// Seed all demo data after database connection
-setTimeout(async () => {
-  await seedAllData()
-}, 2000) // Wait 2 seconds for DB connection
+// Initialize SQLite database
+try {
+  initializeDatabase()
+  console.log("✅ SQLite database initialized")
+} catch (error) {
+  console.error("❌ Failed to initialize database:", error)
+  process.exit(1)
+}
 
 // Security middleware
 app.use(helmet())

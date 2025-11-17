@@ -1,25 +1,16 @@
 const express = require("express")
-const Employee = require("../models/Employee")
 const { auth, requireRole } = require("../middleware/auth")
 const { validateEmployee } = require("../middleware/validation")
-const { mockEmployees } = require("../middleware/mockData")
+const { getDatabase } = require("../database/db")
 
 const router = express.Router()
 
 // Get all employees
-router.get("/", auth, async (req, res) => {
+router.get("/", auth, (req, res) => {
   try {
-    // Check if database is connected
-    if (Employee.db.readyState !== 1) {
-      // Use mock data if database not connected
-      return res.json({
-        success: true,
-        data: mockEmployees,
-        count: mockEmployees.length,
-      })
-    }
-
-    const employees = await Employee.find({ isActive: true }).sort({ name: 1 })
+    const db = getDatabase()
+    const stmt = db.prepare("SELECT * FROM Employee WHERE is_active = 1 ORDER BY name ASC")
+    const employees = stmt.all()
 
     res.json({
       success: true,
@@ -36,9 +27,11 @@ router.get("/", auth, async (req, res) => {
 })
 
 // Get employee by ID
-router.get("/:id", auth, async (req, res) => {
+router.get("/:id", auth, (req, res) => {
   try {
-    const employee = await Employee.findById(req.params.id)
+    const db = getDatabase()
+    const stmt = db.prepare("SELECT * FROM Employee WHERE id = ?")
+    const employee = stmt.get(req.params.id)
 
     if (!employee) {
       return res.status(404).json({
@@ -61,10 +54,39 @@ router.get("/:id", auth, async (req, res) => {
 })
 
 // Create new employee (Manager only)
-router.post("/", auth, requireRole(["manager"]), validateEmployee, async (req, res) => {
+router.post("/", auth, requireRole(["manager"]), validateEmployee, (req, res) => {
   try {
-    const employee = new Employee(req.body)
-    await employee.save()
+    const db = getDatabase()
+    const { name, email, phone, role, hourly_rate, hours_per_week, availability } = req.body
+
+    // Check if email already exists
+    const existingStmt = db.prepare("SELECT id FROM Employee WHERE email = ?")
+    if (existingStmt.get(email.toLowerCase())) {
+      return res.status(400).json({
+        success: false,
+        error: "Employee with this email already exists",
+      })
+    }
+
+    // Insert new employee
+    const insertStmt = db.prepare(`
+      INSERT INTO Employee (name, email, phone, role, hourly_rate, hours_per_week, is_active, hire_date, availability)
+      VALUES (?, ?, ?, ?, ?, ?, 1, DATE('now'), ?)
+    `)
+
+    const result = insertStmt.run(
+      name,
+      email.toLowerCase(),
+      phone || null,
+      role,
+      hourly_rate || 0,
+      hours_per_week || 0,
+      availability ? JSON.stringify(availability) : null
+    )
+
+    // Fetch and return the created employee
+    const getStmt = db.prepare("SELECT * FROM Employee WHERE id = ?")
+    const employee = getStmt.get(result.lastInsertRowid)
 
     res.status(201).json({
       success: true,
@@ -73,14 +95,6 @@ router.post("/", auth, requireRole(["manager"]), validateEmployee, async (req, r
     })
   } catch (error) {
     console.error("Create employee error:", error)
-
-    if (error.code === 11000) {
-      return res.status(400).json({
-        success: false,
-        error: "Employee with this email already exists",
-      })
-    }
-
     res.status(500).json({
       success: false,
       error: "Failed to create employee",
@@ -89,19 +103,41 @@ router.post("/", auth, requireRole(["manager"]), validateEmployee, async (req, r
 })
 
 // Update employee (Manager only)
-router.put("/:id", auth, requireRole(["manager"]), validateEmployee, async (req, res) => {
+router.put("/:id", auth, requireRole(["manager"]), validateEmployee, (req, res) => {
   try {
-    const employee = await Employee.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
-      runValidators: true,
-    })
+    const db = getDatabase()
+    const { name, email, phone, role, hourly_rate, hours_per_week, availability } = req.body
 
-    if (!employee) {
+    // Check if employee exists
+    const checkStmt = db.prepare("SELECT id FROM Employee WHERE id = ?")
+    if (!checkStmt.get(req.params.id)) {
       return res.status(404).json({
         success: false,
         error: "Employee not found",
       })
     }
+
+    // Update employee
+    const updateStmt = db.prepare(`
+      UPDATE Employee
+      SET name = ?, email = ?, phone = ?, role = ?, hourly_rate = ?, hours_per_week = ?, availability = ?, updated_at = CURRENT_TIMESTAMP
+      WHERE id = ?
+    `)
+
+    updateStmt.run(
+      name,
+      email.toLowerCase(),
+      phone || null,
+      role,
+      hourly_rate || 0,
+      hours_per_week || 0,
+      availability ? JSON.stringify(availability) : null,
+      req.params.id
+    )
+
+    // Fetch and return the updated employee
+    const getStmt = db.prepare("SELECT * FROM Employee WHERE id = ?")
+    const employee = getStmt.get(req.params.id)
 
     res.json({
       success: true,
@@ -117,21 +153,23 @@ router.put("/:id", auth, requireRole(["manager"]), validateEmployee, async (req,
   }
 })
 
-// Delete employee (Manager only)
-router.delete("/:id", auth, requireRole(["manager"]), async (req, res) => {
+// Delete employee (Manager only) - Soft delete
+router.delete("/:id", auth, requireRole(["manager"]), (req, res) => {
   try {
-    const employee = await Employee.findByIdAndUpdate(
-      req.params.id,
-      { isActive: false },
-      { new: true }
-    )
+    const db = getDatabase()
 
-    if (!employee) {
+    // Check if employee exists
+    const checkStmt = db.prepare("SELECT id FROM Employee WHERE id = ?")
+    if (!checkStmt.get(req.params.id)) {
       return res.status(404).json({
         success: false,
         error: "Employee not found",
       })
     }
+
+    // Soft delete (set is_active = 0)
+    const deleteStmt = db.prepare("UPDATE Employee SET is_active = 0, updated_at = CURRENT_TIMESTAMP WHERE id = ?")
+    deleteStmt.run(req.params.id)
 
     res.json({
       success: true,
