@@ -13,7 +13,8 @@
       "Bash(echo \"\" echo \"=== Testing Time-Off Requests ===\" curl -s http://localhost:3001/api/requests -H \"Authorization: Bearer $TOKEN\")",
       "Bash(TOKEN=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImVtYWlsIjoibWFyaS5saXNhQGV4YW1wbGUuY29tIiwicm9sZSI6Im1hbmFnZXIiLCJpYXQiOjE3NjMwNzgwMDEsImV4cCI6MTc2MzY4MjgwMX0.hGgp-GJMaHuBuK7PPPjgkvpn0Tq9QcuK_5qkAZJZSSk curl -s http://localhost:3001/api/employees -H 'Authorization: Bearer $TOKEN')",
       "Bash(chmod:*)",
-      "Bash(bash:*)"
+      "Bash(bash:*)",
+      "Bash(pkill:*)"
     ],
     "deny": [],
     "ask": []

@@ -17,8 +17,8 @@ module.exports = {
       },
     },
     extend: {
-      // Enhanced 8pt spacing system
-      spacing: {
+      // enhanced 8pt spacing system
+      spacing: {      
         18: "4.5rem", // 72px
         22: "5.5rem", // 88px
         26: "6.5rem", // 104px
